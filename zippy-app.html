@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zippy by Cognospace</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#FF5200;--orange-light:#FF7340;--orange-dark:#D94600;
+  --orange-bg:#FFF3EE;--black:#1C1C1C;--gray:#686B78;
+  --gray-light:#93959F;--border:#E9E9EB;--bg:#F7F7F7;
+  --white:#FFFFFF;--green:#1BA672;--yellow:#F5A623;
+  --shadow-sm:0 1px 6px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 20px rgba(0,0,0,0.10);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.14);
+  --shadow-orange:0 6px 24px rgba(255,82,0,0.25);
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--black);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:inherit;outline:none}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--orange);border-radius:10px}
+
+/* ── ENHANCED ANIMATIONS ── */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(255,82,0,.45)}70%{box-shadow:0 0 0 12px rgba(255,82,0,0)}100%{box-shadow:0 0 0 0 rgba(255,82,0,0)}}
+@keyframes bounce-in{0%{transform:scale(.3);opacity:0}50%{transform:scale(1.08)}70%{transform:scale(.96)}100%{transform:scale(1);opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes slide-right{from{transform:translateX(-12px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes card-pop{0%{opacity:0;transform:translateY(24px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Staggered restaurant card entry */
+.rest-card{animation:card-pop .4s cubic-bezier(.34,1.56,.64,1) both}
+.rest-card:nth-child(1){animation-delay:.05s}
+.rest-card:nth-child(2){animation-delay:.10s}
+.rest-card:nth-child(3){animation-delay:.15s}
+.rest-card:nth-child(4){animation-delay:.20s}
+.rest-card:nth-child(5){animation-delay:.25s}
+.rest-card:nth-child(6){animation-delay:.30s}
+
+/* Card hover — lift + orange glow */
+.rest-card{transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease,border-color .25s ease}
+.rest-card:hover{transform:translateY(-8px) scale(1.01)!important;box-shadow:0 20px 52px rgba(255,82,0,.18)!important;border-color:rgba(255,82,0,.45)!important}
+
+/* Logo mark float */
+.logo-mark{animation:float 4s ease-in-out infinite}
+
+/* Hero CTA bounce-in on load */
+.hero-cta{animation:bounce-in .6s .3s both}
+
+/* Filter pill snappy hover */
+.filter-pill{transition:all .18s cubic-bezier(.34,1.56,.64,1)}
+.filter-pill.active{animation:bounce-in .3s ease}
+
+/* Shimmer loading placeholder for image areas */
+.rest-img-ph,.top-pick-img-ph,.menu-item-img-ph,.hero-img-ph,.rest-hero-ph{
+  background:linear-gradient(90deg,var(--orange-bg) 25%,#ffe8d6 50%,var(--orange-bg) 75%);
+  background-size:400px 100%;
+  animation:shimmer 1.6s infinite linear;
+}
+
+/* Menu item slide-in */
+.menu-item{animation:slide-right .3s ease both}
+
+/* Top pick card spring hover */
+.top-pick-card{transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s ease}
+.top-pick-card:hover{transform:scale(1.04);box-shadow:var(--shadow-lg)}
+
+/* Qty stepper button ripple */
+.qty-btn,.cls-btn{position:relative;overflow:hidden}
+.qty-btn::after,.cls-btn::after{content:'';position:absolute;inset:50%;background:rgba(255,255,255,.3);border-radius:50%;transform:translate(-50%,-50%) scale(0);transition:transform .35s,opacity .35s;pointer-events:none}
+.qty-btn:active::after,.cls-btn:active::after{transform:translate(-50%,-50%) scale(3);opacity:0}
+
+/* Toast bounce */
+.toast.show{animation:bounce-in .35s ease}
+
+/* Data table row hover */
+#dataTableBody tr{transition:background .15s ease}
+#dataTableBody tr:hover{background:#fff5f0}
+
+/* Checkout sections staggered entry */
+.checkout-section{animation:fadeInUp .35s ease both}
+.checkout-section:nth-child(2){animation-delay:.08s}
+.checkout-section:nth-child(3){animation-delay:.16s}
+.checkout-section:nth-child(4){animation-delay:.24s}
+
+/* Universal button press feedback */
+button:not(.qty-btn):not(.cls-btn):active{transform:scale(.97)}
+.hero-cta:active,.cart-pill:active,.menu-item-add-btn:active,.top-pick-add:active{transform:scale(.96)!important}
+
+/* Active deal dot glow */
+.deals-dot.active{box-shadow:0 0 8px rgba(255,82,0,.55)}
+
+/* Cart pill pulse when bumped */
+@keyframes cart-bump{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+.cart-pill.bump{animation:cart-bump .35s ease;background:var(--orange-dark)}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:900;background:var(--white);border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.header-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.logo-mark{width:38px;height:38px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;font-weight:900;font-family:'Nunito',sans-serif;overflow:hidden}
+.logo-mark img{width:100%;height:100%;object-fit:cover;display:block;border-radius:10px}
+.logo-wordmark{display:flex;flex-direction:column;line-height:1.1}
+.logo-wordmark .brand{font-family:'Nunito',sans-serif;font-weight:900;font-size:40px;color:var(--orange)}
+.logo-wordmark .sub{font-size:10px;color:var(--gray);font-weight:500;letter-spacing:.8px;text-transform:uppercase}
+.header-location{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:7px 14px;cursor:pointer;transition:border-color .2s;min-width:0;flex:1;max-width:300px}
+.header-location:hover{border-color:var(--orange)}
+.header-location .pin{color:var(--orange);font-size:16px;flex-shrink:0}
+.header-location .loc-text{font-size:13px;font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-location .loc-sub{font-size:11px;color:var(--gray);white-space:nowrap}
+.header-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.cognospace-logo-link{display:flex;align-items:center;justify-content:center;height:38px;padding:0 4px;border-radius:8px;transition:transform .2s,opacity .2s;flex-shrink:0}
+.cognospace-logo-link:hover{transform:scale(1.06);opacity:.85}
+.cognospace-logo-link img{height:80px;width:auto;max-width:180px;object-fit:contain;display:block}
+.cart-pill{display:flex;align-items:center;gap:8px;background:var(--orange);color:white;border-radius:10px;padding:8px 16px;font-weight:700;font-size:14px;transition:background .2s,transform .15s}
+.cart-pill:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.cart-pill .cart-num{background:white;color:var(--orange);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+
+/* HERO */
+.hero{background:#3d0c00;position:relative;overflow:hidden}
+.hero-inner{max-width:1280px;margin:0 auto;padding:36px 24px}
+.hero-banner{border-radius:var(--r-lg);background:linear-gradient(135deg,#4a0f00 0%,#8a2500 50%,#4a0f00 100%);padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:24px;overflow:hidden;position:relative;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.hero-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(255,82,0,.25) 0%,transparent 60%)}
+.hero-text{position:relative;z-index:1}
+.hero-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,200,150,.8);font-weight:600;margin-bottom:8px}
+.hero-title{font-family:'Nunito',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:900;color:var(--orange);line-height:1;letter-spacing:-1px;margin-bottom:4px}
+.hero-title span{color:white}
+.hero-subtitle{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:20px}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:white;border-radius:50px;padding:11px 24px;font-weight:700;font-size:14px;transition:all .2s;box-shadow:var(--shadow-orange);cursor:pointer}
+.hero-cta:hover{background:var(--orange-dark);transform:translateY(-2px)}
+.hero-img{position:relative;z-index:1;width:200px;height:160px;flex-shrink:0;border-radius:var(--r-md);overflow:hidden;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
+.hero-img img{width:100%;height:100%;object-fit:cover}
+.hero-img-ph{font-size:80px;opacity:.6}
+
+/* BIG DYNAMIC HERO CARD */
+.hero-big-card{position:relative;border-radius:var(--r-xl);overflow:hidden;min-height:240px;display:flex;align-items:center;justify-content:space-between;padding:40px 48px;gap:24px;transition:background .7s ease}
+.hero-big-left{position:relative;z-index:2;flex:1;min-width:0}
+.hero-big-eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px;opacity:.85}
+.hero-big-title{font-family:'Nunito',sans-serif;font-size:clamp(36px,5.5vw,60px);font-weight:900;line-height:1;letter-spacing:-1.5px;margin-bottom:8px}
+.hero-big-title span{opacity:.85}
+.hero-big-sub{font-size:14px;font-weight:500;margin-bottom:24px;opacity:.8}
+.hero-big-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hero-big-cta{font-size:15px;padding:13px 28px}
+.hero-big-secondary{background:rgba(255,255,255,.18);color:white;border-radius:50px;padding:12px 22px;font-weight:700;font-size:13px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.3);transition:all .2s;cursor:pointer}
+.hero-big-secondary:hover{background:rgba(255,255,255,.28)}
+.hero-big-img{position:relative;z-index:2;width:220px;height:190px;flex-shrink:0;border-radius:var(--r-lg);overflow:hidden;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.hero-big-img-inner{font-size:90px;animation:float 4s ease-in-out infinite;line-height:1;text-align:center;padding:20px}
+.hero-big-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
+.hero-big-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:all .25s}
+.hero-big-dot.active{background:white;width:24px;border-radius:4px}
+.hero-big-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:white;border-radius:50%;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(4px);transition:all .2s;line-height:1}
+.hero-big-arrow:hover{background:rgba(255,255,255,.32)}
+.hero-big-prev{left:14px}
+.hero-big-next{right:14px}
+
+/* WEATHER MODE BUTTONS */
+.weather-modes{display:flex;align-items:center;gap:8px;margin-right:4px}
+.mode-btn{display:flex;align-items:center;gap:6px;border-radius:50px;padding:6px 14px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:white;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
+.mode-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mode-btn.active.traffic{background:#fff3e0;border-color:#e65100;color:#e65100}
+.mode-btn.active.rain{background:#e3f2fd;border-color:#1565c0;color:#1565c0}
+.mode-indicator{display:none;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--orange);background:var(--orange-bg);border-radius:50px;padding:4px 12px;border:1px solid rgba(255,82,0,.2)}
+.mode-indicator.show{display:flex}
+@media(max-width:640px){.weather-modes{gap:5px}.mode-btn{padding:5px 10px;font-size:11px}}
+@media(max-width:480px){.weather-modes{display:none}}
+
+/* DEAL SLIDESHOW (kept for dots CSS reuse) */
+.deals-dots{display:flex;justify-content:center;gap:7px;margin-top:12px}
+.deals-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .2s}
+.deals-dot.active{background:var(--orange);width:22px;border-radius:4px}
+
+/* PAGE BODY */
+.page-body{max-width:1280px;margin:0 auto;padding:0 24px 60px}
+.sec-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;padding-top:36px}
+.sec-title{font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;color:var(--black)}
+.sec-link{font-size:13px;font-weight:600;color:var(--orange)}
+
+/* RESTAURANT CARDS */
+.restaurant-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
+.rest-card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .22s,box-shadow .22s;border:1.5px solid var(--border)}
+.rest-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:rgba(255,82,0,.3)}
+.rest-img-wrap{position:relative;height:170px;overflow:hidden;background:#f0e8e0}
+.rest-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.rest-card:hover .rest-img-wrap img{transform:scale(1.04)}
+.rest-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:64px;background:var(--orange-bg)}
+.rest-offer-badge{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.75));padding:24px 12px 10px;display:flex;align-items:flex-end;justify-content:space-between}
+.rest-offer-tag{background:white;color:var(--orange);font-weight:800;font-size:11px;padding:4px 9px;border-radius:6px;text-transform:uppercase}
+.rest-offer-tag.dark{background:rgba(0,0,0,.7);color:white;border:1px solid rgba(255,255,255,.2)}
+.rest-fav{position:absolute;top:10px;right:10px;width:30px;height:30px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:var(--shadow-sm);transition:transform .2s}
+.rest-fav:hover{transform:scale(1.2)}
+.rest-info{padding:14px 15px 16px}
+.rest-name{font-family:'Nunito',sans-serif;font-weight:800;font-size:16px;color:var(--black);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rest-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray);margin-bottom:4px}
+.rest-rating{display:flex;align-items:center;gap:3px;background:var(--green);color:white;font-weight:700;font-size:11px;padding:2px 7px;border-radius:6px}
+.rest-dot{width:3px;height:3px;background:var(--gray-light);border-radius:50%;display:inline-block}
+.rest-cuisine{font-size:12px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rest-dist-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-light);margin-top:6px}
+
+/* INNER PAGE */
+.inner-page{display:none;animation:fadeInUp .3s ease}
+.inner-page.active{display:block}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.rest-hero{position:relative;height:280px;overflow:hidden;background:#2a2a2a;border-radius:0 0 var(--r-xl) var(--r-xl)}
+.rest-hero img{width:100%;height:100%;object-fit:cover;opacity:.7}
+.rest-hero-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:100px;opacity:.4}
+.rest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 60%)}
+.rest-hero-back{position:absolute;top:18px;left:18px;width:38px;height:38px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;cursor:pointer;transition:background .2s}
+.rest-hero-back:hover{background:rgba(255,255,255,.3)}
+.rest-info-card{background:white;border-radius:var(--r-lg);padding:20px 22px;margin:-36px 16px 0;box-shadow:var(--shadow-lg);position:relative;z-index:10}
+.rest-info-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.rest-info-badge{font-size:11px;color:var(--gray);display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.rest-info-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:24px;color:var(--black);margin-bottom:4px}
+.rest-info-meta{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray)}
+.rest-rating-pill{display:flex;align-items:center;gap:4px;background:var(--green);color:white;border-radius:8px;padding:5px 10px;font-weight:800;font-size:15px;flex-shrink:0}
+.rest-rating-sub{font-size:10px;color:var(--gray);margin-top:3px;text-align:center}
+.rest-info-divider{height:1px;background:var(--border);margin:14px 0}
+.rest-deal-row{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.rest-deal-left{display:flex;align-items:center;gap:10px}
+.deal-icon-badge{background:var(--orange);color:white;border-radius:8px;padding:5px 7px;font-size:9px;font-weight:800;text-align:center;line-height:1.2;text-transform:uppercase}
+.rest-deal-text strong{color:var(--black);font-weight:700}
+.rest-deal-text small{color:var(--gray);font-size:12px;display:block}
+.rest-deal-count{color:var(--orange);font-weight:700}
+.free-del-bar{background:#2a1200;color:white;text-align:center;padding:10px;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 16px;border-radius:10px}
+.free-del-bar .one-badge{background:var(--orange);color:white;border-radius:6px;padding:2px 8px;font-weight:800;font-size:11px}
+.menu-controls{padding:16px 16px 0;display:flex;flex-direction:column;gap:12px}
+.menu-search{display:flex;align-items:center;gap:10px;background:#f2f2f2;border-radius:10px;padding:10px 16px;border:1.5px solid transparent;transition:border-color .2s}
+.menu-search:focus-within{border-color:var(--orange);background:white}
+.menu-search input{flex:1;background:none;border:none;font-size:14px;color:var(--black)}
+.menu-search input::placeholder{color:var(--gray-light)}
+.menu-filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.menu-filters::-webkit-scrollbar{display:none}
+.filter-pill{flex-shrink:0;border:1.5px solid var(--border);border-radius:50px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--gray);background:white;cursor:pointer;transition:all .2s}
+.filter-pill.active,.filter-pill:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-bg)}
+.menu-body{padding:0 16px 24px}
+.menu-section{margin-top:28px}
+.menu-section-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:18px;color:var(--black);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.top-picks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.top-pick-card{border-radius:var(--r-md);overflow:hidden;position:relative;cursor:pointer;transition:transform .2s;background:#f0e8e0;border:1.5px solid var(--border)}
+.top-pick-card:hover{transform:scale(1.02)}
+.top-pick-img{height:160px;overflow:hidden;position:relative;background:#f0e8e0}
+.top-pick-img img{width:100%;height:100%;object-fit:cover}
+.top-pick-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px}
+.top-pick-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.72));padding:28px 12px 10px}
+.top-pick-name{font-weight:700;font-size:15px;color:white;margin-bottom:6px}
+.top-pick-price-row{display:flex;align-items:center;justify-content:space-between}
+.top-pick-prices{display:flex;align-items:center;gap:7px}
+.top-pick-original{font-size:12px;color:rgba(255,255,255,.55);text-decoration:line-through}
+.top-pick-discounted{background:var(--yellow);color:#3d0c00;font-weight:800;font-size:13px;padding:2px 8px;border-radius:6px}
+.top-pick-add{background:white;color:var(--orange);border-radius:8px;padding:6px 14px;font-weight:800;font-size:12px;transition:all .2s}
+.top-pick-add:hover,.top-pick-add.in-cart{background:var(--orange);color:white}
+.top-pick-veg{position:absolute;top:8px;left:8px;width:16px;height:16px;border:2px solid var(--green);border-radius:3px;display:flex;align-items:center;justify-content:center;background:white}
+.top-pick-veg::after{content:'';width:7px;height:7px;background:var(--green);border-radius:50%}
+.menu-list{display:flex;flex-direction:column}
+.menu-item{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--border)}
+.menu-item:last-child{border-bottom:none}
+.menu-item-veg{width:16px;height:16px;flex-shrink:0;margin-top:3px;border:2px solid var(--green);border-radius:3px;display:flex;align-items:center;justify-content:center;background:white}
+.menu-item-veg.nv{border-color:#c0392b}
+.menu-item-veg::after{content:'';width:7px;height:7px;background:var(--green);border-radius:50%}
+.menu-item-veg.nv::after{background:#c0392b;border-radius:0;clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+.menu-item-info{flex:1;min-width:0}
+.menu-item-name{font-weight:700;font-size:14px;color:var(--black);margin-bottom:4px}
+.menu-item-desc{font-size:12px;color:var(--gray);line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.menu-item-price-row{display:flex;align-items:center;gap:8px}
+.menu-item-price{font-weight:800;font-size:14px;color:var(--black)}
+.menu-item-original{font-size:12px;color:var(--gray);text-decoration:line-through}
+.menu-item-img-wrap{width:160px;height:150px;flex-shrink:0;border-radius:10px;overflow:hidden;position:relative;background:var(--orange-bg)}
+.menu-item-img-wrap img{width:100%;height:100%;object-fit:cover}
+.menu-item-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px}
+.menu-item-add-wrap{position:absolute;bottom:-1px;left:0;right:0;display:flex;justify-content:center}
+.menu-item-add-btn{background:white;color:var(--orange);border:2px solid var(--orange);border-radius:8px;padding:5px 16px;font-weight:800;font-size:13px;transition:all .2s;box-shadow:var(--shadow-sm);width:90%}
+.menu-item-add-btn:hover,.menu-item-add-btn.in-cart{background:var(--orange);color:white}
+.qty-stepper{display:flex;align-items:center;background:var(--orange);border-radius:8px;overflow:hidden;width:90%}
+.qty-btn{width:28px;height:32px;background:transparent;color:white;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.qty-btn:hover{background:rgba(255,255,255,.15)}
+.qty-val{flex:1;text-align:center;color:white;font-weight:800;font-size:13px}
+
+/* CART */
+.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000}
+.cart-overlay.open{display:block}
+.cart-drawer{position:fixed;top:0;right:-420px;bottom:0;width:400px;max-width:100vw;background:white;z-index:1001;display:flex;flex-direction:column;transition:right .3s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.15)}
+.cart-drawer.open{right:0}
+.cart-drawer-head{background:var(--orange);padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.cart-drawer-head h2{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:white;display:flex;align-items:center;gap:8px}
+.cart-close-btn{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:50%;color:white;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.cart-close-btn:hover{background:rgba(255,255,255,.35)}
+.cart-scroll{flex:1;overflow-y:auto;padding:16px 20px}
+.cart-empty-state{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--gray);text-align:center}
+.cart-empty-icon{font-size:60px;opacity:.5}
+.cart-rest-group{margin-bottom:20px}
+.cart-rest-name{font-weight:700;font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px dashed var(--border)}
+.cart-line{display:flex;align-items:center;gap:12px;padding:8px 0}
+.cart-line-img{width:44px;height:44px;border-radius:8px;background:var(--orange-bg);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px}
+.cart-line-img img{width:100%;height:100%;object-fit:cover}
+.cart-line-info{flex:1}
+.cart-line-name{font-weight:600;font-size:13px;color:var(--black)}
+.cart-line-price{font-weight:700;font-size:13px;color:var(--orange);margin-top:2px}
+.cart-line-stepper{display:flex;align-items:center;background:var(--orange);border-radius:7px;overflow:hidden}
+.cls-btn{width:26px;height:28px;background:transparent;color:white;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.cls-btn:hover{background:rgba(255,255,255,.15)}
+.cls-val{width:22px;text-align:center;color:white;font-weight:800;font-size:12px}
+.cart-bill-box{background:var(--bg);border-radius:12px;padding:16px;margin-top:4px}
+.cart-bill-row{display:flex;justify-content:space-between;font-size:13px;color:var(--gray);margin-bottom:8px}
+.cart-bill-row.total{font-size:15px;font-weight:800;color:var(--black);border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
+.cart-bill-row.total span:last-child{color:var(--orange)}
+.cart-footer-area{padding:16px 20px;border-top:1px solid var(--border)}
+.btn-checkout{width:100%;background:var(--orange);color:white;border-radius:12px;padding:15px;font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;transition:all .2s;box-shadow:var(--shadow-orange)}
+.btn-checkout:hover{background:var(--orange-dark);transform:translateY(-1px)}
+
+/* CHECKOUT */
+.checkout-page{display:none;max-width:760px;margin:0 auto;padding:24px 16px 60px;animation:fadeInUp .3s ease}
+.checkout-page.active{display:block}
+.checkout-back{display:flex;align-items:center;gap:8px;color:var(--orange);font-weight:700;font-size:14px;cursor:pointer;margin-bottom:24px}
+.checkout-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;color:var(--black);margin-bottom:24px}
+.checkout-section{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);margin-bottom:16px;overflow:hidden}
+.checkout-sec-head{background:var(--orange-bg);padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.checkout-sec-num{width:26px;height:26px;background:var(--orange);color:white;border-radius:50%;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.checkout-sec-title{font-weight:700;font-size:15px;color:var(--black)}
+.checkout-sec-body{padding:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.form-group:last-child{margin-bottom:0}
+.form-label{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px}
+.form-input{border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--black);background:white;transition:border-color .2s;width:100%}
+.form-input:focus{border-color:var(--orange)}
+.addr-options{display:flex;flex-direction:column;gap:10px}
+.addr-option{border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px}
+.addr-option:hover{border-color:var(--orange)}
+.addr-option.selected{border-color:var(--orange);background:var(--orange-bg)}
+.addr-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.addr-option.selected .addr-radio{border-color:var(--orange)}
+.addr-option.selected .addr-radio::after{content:'';width:9px;height:9px;background:var(--orange);border-radius:50%}
+.addr-icon{font-size:18px;flex-shrink:0}
+.addr-info{flex:1}
+.addr-label{font-weight:700;font-size:13px;color:var(--black);margin-bottom:2px}
+.addr-text{font-size:12px;color:var(--gray)}
+.loc-input-row{display:flex;gap:8px;margin-top:12px}
+.loc-input-row .form-input{flex:1}
+.btn-use-loc{background:var(--orange);color:white;border-radius:10px;padding:11px 16px;font-weight:700;font-size:13px;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.btn-use-loc:hover{background:var(--orange-dark)}
+.btn-add-addr{display:flex;align-items:center;gap:7px;color:var(--orange);font-weight:700;font-size:13px;background:var(--orange-bg);border:1.5px dashed var(--orange);border-radius:10px;padding:10px 16px;margin-top:12px;transition:all .2s;width:100%}
+.btn-add-addr:hover{background:var(--orange);color:white}
+.pay-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.pay-option{border:1.5px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.pay-option:hover{border-color:var(--orange)}
+.pay-option.selected{border-color:var(--orange);background:var(--orange-bg)}
+.pay-icon{font-size:26px}
+.pay-label{font-size:12px;font-weight:700;color:var(--black)}
+.checkout-order-item{display:flex;justify-content:space-between;font-size:13px;color:var(--gray);margin-bottom:8px}
+.checkout-order-item span:first-child{color:var(--black);font-weight:500}
+.checkout-total-row{display:flex;justify-content:space-between;font-size:16px;font-weight:800;color:var(--black);border-top:1.5px solid var(--border);padding-top:12px;margin-top:4px}
+.checkout-total-row span:last-child{color:var(--orange)}
+.btn-pay{width:100%;background:var(--orange);color:white;border-radius:14px;padding:16px;font-family:'Nunito',sans-serif;font-weight:900;font-size:17px;margin-top:20px;transition:all .2s;box-shadow:var(--shadow-orange);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-pay:hover{background:var(--orange-dark);transform:translateY(-2px)}
+.btn-pay:disabled{background:#ccc;transform:none;box-shadow:none;cursor:not-allowed}
+
+/* SUCCESS MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal-box{background:white;border-radius:var(--r-xl);width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-top{background:linear-gradient(135deg,var(--orange),#ff8c00);padding:32px 24px 24px;text-align:center}
+.modal-confetti{font-size:56px;margin-bottom:10px}
+.modal-top h2{font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;color:white;margin-bottom:4px}
+.modal-top p{font-size:14px;color:rgba(255,255,255,.85)}
+.modal-stats{display:flex;justify-content:center;border-bottom:1px solid var(--border)}
+.modal-stat{flex:1;padding:18px 16px;text-align:center;border-right:1px solid var(--border)}
+.modal-stat:last-child{border-right:none}
+.modal-stat .val{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:var(--orange)}
+.modal-stat .lbl{font-size:11px;color:var(--gray);margin-top:2px}
+.tracking-steps{display:flex;align-items:center;justify-content:space-between;padding:20px 24px}
+.track-step{text-align:center;flex:1;position:relative}
+.track-step::after{content:'';position:absolute;top:13px;left:60%;right:-40%;height:2px;background:var(--border)}
+.track-step:last-child::after{display:none}
+.track-step.done::after{background:var(--orange)}
+.track-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:12px;margin:0 auto 5px;transition:all .3s}
+.track-step.done .track-dot{border-color:var(--orange);background:var(--orange);color:white}
+.track-step.active .track-dot{border-color:var(--orange);background:var(--orange-bg)}
+.track-lbl{font-size:10px;color:var(--gray);font-weight:600}
+.track-step.done .track-lbl,.track-step.active .track-lbl{color:var(--orange)}
+.modal-close-row{padding:4px 24px 20px}
+.btn-modal-close{width:100%;background:var(--bg);color:var(--black);border-radius:12px;padding:13px;font-weight:700;font-size:14px;border:1.5px solid var(--border);transition:all .2s}
+.btn-modal-close:hover{border-color:var(--orange);color:var(--orange)}
+
+/* DATA SECTION */
+.data-section{margin-top:40px}
+.data-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.data-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-gen-table{display:flex;align-items:center;gap:8px;background:var(--orange);color:white;border-radius:10px;padding:12px 22px;font-weight:800;font-size:14px;transition:all .2s;box-shadow:var(--shadow-orange)}
+.btn-gen-table:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.btn-gen-table:disabled{background:#ccc;transform:none;box-shadow:none}
+.btn-plot-graph{display:flex;align-items:center;gap:8px;background:var(--green);color:white;border-radius:10px;padding:12px 22px;font-weight:800;font-size:14px;transition:all .2s;box-shadow:0 4px 16px rgba(27,166,114,.3)}
+.btn-plot-graph:hover{background:#178a5e;transform:translateY(-1px)}
+.btn-plot-graph:disabled{background:#ccc;transform:none;box-shadow:none}
+.data-table-wrap{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);overflow:hidden;display:none}
+.data-table-wrap.show{display:block;animation:fadeInUp .4s ease}
+.data-table-head-bar{background:var(--orange);padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.data-table-head-bar h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:17px;color:white}
+.data-table-head-bar span{font-size:12px;color:rgba(255,255,255,.75)}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--orange-bg);padding:12px 18px;text-align:left;font-size:11px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:.6px}
+tbody td{padding:13px 18px;font-size:13px;color:var(--black);border-bottom:1px solid var(--border)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even) td{background:#fafafa}
+tbody tr:hover td{background:var(--orange-bg)}
+td.dist-val{font-weight:700;color:var(--orange)}
+td.time-val{font-weight:700;color:var(--green)}
+.table-foot-bar{background:var(--bg);padding:12px 18px;display:flex;gap:24px;flex-wrap:wrap;font-size:12px;color:var(--gray);font-weight:600}
+
+/* GRAPH PAGE */
+.graph-page{display:none;animation:fadeInUp .3s ease}
+.graph-page.active{display:block}
+.graph-back-bar{max-width:1280px;margin:0 auto;padding:24px 24px 0}
+.graph-back{display:inline-flex;align-items:center;gap:8px;color:var(--orange);font-weight:700;font-size:14px;cursor:pointer;margin-bottom:20px}
+.graph-inner{max-width:1280px;margin:0 auto;padding:0 24px 60px;display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
+.graph-box{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:24px;box-shadow:var(--shadow-sm)}
+.graph-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--black);margin-bottom:4px}
+.graph-subtitle{font-size:13px;color:var(--gray);margin-bottom:16px}
+.graph-canvas-wrap{position:relative;width:100%;background:#f5fcf5;border:1.5px solid #c8e6c9;border-radius:10px;overflow:hidden}
+#regressionCanvas{display:block;width:100%}
+.graph-controls{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.btn-draw-line{background:var(--black);color:white;border-radius:10px;padding:10px 22px;font-weight:700;font-size:14px;transition:all .2s;display:flex;align-items:center;gap:7px}
+.btn-draw-line:hover{background:#333;transform:translateY(-1px)}
+.btn-draw-line.active-line{background:var(--orange)}
+.btn-clear-pts{background:var(--bg);color:var(--gray);border:1.5px solid var(--border);border-radius:10px;padding:10px 18px;font-weight:700;font-size:14px;transition:all .2s}
+.btn-clear-pts:hover{border-color:var(--orange);color:var(--orange)}
+.graph-hint{font-size:12px;color:var(--gray-light);margin-top:10px;display:flex;align-items:center;gap:5px}
+.graph-legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);font-weight:600}
+.legend-x{font-size:14px;font-weight:900;color:var(--orange)}
+.graph-side-table{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm)}
+.graph-side-head{background:var(--orange);padding:14px 18px}
+.graph-side-head h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;color:white}
+.graph-side-head p{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
+.graph-side-scroll{max-height:500px;overflow-y:auto}
+
+.btn-new-graph{background:var(--orange);color:white;border-radius:10px;padding:10px 22px;font-weight:700;font-size:14px;transition:all .2s;display:flex;align-items:center;gap:7px}
+.btn-new-graph:hover{background:var(--orange-dark);transform:translateY(-1px)}
+
+/* NEW GRAPH PAGE */
+.new-graph-page{display:none;animation:fadeInUp .3s ease}
+.new-graph-page.active{display:block}
+.new-graph-inner{max-width:1280px;margin:0 auto;padding:0 24px 60px;display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+@media(max-width:1024px){.new-graph-inner{grid-template-columns:1fr}}
+@media(max-width:640px){.new-graph-inner{padding:0 14px 40px}}
+
+/* New graph canvas interaction modes */
+.ng-mode-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.ng-mode-btn{border:2px solid var(--border);border-radius:10px;padding:8px 18px;font-weight:700;font-size:13px;color:var(--gray);background:white;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.ng-mode-btn:hover{border-color:var(--orange);color:var(--orange)}
+.ng-mode-btn.active{border-color:var(--orange);background:var(--orange);color:white}
+.ng-canvas-wrap{position:relative;width:100%;background:#f5fcf5;border:2px solid #c8e6c9;border-radius:12px;overflow:hidden;cursor:crosshair}
+#newGraphCanvas{display:block;width:100%}
+.ng-controls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.ng-hint-box{background:var(--orange-bg);border:1px solid rgba(255,82,0,.2);border-radius:10px;padding:12px 16px;margin-top:12px;font-size:12px;color:var(--black);line-height:1.6}
+.ng-hint-box b{color:var(--orange)}
+.ng-legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.ng-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);font-weight:600}
+
+/* Side panel for new graph */
+.ng-side{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm)}
+.ng-side-head{background:var(--orange);padding:14px 18px}
+.ng-side-head h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;color:white}
+.ng-side-head p{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
+.ng-input-row{display:flex;gap:8px;padding:14px 16px 0;align-items:flex-end}
+.ng-input-group{flex:1}
+.ng-input-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.ng-input{border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;font-weight:700;color:var(--black);width:100%;transition:border-color .2s}
+.ng-input:focus{border-color:var(--orange)}
+.ng-add-row-btn{background:var(--orange);color:white;border-radius:8px;padding:9px 16px;font-weight:800;font-size:13px;white-space:nowrap;flex-shrink:0;transition:all .2s;align-self:flex-end}
+.ng-add-row-btn:hover{background:var(--orange-dark)}
+.ng-table-scroll{max-height:380px;overflow-y:auto;padding:10px 0 4px}
+.ng-table-empty{padding:24px;text-align:center;font-size:13px;color:var(--gray-light);font-style:italic}
+.ng-side-btns{padding:12px 16px;display:flex;gap:8px;border-top:1px solid var(--border);flex-wrap:wrap}
+.ng-plot-btn{flex:1;background:var(--green);color:white;border-radius:10px;padding:11px;font-weight:800;font-size:14px;transition:all .2s}
+.ng-plot-btn:hover{background:#178a5e}
+.ng-clear-btn{background:var(--bg);color:var(--gray);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-weight:700;font-size:13px;transition:all .2s}
+.ng-clear-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ADD ADDRESS MODAL */
+.addr-modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;align-items:center;justify-content:center;padding:20px}
+.addr-modal-backdrop.open{display:flex}
+.addr-modal{background:white;border-radius:var(--r-xl);width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;animation:popIn .35s cubic-bezier(.34,1.56,.64,1)}
+.addr-modal-head{background:var(--orange);padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+.addr-modal-head h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;color:white}
+.addr-modal-close{width:30px;height:30px;background:rgba(255,255,255,.2);border-radius:50%;color:white;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.addr-modal-close:hover{background:rgba(255,255,255,.35)}
+.addr-modal-body{padding:22px}
+.addr-type-row{display:flex;gap:10px;margin-bottom:16px}
+.addr-type-btn{flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:13px;font-weight:700;color:var(--gray);background:white;cursor:pointer;transition:all .2s;text-align:center}
+.addr-type-btn:hover,.addr-type-btn.active{border-color:var(--orange);color:var(--orange);background:var(--orange-bg)}
+.addr-modal-footer{padding:0 22px 22px;display:flex;gap:10px}
+.btn-addr-save{flex:1;background:var(--orange);color:white;border-radius:12px;padding:13px;font-weight:800;font-size:15px;transition:all .2s;box-shadow:var(--shadow-orange)}
+.btn-addr-save:hover{background:var(--orange-dark)}
+.btn-addr-cancel{background:var(--bg);color:var(--gray);border:1.5px solid var(--border);border-radius:12px;padding:13px;font-weight:700;font-size:14px;transition:all .2s}
+.btn-addr-cancel:hover{border-color:var(--orange);color:var(--orange)}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--black);color:white;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;z-index:9999;white-space:nowrap;transition:transform .3s ease;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* FOOTER */
+.site-footer{background:#1a0800;color:rgba(255,255,255,.7);margin-top:60px}
+.footer-inner{max-width:1280px;margin:0 auto;padding:44px 24px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.footer-brand{display:flex;align-items:center;gap:14px}
+.footer-logo-mark{width:44px;height:44px;background:var(--orange);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:white;flex-shrink:0}
+.footer-brand-name{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:white}
+.footer-brand-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:2px}
+.footer-links{display:flex;gap:48px;flex-wrap:wrap}
+.footer-col{display:flex;flex-direction:column;gap:10px}
+.footer-col-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:rgba(255,255,255,.4);margin-bottom:4px}
+.footer-col a{font-size:13px;color:rgba(255,255,255,.65);transition:color .2s;text-decoration:none}
+.footer-col a:hover{color:var(--orange)}
+.footer-bottom{max-width:1280px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap}
+.footer-credit{color:rgba(255,255,255,.5)}
+.footer-credit a{color:var(--orange);font-weight:700;text-decoration:none}
+.footer-credit a:hover{text-decoration:underline}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.graph-inner{grid-template-columns:1fr}.graph-side-scroll{max-height:300px}}
+@media(max-width:900px){.hero-banner{flex-direction:column;text-align:center;padding:28px 20px}.hero-img{width:100%;height:180px}.restaurant-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.form-row{grid-template-columns:1fr}}
+@media(max-width:640px){.header-inner{padding:0 14px;gap:10px}.header-location{max-width:160px}.hero-inner{padding:20px 14px}.deals-banner{padding:0 14px 20px}.page-body{padding:0 14px 50px}.restaurant-grid{grid-template-columns:1fr 1fr;gap:12px}.rest-img-wrap{height:130px}.cart-drawer{width:100%}.rest-info-card{margin:-28px 10px 0}.top-picks-grid{grid-template-columns:1fr 1fr}.pay-options{grid-template-columns:repeat(3,1fr)}.data-btns{flex-direction:column;width:100%}.graph-controls{flex-direction:column;align-items:flex-start}.graph-inner{padding:0 14px 40px}}
+@media(max-width:380px){.restaurant-grid{grid-template-columns:1fr}.top-picks-grid{grid-template-columns:1fr}.pay-options{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="goHome()">
+      <div class="logo-wordmark">
+        <span class="brand">Zippy</span>
+        <span class="sub"></span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="weather-modes">
+        <button class="mode-btn traffic" id="btnTraffic" onclick="toggleMode('traffic')" title="Enable traffic mode — increases delivery time">&#x1F6A6; Traffic</button>
+        <button class="mode-btn rain" id="btnRain" onclick="toggleMode('rain')" title="Enable rain mode — increases delivery time">&#x1F327;&#xFE0F; Rain</button>
+        <div class="mode-indicator" id="modeIndicator">&#x23F1; Extended ETA</div>
+      </div>
+      <a href="https://www.cognospace.in" target="_blank" rel="noopener" class="cognospace-logo-link" title="Visit Cognospace">
+        <img src="images/cognospace_logo.png" alt="Cognospace" onerror="this.style.display='none'">
+      </a>
+      <button class="cart-pill" onclick="openCart()">&#x1F6D2; Cart <span class="cart-num" id="cartNum">0</span></button>
+    </div>
+  </div>
+</header>
+
+<!-- HOME PAGE -->
+<div id="homePage" style="display:block">
+  <div class="hero">
+    <div class="hero-inner">
+      <!-- SINGLE DYNAMIC BIG HERO CARD -->
+      <div class="hero-big-card" id="heroBigCard">
+        <div class="hero-big-left" id="heroBigLeft" style="position:relative;z-index:2">
+          <div class="hero-big-eyebrow" id="heroBigEyebrow">Limited Time Offer</div>
+          <div class="hero-big-title" id="heroBigTitle">CRAVE<span>-ATHON</span></div>
+          <div class="hero-big-sub" id="heroBigSub">Min. &#x20B9;150 OFF &amp; More</div>
+          <div class="hero-big-actions">
+            <button class="hero-cta hero-big-cta" id="heroBigCta" onclick="document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})">Order Now &#x2192;</button>
+            <button class="hero-big-secondary" id="heroBigSecBtn">Explore Deals</button>
+          </div>
+        </div>
+        <!-- Full background image — managed by applyHeroSlide() -->
+        <img id="heroBgImg" alt="" aria-hidden="true"
+             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.38;border-radius:inherit;pointer-events:none;transition:opacity .6s ease">
+        <div style="position:absolute;inset:0;z-index:1;border-radius:inherit;background:linear-gradient(90deg,rgba(0,0,0,.6) 30%,rgba(0,0,0,.1) 100%);pointer-events:none"></div>
+        <!-- Slide dots -->
+        <div class="hero-big-dots" id="heroBigDots" style="position:relative;z-index:3"></div>
+        <!-- Arrow controls -->
+        <button class="hero-big-arrow hero-big-prev" onclick="heroPrev()" style="z-index:3">&#x2039;</button>
+        <button class="hero-big-arrow hero-big-next" onclick="heroNext()" style="z-index:3">&#x203A;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div id="restaurants">
+      <div class="sec-header"><div class="sec-title">Top rated near you</div><a class="sec-link" href="#">See all &rsaquo;</a></div>
+      <div class="restaurant-grid" id="restaurantGrid"></div>
+    </div>
+    <div class="data-section">
+      <div class="data-header">
+        <div class="sec-title">Regression Data</div>
+        <div class="data-btns">
+          <button class="btn-gen-table" id="genTableBtn" onclick="generateTable()" disabled>&#x1F4CA; Generate Table</button>
+          <button class="btn-plot-graph" id="plotGraphBtn" onclick="openGraphPage()" disabled>&#x1F4C8; Plot Graph</button>
+        </div>
+      </div>
+      <p id="dataHint" style="font-size:13px;color:var(--gray);margin-bottom:20px;">Place orders to collect distance &amp; time data points.</p>
+      <div class="data-table-wrap" id="dataTableWrap">
+        <div class="data-table-head-bar"><h3>Distance vs Time &#x2014; Regression Dataset</h3><span id="dataTableInfo">0 records</span></div>
+        <table><thead><tr><th>#</th><th>Restaurant</th><th>Item</th><th>Customer</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="dataTableBody"></tbody></table>
+        <div class="table-foot-bar"><span id="ftAvgDist">Avg Distance: &#x2014;</span><span id="ftAvgTime">Avg Time: &#x2014;</span><span id="ftTotal">Total: 0 orders</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESTAURANT INNER PAGE -->
+<div id="restPage" class="inner-page">
+  <div class="rest-hero">
+    <img id="restHeroImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;opacity:0.75">
+    <div class="rest-hero-overlay"></div>
+    <button class="rest-hero-back" onclick="goHome()">&#x2190;</button>
+  </div>
+  <div class="page-body" style="padding-top:0">
+    <div class="rest-info-card">
+      <div class="rest-info-top">
+        <div>
+          <div class="rest-info-badge"><span>&#x1F947;</span><span id="restCat"></span><em id="restCatItalic" style="margin-left:4px;font-weight:600"></em></div>
+          <div class="rest-info-title" id="restInfoName"></div>
+          <div class="rest-info-meta"><span id="restInfoTime"></span><span>|</span><span id="restInfoArea"></span></div>
+        </div>
+        <div>
+          <div class="rest-rating-pill"><span id="restInfoRating"></span><span>&#x2605;</span></div>
+          <div class="rest-rating-sub" id="restInfoRatingCt"></div>
+        </div>
+      </div>
+      <div class="rest-info-divider"></div>
+      <div class="rest-deal-row">
+        <div class="rest-deal-left"><div class="deal-icon-badge">DEAL<br>OF DAY</div><div class="rest-deal-text"><strong id="restDealText"></strong><small id="restDealSub"></small></div></div>
+        <div class="rest-deal-count" id="restDealCnt"></div>
+      </div>
+    </div>
+    <div class="free-del-bar">Free delivery on orders above &#x20B9;99 <span class="one-badge">one</span></div>
+    <div class="menu-controls">
+      <div class="menu-search"><span>&#x1F50D;</span><input type="text" id="menuSearchInput" placeholder="Search for dishes" oninput="filterMenu()"></div>
+      <div class="menu-filters" id="menuFilters"></div>
+    </div>
+    <div class="menu-body" id="menuBody"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT PAGE -->
+<div id="checkoutPage" class="checkout-page">
+  <div class="checkout-back" onclick="closeCheckout()">&#x2190; Back to Cart</div>
+  <div class="checkout-title">Checkout</div>
+  <div class="checkout-section">
+    <div class="checkout-sec-head"><div class="checkout-sec-num">1</div><div class="checkout-sec-title">Your Details</div></div>
+    <div class="checkout-sec-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" id="coName" placeholder="Ravi Kumar" oninput="validateCheckout()"></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" id="coPhone" placeholder="98765 43210" maxlength="10" oninput="validateCheckout()"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email (optional)</label><input type="email" class="form-input" id="coEmail" placeholder="ravi@email.com"></div>
+    </div>
+  </div>
+  <div class="checkout-section">
+    <div class="checkout-sec-head"><div class="checkout-sec-num">2</div><div class="checkout-sec-title">Delivery Address</div></div>
+    <div class="checkout-sec-body">
+      <div class="addr-options" id="addrOptions">
+        <div class="addr-option selected" data-label="Home" onclick="selectAddr(this)"><div class="addr-radio"></div><div class="addr-icon">&#x1F3E0;</div><div class="addr-info"><div class="addr-label">Home</div><div class="addr-text">N&#x101;rsingi, Hyderabad, Telangana 500075</div></div></div>
+        <div class="addr-option" data-label="Work" onclick="selectAddr(this)"><div class="addr-radio"></div><div class="addr-icon">&#x1F4BC;</div><div class="addr-info"><div class="addr-label">Work</div><div class="addr-text">HITEC City, Hyderabad, Telangana 500081</div></div></div>
+      </div>
+      <div class="loc-input-row">
+        <input type="text" class="form-input" id="customLocInput" placeholder="Or type your delivery location here..." oninput="validateCheckout()">
+        <button class="btn-use-loc" onclick="useTypedLocation()">Use This</button>
+      </div>
+      <div id="locConfirmMsg" style="display:none;margin-top:8px;font-size:12px;color:var(--green);font-weight:700;">&#x2705; Location set: <span id="locConfirmText"></span></div>
+      <button class="btn-add-addr" onclick="openAddrModal()">+ Add New Address</button>
+    </div>
+  </div>
+  <div class="checkout-section">
+    <div class="checkout-sec-head"><div class="checkout-sec-num">3</div><div class="checkout-sec-title">Payment Method</div></div>
+    <div class="checkout-sec-body">
+      <div class="pay-options" id="payOptions">
+        <div class="pay-option selected" onclick="selectPay(this)"><div class="pay-icon">&#x1F4B3;</div><div class="pay-label">Card</div></div>
+        <div class="pay-option" onclick="selectPay(this)"><div class="pay-icon">&#x1F4F1;</div><div class="pay-label">UPI</div></div>
+        <div class="pay-option" onclick="selectPay(this)"><div class="pay-icon">&#x1F3E6;</div><div class="pay-label">Net Banking</div></div>
+        <div class="pay-option" onclick="selectPay(this)"><div class="pay-icon">&#x1F4B5;</div><div class="pay-label">Cash</div></div>
+        <div class="pay-option" onclick="selectPay(this)"><div class="pay-icon">&#x1F45B;</div><div class="pay-label">Wallet</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="checkout-section">
+    <div class="checkout-sec-head"><div class="checkout-sec-num">4</div><div class="checkout-sec-title">Order Summary</div></div>
+    <div class="checkout-sec-body">
+      <div id="checkoutSummaryItems"></div>
+      <div class="checkout-order-item" style="margin-top:10px;"><span>Delivery Fee</span><span style="color:var(--green);font-weight:700;">FREE</span></div>
+      <div class="checkout-order-item"><span>Platform Fee</span><span>&#x20B9;5</span></div>
+      <div class="checkout-total-row"><span>Total Payable</span><span id="checkoutTotal">&#x20B9;0</span></div>
+      <button class="btn-pay" id="btnPay" onclick="processPayment()" disabled>&#x1F512; Pay Securely</button>
+    </div>
+  </div>
+</div>
+
+<!-- GRAPH PAGE -->
+<div id="graphPage" class="graph-page">
+  <div class="graph-back-bar"><div class="graph-back" onclick="closeGraphPage()">&#x2190; Back to Home</div></div>
+  <div class="graph-inner">
+    <div class="graph-box">
+      <div class="graph-title">Scatter Plot &#x2014; Distance vs Delivery Time</div>
+      <div class="graph-subtitle">X&#x2011;axis: Distance (km) &nbsp;|&nbsp; Y&#x2011;axis: Time (min)</div>
+
+      <!-- Mode bar (same as new graph) -->
+      <div class="ng-mode-bar">
+        <button class="ng-mode-btn" id="sgModeNone" onclick="setSGMode('none')">&#x1F4CF; Best-Fit Line</button>
+        <button class="ng-mode-btn" id="sgModeLine" onclick="setSGMode('line')">&#x2014; Draw Line</button>
+        <button class="ng-mode-btn active" id="sgModeReadX" onclick="setSGMode('readX')">&#x21E3; Read X value</button>
+        <button class="ng-mode-btn" id="sgModeReadY" onclick="setSGMode('readY')">&#x21E2; Read Y value</button>
+      </div>
+
+      <div class="graph-canvas-wrap">
+        <canvas id="regressionCanvas"></canvas>
+      </div>
+
+      <div class="graph-controls">
+        <button class="btn-draw-line" id="btnDrawLine" onclick="toggleRegressionLine()">&#x1F4CF; Draw Best-Fit Line</button>
+        <button class="btn-clear-pts" id="btnClearReadings" onclick="clearSGReadings()">&#x2715; Clear Readings</button>
+        <button class="btn-clear-pts" id="btnClearManualLine" onclick="clearSGManualLine()">&#x21BA; Clear Line</button>
+        <button class="btn-clear-pts" onclick="replotGraph()">&#x1F5D1; Clear All</button>
+        <button class="btn-new-graph" onclick="openNewGraphPage()">&#x2795; Plot New Graph</button>
+      </div>
+      <div id="sgEquation" style="display:none;margin-top:10px;background:var(--orange-bg);border:1.5px solid var(--orange);border-radius:10px;padding:10px 16px;font-size:15px;font-weight:800;color:var(--orange);font-family:'Nunito',sans-serif;letter-spacing:0.3px;">&#x1F4C8; Regression Equation: <span id="sgEquationText"></span></div>
+      <div class="graph-hint" id="sgHint">&#x1F4A1; Use the mode buttons above to draw a line or read values. Click the canvas to interact.</div>
+      <div class="graph-legend">
+        <div class="legend-item"><span class="legend-x">&#xD7;</span> Data Point</div>
+        <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;background:var(--black);vertical-align:middle"></span> Best-fit / Drawn Line</div>
+        <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;border-top:2px dashed #1565c0;vertical-align:middle"></span> Reading Lines</div>
+      </div>
+    </div>
+    <div class="graph-side-table">
+      <div class="graph-side-head"><h3>Data Table</h3><p>Distance &amp; Time values only</p></div>
+      <div class="graph-side-scroll">
+        <table><thead><tr><th>#</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="graphSideTableBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW GRAPH PAGE -->
+<div id="newGraphPage" class="new-graph-page">
+  <div class="graph-back-bar"><div class="graph-back" onclick="closeNewGraphPage()">&#x2190; Back to Graph</div></div>
+  <div class="new-graph-inner">
+    <div class="graph-box">
+      <div class="graph-title">&#x1F4C8; Plot Your Own Graph</div>
+      <div class="graph-subtitle">Enter data in the table &#x2192; click <b>Plot Points</b> &#x2192; select a mode to draw lines &amp; read values</div>
+
+      <!-- Mode selector -->
+      <div class="ng-mode-bar">
+        <button class="ng-mode-btn active" id="ngModePoint" onclick="setNGMode('point')">&#x2715; Plot Point</button>
+        <button class="ng-mode-btn" id="ngModeLine" onclick="setNGMode('line')">&#x2014; Draw Line</button>
+        <button class="ng-mode-btn" id="ngModeReadX" onclick="setNGMode('readX')">&#x21E3; Read X value</button>
+        <button class="ng-mode-btn" id="ngModeReadY" onclick="setNGMode('readY')">&#x21E2; Read Y value</button>
+      </div>
+
+      <div class="ng-canvas-wrap">
+        <canvas id="newGraphCanvas"></canvas>
+      </div>
+
+      <div class="ng-controls">
+        <button class="btn-draw-line" onclick="ngPlotPoints()">&#x2715; Plot Points</button>
+        <button class="btn-clear-pts" onclick="ngClearPoints()">&#x2715; Clear Points</button>
+        <button class="btn-clear-pts" onclick="ngClearLine()">&#x21BA; Clear Line</button>
+        <button class="btn-clear-pts" onclick="ngClearAll()">&#x1F5D1; Clear All</button>
+      </div>
+
+      <div class="ng-hint-box">
+        <b>&#x1F4A1; How to use:</b><br>
+        1. Enter X &amp; Y values in the table on the right → <b>Add Row</b><br>
+        2. Click <b>Plot Points</b> to place the × marks on the graph<br>
+        3. Switch to <b>Draw Line</b> mode — click any start point on the graph (including on axes) and drag to draw a straight line<br>
+        4. Use <b>Read X</b> or <b>Read Y</b> mode — click the best-fit line to draw corresponding dashed lines to both axes and read the values
+      </div>
+
+      <div class="ng-legend">
+        <div class="ng-legend-item"><span style="color:var(--orange);font-weight:900;font-size:15px">&#x2715;</span> Plotted Point</div>
+        <div class="ng-legend-item"><span style="display:inline-block;width:20px;height:2.5px;background:#1C1C1C;vertical-align:middle"></span> Drawn Line</div>
+        <div class="ng-legend-item"><span style="display:inline-block;width:20px;height:2px;background:#1565c0;border-top:2px dashed #1565c0;vertical-align:middle"></span> Reading Lines</div>
+      </div>
+    </div>
+
+    <!-- Side table -->
+    <div class="ng-side">
+      <div class="ng-side-head">
+        <h3>&#x1F4CB; Data Table</h3>
+        <p>Enter X (Distance km) &amp; Y (Time min) values</p>
+      </div>
+      <div class="ng-input-row">
+        <div class="ng-input-group">
+          <div class="ng-input-label">X (Distance km)</div>
+          <input class="ng-input" type="number" id="ngInputX" placeholder="e.g. 4" min="0" max="20" step="1">
+        </div>
+        <div class="ng-input-group">
+          <div class="ng-input-label">Y (Time min)</div>
+          <input class="ng-input" type="number" id="ngInputY" placeholder="e.g. 30" min="0" max="100" step="1">
+        </div>
+        <button class="ng-add-row-btn" onclick="ngAddRow()">+ Add</button>
+      </div>
+      <div class="ng-table-scroll">
+        <div class="ng-table-empty" id="ngTableEmpty">No data yet. Add rows above.</div>
+        <table id="ngDataTable" style="display:none">
+          <thead><tr><th>#</th><th>X (km)</th><th>Y (min)</th><th></th></tr></thead>
+          <tbody id="ngTableBody"></tbody>
+        </table>
+      </div>
+      <div class="ng-side-btns">
+        <button class="ng-plot-btn" onclick="ngPlotPoints()">&#x1F4C9; Plot Points</button>
+        <button class="ng-clear-btn" onclick="ngClearData()">&#x1F5D1; Clear Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-head">
+    <h2>&#x1F6D2; Your Cart <span id="cartDrawerCount" style="font-size:14px;font-weight:600;opacity:.8"></span></h2>
+    <button class="cart-close-btn" onclick="closeCart()">&#x2715;</button>
+  </div>
+  <div class="cart-scroll" id="cartScroll">
+    <div class="cart-empty-state" id="cartEmptyState"><div class="cart-empty-icon">&#x1F6D2;</div><strong>Your cart is empty</strong><span style="font-size:12px">Add items to get started</span></div>
+    <div id="cartItemsWrap" style="display:none">
+      <div id="cartLineItems"></div>
+      <div class="cart-bill-box">
+        <div class="cart-bill-row"><span>Item Total</span><span id="billItemTotal">&#x20B9;0</span></div>
+        <div class="cart-bill-row"><span>Delivery Fee</span><span style="color:var(--green)">FREE</span></div>
+        <div class="cart-bill-row"><span>Platform Fee</span><span>&#x20B9;5</span></div>
+        <div class="cart-bill-row total"><span>To Pay</span><span id="billTotal">&#x20B9;0</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="cart-footer-area" id="cartFooter" style="display:none"><button class="btn-checkout" onclick="openCheckout()">Proceed to Checkout &#x2192;</button></div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-backdrop" id="successModal">
+  <div class="modal-box">
+    <div class="modal-top"><div class="modal-confetti">&#x1F389;</div><h2>Order Placed!</h2><p>Your food is on its way!</p></div>
+    <div class="modal-stats">
+      <div class="modal-stat"><div class="val" id="modalDist">&#x2014;</div><div class="lbl">Distance (km)</div></div>
+      <div class="modal-stat"><div class="val" id="modalTime">&#x2014;</div><div class="lbl">Est. Time (min)</div></div>
+      <div class="modal-stat"><div class="val" id="modalAmt">&#x2014;</div><div class="lbl">Amount Paid</div></div>
+    </div>
+    <div class="tracking-steps">
+      <div class="track-step done"><div class="track-dot">&#x2713;</div><div class="track-lbl">Confirmed</div></div>
+      <div class="track-step done"><div class="track-dot">&#x2713;</div><div class="track-lbl">Preparing</div></div>
+      <div class="track-step active"><div class="track-dot">&#x1F6F5;</div><div class="track-lbl">On the way</div></div>
+      <div class="track-step"><div class="track-dot">&#x1F3E0;</div><div class="track-lbl">Delivered</div></div>
+    </div>
+    <div class="modal-close-row"><button class="btn-modal-close" onclick="closeSuccessModal()">OK, Got it!</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo-mark">Z</div>
+      <div>
+        <div class="footer-brand-name">Zippy</div>
+        <div class="footer-brand-sub">Fast food. Faster delivery.</div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Help</div>
+        <a href="#">Support</a>
+        <a href="#">Track Order</a>
+        <a href="#">Partner with Us</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&#xa9; 2026 Zippy. All rights reserved.</span>
+    <span class="footer-credit">Designed &amp; Developed by <a href="https://www.cognospace.in" target="_blank" rel="noopener">CognoSpace</a> &#x2728;</span>
+  </div>
+</footer>
+
+<!-- ADD NEW ADDRESS MODAL -->
+<div class="addr-modal-backdrop" id="addrModalBackdrop" onclick="closeAddrModal(event)">
+  <div class="addr-modal" onclick="event.stopPropagation()">
+    <div class="addr-modal-head">
+      <h3>&#x2795; Add New Address</h3>
+      <button class="addr-modal-close" onclick="closeAddrModal()">&#x2715;</button>
+    </div>
+    <div class="addr-modal-body">
+      <div class="addr-type-row" id="addrTypeRow">
+        <button class="addr-type-btn active" onclick="setAddrType(this,'&#x1F3E0;','Home')">&#x1F3E0; Home</button>
+        <button class="addr-type-btn" onclick="setAddrType(this,'&#x1F4BC;','Work')">&#x1F4BC; Work</button>
+        <button class="addr-type-btn" onclick="setAddrType(this,'&#x1F4CD;','Other')">&#x1F4CD; Other</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Address Label</label>
+        <input type="text" class="form-input" id="newAddrLabel" placeholder="e.g. Home, Office, Parents..." value="Home">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Address</label>
+        <input type="text" class="form-input" id="newAddrLine1" placeholder="Flat/House No., Building Name, Street">
+      </div>
+      <div class="form-row" style="gap:12px">
+        <div class="form-group">
+          <label class="form-label">Area / Locality</label>
+          <input type="text" class="form-input" id="newAddrLocality" placeholder="Banjara Hills">
+        </div>
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input type="text" class="form-input" id="newAddrCity" placeholder="Hyderabad" value="Hyderabad">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Pincode</label>
+        <input type="text" class="form-input" id="newAddrPin" placeholder="500034" maxlength="6">
+      </div>
+    </div>
+    <div class="addr-modal-footer">
+      <button class="btn-addr-cancel" onclick="closeAddrModal()">Cancel</button>
+      <button class="btn-addr-save" onclick="saveNewAddress()">Save Address</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   RESTAURANT DATA
+   To add a new restaurant: copy one object, give new id,
+   set baseDistKm (fixed base distance for this restaurant).
+   Different users get baseDistKm +/- small random variation.
+   ============================================================ */
+const RESTAURANTS = [
+  { id:1, name:"Hyderabad House", cuisine:"Biryani \u00B7 Mughlai \u00B7 North Indian", rating:4.5, ratingCount:"12K+", time:"30-40", discount:"\u20B9166 OFF", discountAbove:"above \u20B9999", category:"Biryani", img:"images/rest-hyderabad-house.jpg", ph:"\uD83C\uDF5B", area:"Banjara Hills", baseDistKm:8,
+    deal:"Items at \u20B949", dealSub:"ON SELECT ITEMS", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Chicken Biryani",desc:"Aromatic basmati with juicy chicken & saffron",price:220,orig:280,img:"images/chicken-biryani.jpg",veg:false}, {name:"Mutton Biryani",desc:"Tender mutton slow-cooked with fragrant rice",price:280,orig:340,img:"images/mutton-biryani.jpg",veg:false} ],
+      "Biryani":[ {name:"Veg Biryani",desc:"Fresh vegetables layered with basmati rice",price:160,orig:200,img:"images/veg-biryani.jpg",veg:true}, {name:"Prawn Biryani",desc:"Succulent prawns in spiced basmati rice",price:310,orig:380,img:"images/prawn-biryani.jpg",veg:false}, {name:"Egg Biryani",desc:"Boiled eggs in aromatic rice",price:180,orig:220,img:"images/egg-biryani.jpg",veg:false} ],
+      "Curries":[ {name:"Haleem",desc:"Slow-cooked wheat, lentil and meat stew",price:180,orig:220,img:"images/haleem.jpg",veg:false}, {name:"Butter Chicken",desc:"Creamy tomato curry with tender chicken",price:220,orig:270,img:"images/butter-chicken.jpg",veg:false}, {name:"Dal Makhani",desc:"Black lentils simmered overnight",price:160,orig:190,img:"images/dal-makhani.jpg",veg:true} ],
+      "Breads":[ {name:"Mirchi Ka Salan",desc:"Hyderabadi green chili curry",price:120,orig:150,img:"images/mirchi-salan.jpg",veg:true}, {name:"Garlic Naan",desc:"Tandoor-baked bread with garlic butter",price:50,orig:60,img:"images/naan.jpg",veg:true} ] }
+  },
+  { id:2, name:"Dosa Plaza", cuisine:"South Indian \u00B7 Breakfast \u00B7 Tiffins", rating:4.3, ratingCount:"8K+", time:"20-30", discount:"\u20B9100 OFF", discountAbove:"above \u20B9499", category:"South Indian", img:"images/rest-dosa-plaza.jpg", ph:"\uD83E\uDD53", area:"Jubilee Hills", baseDistKm:5,
+    deal:"Combo Meals at \u20B999", dealSub:"ON SELECT COMBOS", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Masala Dosa",desc:"Crispy golden dosa with spiced potato",price:90,orig:120,img:"images/masala-dosa.jpg",veg:true}, {name:"Medu Vada",desc:"Crispy urad dal fritters with sambar",price:60,orig:80,img:"images/medu-vada.jpg",veg:true} ],
+      "Dosas":[ {name:"Plain Dosa",desc:"Thin crispy rice & lentil crepe",price:60,orig:75,img:"images/plain-dosa.jpg",veg:true}, {name:"Rava Dosa",desc:"Lacy semolina crepe",price:100,orig:125,img:"images/rava-dosa.jpg",veg:true}, {name:"Mysore Masala Dosa",desc:"Dosa with red chutney and potato",price:110,orig:140,img:"images/mysore-dosa.jpg",veg:true}, {name:"Cheese Dosa",desc:"Crispy dosa with melted cheese",price:130,orig:160,img:"images/cheese-dosa.jpg",veg:true} ],
+      "Idli & Vada":[ {name:"Idli Sambar",desc:"Soft steamed rice cakes with sambar",price:70,orig:90,img:"images/idli.jpg",veg:true}, {name:"Pongal",desc:"Rice and moong dal with ghee",price:80,orig:100,img:"images/pongal.jpg",veg:true} ],
+      "Beverages":[ {name:"Filter Coffee",desc:"Strong South Indian filter coffee",price:40,orig:50,img:"images/filter-coffee.jpg",veg:true}, {name:"Mango Lassi",desc:"Chilled thick mango yogurt drink",price:80,orig:100,img:"images/mango-lassi.jpg",veg:true} ] }
+  },
+  { id:3, name:"Pizza Express", cuisine:"Italian \u00B7 Fast Food \u00B7 Pasta", rating:4.1, ratingCount:"6K+", time:"25-35", discount:"50% OFF", discountAbove:"above \u20B9599", category:"Pizza", img:"images/rest-pizza.jpg", ph:"\uD83C\uDF55", area:"Madhapur", baseDistKm:12,
+    deal:"Buy 1 Get 1 Free", dealSub:"ON MEDIUM PIZZAS", dealCnt:"1/5",
+    menu:{ "Top Picks":[ {name:"Margherita",desc:"Classic tomato sauce, mozzarella & basil",price:220,orig:299,img:"images/margherita.jpg",veg:true}, {name:"Chicken Tikka Pizza",desc:"Tandoori chicken with onion & capsicum",price:320,orig:420,img:"images/chicken-tikka-pizza.jpg",veg:false} ],
+      "Pizzas":[ {name:"Pepperoni",desc:"Loaded with spicy pepperoni",price:299,orig:380,img:"images/pepperoni.jpg",veg:false}, {name:"BBQ Chicken",desc:"Smoky BBQ sauce with grilled chicken",price:349,orig:440,img:"images/bbq-chicken-pizza.jpg",veg:false}, {name:"Farm House",desc:"Mushroom, capsicum, onion & baby corn",price:269,orig:340,img:"images/farmhouse.jpg",veg:true} ],
+      "Pasta & Sides":[ {name:"Pasta Arabiata",desc:"Penne in spicy tomato sauce",price:180,orig:220,img:"images/pasta.jpg",veg:true}, {name:"Garlic Bread",desc:"Toasted baguette with herb garlic butter",price:90,orig:110,img:"images/garlic-bread.jpg",veg:true}, {name:"Caesar Salad",desc:"Romaine lettuce with caesar dressing",price:150,orig:190,img:"images/caesar-salad.jpg",veg:true} ] }
+  },
+  { id:4, name:"Burger Factory", cuisine:"American \u00B7 Burgers \u00B7 Wraps", rating:4.4, ratingCount:"10K+", time:"15-25", discount:"\u20B9166 OFF", discountAbove:"above \u20B9599", category:"Burgers", img:"images/rest-burger.jpg", ph:"\uD83C\uDF54", area:"Gachibowli", baseDistKm:15,
+    deal:"Free Fries on \u20B9299+", dealSub:"SELECTED BURGERS", dealCnt:"4/5",
+    menu:{ "Top Picks":[ {name:"Classic Smash Burger",desc:"Double smash patty, cheddar & special sauce",price:199,orig:249,img:"images/smash-burger.jpg",veg:false}, {name:"Crispy Chicken Burger",desc:"Fried chicken thigh, coleslaw & spicy mayo",price:179,orig:229,img:"images/crispy-chicken.jpg",veg:false} ],
+      "Burgers":[ {name:"Veg Patty Burger",desc:"Hearty veggie patty with lettuce & cheese",price:130,orig:170,img:"images/veg-burger.jpg",veg:true}, {name:"Double Beef Burger",desc:"Two beef patties, bacon & American cheese",price:260,orig:320,img:"images/double-beef.jpg",veg:false}, {name:"BBQ Pulled Pork",desc:"Slow-cooked pulled pork with smoky BBQ",price:240,orig:299,img:"images/bbq-burger.jpg",veg:false} ],
+      "Sides":[ {name:"Loaded Fries",desc:"Fries topped with cheese & jalape\u00F1os",price:110,orig:140,img:"images/loaded-fries.jpg",veg:true}, {name:"Onion Rings",desc:"Battered & fried golden onion rings",price:90,orig:110,img:"images/onion-rings.jpg",veg:true} ],
+      "Beverages":[ {name:"Chocolate Milkshake",desc:"Thick creamy chocolate shake",price:120,orig:150,img:"images/choc-shake.jpg",veg:true}, {name:"Oreo Shake",desc:"Crushed Oreo with vanilla ice cream",price:130,orig:160,img:"images/oreo-shake.jpg",veg:true} ] }
+  },
+  { id:5, name:"Rolls & Wraps", cuisine:"Street Food \u00B7 Wraps \u00B7 Kathi Rolls", rating:4.2, ratingCount:"5K+", time:"15-20", discount:"45% OFF", discountAbove:"above \u20B9349", category:"Street Food", img:"images/rest-rolls.jpg", ph:"\uD83C\uDF2F", area:"Kukatpally", baseDistKm:10,
+    deal:"Free Raita with Rolls", dealSub:"ORDERS ABOVE \u20B9199", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Paneer Kathi Roll",desc:"Spiced paneer tikka in flaky paratha",price:110,orig:149,img:"images/paneer-roll.jpg",veg:true}, {name:"Chicken Tikka Roll",desc:"Grilled chicken tikka with onions & chutney",price:130,orig:169,img:"images/chicken-roll.jpg",veg:false} ],
+      "Rolls":[ {name:"Egg Roll",desc:"Egg-coated paratha with spiced stuffing",price:90,orig:120,img:"images/egg-roll.jpg",veg:false}, {name:"Mushroom Roll",desc:"Saut\u00E9ed mushrooms with cheese in paratha",price:120,orig:150,img:"images/mushroom-roll.jpg",veg:true}, {name:"Double Chicken Roll",desc:"Extra chicken, extra spice",price:160,orig:199,img:"images/double-chicken-roll.jpg",veg:false} ],
+      "Snacks":[ {name:"Samosa (2 pcs)",desc:"Crispy fried pastry with spiced potato",price:50,orig:60,img:"images/samosa.jpg",veg:true}, {name:"Chole Bhature",desc:"Fluffy bhature with spiced chickpea curry",price:120,orig:150,img:"images/chole-bhature.jpg",veg:true} ] }
+  },
+  { id:6, name:"Sweet Cravings", cuisine:"Desserts \u00B7 Bakery \u00B7 Ice Cream", rating:4.6, ratingCount:"15K+", time:"20-30", discount:"ITEMS AT \u20B935", discountAbove:"", category:"Desserts", img:"images/rest-sweets.jpg", ph:"\uD83C\uDF70", area:"Ameerpet", baseDistKm:6,
+    deal:"Gulab Jamun at \u20B949", dealSub:"ON ALL ORDERS", dealCnt:"5/5",
+    menu:{ "Top Picks":[ {name:"Mango Tart",desc:"Buttery pastry shell with fresh mango cream",price:99,orig:155,img:"images/mango-tart.jpg",veg:true}, {name:"Chocolate Lava Cake",desc:"Warm chocolate cake with molten center",price:140,orig:180,img:"images/lava-cake.jpg",veg:true} ],
+      "Cakes":[ {name:"Red Velvet Cake",desc:"Moist red velvet with cream cheese frosting",price:160,orig:200,img:"images/red-velvet.jpg",veg:true}, {name:"Tiramisu",desc:"Classic Italian espresso-soaked dessert",price:180,orig:220,img:"images/tiramisu.jpg",veg:true}, {name:"Brownie",desc:"Dense fudgy chocolate brownie",price:90,orig:120,img:"images/brownie.jpg",veg:true} ],
+      "Indian Sweets":[ {name:"Gulab Jamun (4 pcs)",desc:"Soft milk solid balls in rose syrup",price:80,orig:100,img:"images/gulab-jamun.jpg",veg:true}, {name:"Rasmalai",desc:"Cottage cheese in saffron cream",price:90,orig:120,img:"images/rasmalai.jpg",veg:true} ],
+      "Ice Cream":[ {name:"Brownie Sundae",desc:"Warm brownie with vanilla ice cream",price:150,orig:190,img:"images/brownie-sundae.jpg",veg:true}, {name:"Mango Sorbet",desc:"Refreshing natural mango sorbet",price:80,orig:100,img:"images/mango-sorbet.jpg",veg:true} ] }
+  },
+  { id:7, name:"Chinese Dragon", cuisine:"Chinese \u00B7 Asian \u00B7 Noodles", rating:4.2, ratingCount:"7K+", time:"25-35", discount:"30% OFF", discountAbove:"above \u20B9399", category:"Chinese", img:"images/rest-chinese.jpg", ph:"\uD83C\uDF5C", area:"Kondapur", baseDistKm:9,
+    deal:"Free Spring Rolls", dealSub:"ON ORDERS ABOVE \u20B9399", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Hakka Noodles",desc:"Stir-fried noodles with veggies & soy sauce",price:140,orig:180,img:"images/hakka-noodles.jpg",veg:true}, {name:"Chicken Manchurian",desc:"Crispy chicken in spicy Manchurian gravy",price:190,orig:240,img:"images/manchurian.jpg",veg:false} ],
+      "Rice & Noodles":[ {name:"Fried Rice",desc:"Wok-tossed rice with egg & vegetables",price:120,orig:150,img:"images/fried-rice.jpg",veg:true}, {name:"Chow Mein",desc:"Crispy fried noodles with vegetables",price:130,orig:170,img:"images/chow-mein.jpg",veg:true}, {name:"Schezwan Rice",desc:"Spicy Schezwan sauce fried rice",price:150,orig:190,img:"images/schezwan-rice.jpg",veg:true} ],
+      "Starters":[ {name:"Spring Rolls (4 pcs)",desc:"Crispy rolls filled with vegetables",price:100,orig:130,img:"images/spring-rolls.jpg",veg:true}, {name:"Chilli Paneer",desc:"Paneer tossed in spicy chilli sauce",price:170,orig:210,img:"images/chilli-paneer.jpg",veg:true} ] }
+  },
+  { id:8, name:"Tandoor Tales", cuisine:"Mughlai \u00B7 Kebabs \u00B7 North Indian", rating:4.4, ratingCount:"9K+", time:"30-45", discount:"\u20B9120 OFF", discountAbove:"above \u20B9699", category:"Mughlai", img:"images/rest-tandoor.jpg", ph:"\uD83C\uDF96\uFE0F", area:"Mehdipatnam", baseDistKm:11,
+    deal:"Kebab Platter at \u20B9299", dealSub:"SELECTED PLATTERS", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Seekh Kebab",desc:"Minced lamb with herbs on skewers",price:220,orig:280,img:"images/seekh-kebab.jpg",veg:false}, {name:"Paneer Tikka",desc:"Marinated paneer grilled in tandoor",price:180,orig:230,img:"images/paneer-tikka.jpg",veg:true} ],
+      "Kebabs":[ {name:"Chicken Tandoori",desc:"Whole chicken marinated in spiced yogurt",price:250,orig:320,img:"images/tandoori-chicken.jpg",veg:false}, {name:"Reshmi Kebab",desc:"Silky smooth chicken kebab",price:240,orig:300,img:"images/reshmi-kebab.jpg",veg:false} ],
+      "Curries":[ {name:"Nihari",desc:"Slow-cooked meat stew with bone marrow",price:260,orig:320,img:"images/nihari.jpg",veg:false}, {name:"Shahi Paneer",desc:"Paneer in rich cream-based gravy",price:190,orig:240,img:"images/shahi-paneer.jpg",veg:true} ] }
+  },
+  { id:9, name:"Cafe Latte", cuisine:"Cafe \u00B7 Beverages \u00B7 Snacks", rating:4.3, ratingCount:"11K+", time:"15-20", discount:"20% OFF", discountAbove:"above \u20B9299", category:"Cafe", img:"images/rest-cafe.jpg", ph:"\u2615", area:"Hitech City", baseDistKm:7,
+    deal:"Free Cookie with Coffee", dealSub:"ON ALL ORDERS", dealCnt:"4/5",
+    menu:{ "Top Picks":[ {name:"Caramel Latte",desc:"Espresso with steamed milk & caramel drizzle",price:160,orig:200,img:"images/caramel-latte.jpg",veg:true}, {name:"Avocado Toast",desc:"Smashed avocado on sourdough",price:180,orig:220,img:"images/avocado-toast.jpg",veg:true} ],
+      "Coffee":[ {name:"Americano",desc:"Double espresso with hot water",price:110,orig:140,img:"images/americano.jpg",veg:true}, {name:"Cappuccino",desc:"Espresso with frothed milk",price:130,orig:160,img:"images/cappuccino.jpg",veg:true}, {name:"Cold Brew",desc:"12-hour cold-brewed smooth coffee",price:180,orig:220,img:"images/cold-brew.jpg",veg:true} ],
+      "Food":[ {name:"Croissant",desc:"Buttery flaky French croissant",price:90,orig:120,img:"images/croissant.jpg",veg:true}, {name:"Egg Sandwich",desc:"Scrambled egg on toasted bread",price:130,orig:160,img:"images/egg-sandwich.jpg",veg:false} ] }
+  },
+  { id:10, name:"Sushi Zen", cuisine:"Japanese \u00B7 Sushi \u00B7 Asian", rating:4.5, ratingCount:"6K+", time:"30-45", discount:"15% OFF", discountAbove:"above \u20B9799", category:"Japanese", img:"images/rest-sushi.jpg", ph:"\uD83C\uDF63", area:"Banjara Hills", baseDistKm:8,
+    deal:"Free Miso Soup", dealSub:"WITH SUSHI PLATTERS", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Salmon Nigiri (4 pcs)",desc:"Fresh salmon over seasoned rice",price:320,orig:400,img:"images/salmon-nigiri.jpg",veg:false}, {name:"California Roll (8 pcs)",desc:"Crab, avocado & cucumber maki",price:280,orig:350,img:"images/california-roll.jpg",veg:false} ],
+      "Sushi":[ {name:"Dragon Roll",desc:"Shrimp tempura topped with avocado",price:350,orig:440,img:"images/dragon-roll.jpg",veg:false}, {name:"Veggie Roll",desc:"Cucumber, avocado & pickled radish",price:220,orig:280,img:"images/veggie-roll.jpg",veg:true} ],
+      "Sides":[ {name:"Edamame",desc:"Steamed salted soybeans",price:120,orig:150,img:"images/edamame.jpg",veg:true}, {name:"Miso Soup",desc:"Traditional Japanese fermented soybean soup",price:80,orig:100,img:"images/miso-soup.jpg",veg:true} ] }
+  },
+  { id:11, name:"Wrap It Up", cuisine:"Mexican \u00B7 Tacos \u00B7 Burritos", rating:4.1, ratingCount:"5K+", time:"20-30", discount:"\u20B980 OFF", discountAbove:"above \u20B9449", category:"Mexican", img:"images/rest-mexican.jpg", ph:"\uD83C\uDF2E", area:"Gachibowli", baseDistKm:14,
+    deal:"Free Nachos on \u20B9399+", dealSub:"SELECT COMBOS", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Chicken Burrito",desc:"Grilled chicken, rice & beans in a flour tortilla",price:199,orig:249,img:"images/chicken-burrito.jpg",veg:false}, {name:"Veggie Tacos (3 pcs)",desc:"Loaded tacos with beans, salsa & guacamole",price:160,orig:210,img:"images/veggie-taco.jpg",veg:true} ],
+      "Burritos":[ {name:"Beef Burrito",desc:"Slow-cooked beef with rice & cheese",price:229,orig:289,img:"images/beef-burrito.jpg",veg:false}, {name:"Bean & Cheese Burrito",desc:"Refried beans with melted cheddar",price:150,orig:190,img:"images/bean-burrito.jpg",veg:true} ],
+      "Extras":[ {name:"Nachos",desc:"Corn chips with cheese dip & jalape\u00F1os",price:130,orig:160,img:"images/nachos.jpg",veg:true}, {name:"Guacamole",desc:"Fresh avocado dip with lime & coriander",price:90,orig:120,img:"images/guacamole.jpg",veg:true} ] }
+  },
+  { id:12, name:"Pav Bhaji Stall", cuisine:"Street Food \u00B7 Mumbai \u00B7 Chaat", rating:4.4, ratingCount:"18K+", time:"15-25", discount:"50% OFF", discountAbove:"above \u20B9199", category:"Street Food", img:"images/rest-pavbhaji.jpg", ph:"\uD83E\uDD56", area:"Nampally", baseDistKm:6,
+    deal:"Extra Butter Pav Free", dealSub:"ON ALL ORDERS", dealCnt:"5/5",
+    menu:{ "Top Picks":[ {name:"Pav Bhaji",desc:"Spiced vegetable mash with buttered pav",price:90,orig:120,img:"images/pav-bhaji.jpg",veg:true}, {name:"Vada Pav",desc:"Spiced potato fritter in soft bun",price:50,orig:70,img:"images/vada-pav.jpg",veg:true} ],
+      "Chaat":[ {name:"Pani Puri",desc:"Crispy shells with spiced tamarind water",price:60,orig:80,img:"images/pani-puri.jpg",veg:true}, {name:"Bhel Puri",desc:"Puffed rice with chutneys & vegetables",price:70,orig:90,img:"images/bhel-puri.jpg",veg:true}, {name:"Sev Puri",desc:"Crispy puris with potato & chutneys",price:80,orig:100,img:"images/sev-puri.jpg",veg:true} ],
+      "Extras":[ {name:"Misal Pav",desc:"Spicy sprouted lentil curry with pav",price:100,orig:130,img:"images/misal-pav.jpg",veg:true} ] }
+  },
+  { id:13, name:"The Grill House", cuisine:"BBQ \u00B7 Grills \u00B7 American", rating:4.3, ratingCount:"8K+", time:"30-40", discount:"\u20B9150 OFF", discountAbove:"above \u20B9799", category:"BBQ", img:"images/rest-grill.jpg", ph:"\uD83E\uDD69", area:"Secunderabad", baseDistKm:13,
+    deal:"Half-Price Wings", dealSub:"TUESDAYS ONLY", dealCnt:"1/5",
+    menu:{ "Top Picks":[ {name:"BBQ Ribs",desc:"Slow-smoked pork ribs with BBQ glaze",price:390,orig:490,img:"images/bbq-ribs.jpg",veg:false}, {name:"Grilled Corn",desc:"Char-grilled corn with spice butter",price:80,orig:110,img:"images/grilled-corn.jpg",veg:true} ],
+      "Grills":[ {name:"Chicken Wings (6 pcs)",desc:"Crispy wings with buffalo sauce",price:220,orig:280,img:"images/wings.jpg",veg:false}, {name:"Grilled Fish",desc:"Lemon-herb marinated grilled fish fillet",price:280,orig:360,img:"images/grilled-fish.jpg",veg:false} ],
+      "Sides":[ {name:"Coleslaw",desc:"Creamy cabbage & carrot salad",price:70,orig:90,img:"images/coleslaw.jpg",veg:true}, {name:"Corn Bread",desc:"Southern-style sweet corn muffin",price:80,orig:100,img:"images/corn-bread.jpg",veg:true} ] }
+  },
+  { id:14, name:"Kerala Kitchen", cuisine:"Kerala \u00B7 Seafood \u00B7 South Indian", rating:4.5, ratingCount:"7K+", time:"30-40", discount:"\u20B9100 OFF", discountAbove:"above \u20B9599", category:"Kerala", img:"images/rest-kerala.jpg", ph:"\uD83E\uDD65", area:"Tolichowki", baseDistKm:9,
+    deal:"Appam Combo at \u20B9149", dealSub:"WITH FISH CURRY", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Fish Curry",desc:"Kerala-style tangy fish curry with coconut milk",price:200,orig:260,img:"images/fish-curry.jpg",veg:false}, {name:"Appam & Stew",desc:"Lacy hoppers with white vegetable stew",price:130,orig:170,img:"images/appam-stew.jpg",veg:true} ],
+      "Seafood":[ {name:"Prawn Masala",desc:"Succulent prawns in spiced Kerala gravy",price:280,orig:360,img:"images/prawn-masala.jpg",veg:false}, {name:"Karimeen Pollichathu",desc:"Pearl spot fish wrapped & grilled in banana leaf",price:320,orig:400,img:"images/karimeen.jpg",veg:false} ],
+      "Rice":[ {name:"Kerala Puttu",desc:"Steamed rice cylinders with coconut",price:80,orig:100,img:"images/puttu.jpg",veg:true}, {name:"Malabar Parotta",desc:"Layered flaky flatbread",price:50,orig:65,img:"images/parotta.jpg",veg:true} ] }
+  },
+  { id:15, name:"Shake & Bake", cuisine:"Milkshakes \u00B7 Waffles \u00B7 Crepes", rating:4.2, ratingCount:"9K+", time:"20-30", discount:"COMBO DEALS", discountAbove:"starting \u20B9199", category:"Desserts", img:"images/rest-shake.jpg", ph:"\uD83E\uDD64", area:"Himayatnagar", baseDistKm:7,
+    deal:"Buy 2 Shakes Get 1 Free", dealSub:"ALL FLAVOURS", dealCnt:"4/5",
+    menu:{ "Top Picks":[ {name:"Nutella Waffle",desc:"Crispy waffle with Nutella & fresh berries",price:180,orig:220,img:"images/nutella-waffle.jpg",veg:true}, {name:"Strawberry Shake",desc:"Fresh strawberry blended with vanilla ice cream",price:150,orig:190,img:"images/strawberry-shake.jpg",veg:true} ],
+      "Waffles":[ {name:"Classic Belgian Waffle",desc:"Golden crispy waffle with maple syrup",price:140,orig:180,img:"images/belgian-waffle.jpg",veg:true}, {name:"Chicken & Waffle",desc:"Fried chicken on a savoury waffle",price:220,orig:280,img:"images/chicken-waffle.jpg",veg:false} ],
+      "Shakes":[ {name:"Oreo Shake",desc:"Crushed Oreo with vanilla ice cream",price:160,orig:200,img:"images/oreo-shake2.jpg",veg:true}, {name:"Banana Caramel Shake",desc:"Banana blend with caramel drizzle",price:140,orig:180,img:"images/banana-shake.jpg",veg:true} ] }
+  },
+  { id:16, name:"Punjabi Dhaba", cuisine:"Punjabi \u00B7 North Indian \u00B7 Rotis", rating:4.3, ratingCount:"13K+", time:"25-35", discount:"\u20B9130 OFF", discountAbove:"above \u20B9699", category:"North Indian", img:"images/rest-dhaba.jpg", ph:"\uD83E\uDD58", area:"Dilsukhnagar", baseDistKm:12,
+    deal:"Lassi Free on \u20B9399+", dealSub:"MANGO OR PLAIN", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Butter Naan & Dal",desc:"Tandoor naan with creamy black dal",price:120,orig:150,img:"images/naan-dal.jpg",veg:true}, {name:"Sarson Ka Saag",desc:"Mustard greens cooked with ghee & spices",price:160,orig:200,img:"images/sarson-saag.jpg",veg:true} ],
+      "Curries":[ {name:"Rajma Chawal",desc:"Kidney bean curry with steamed rice",price:130,orig:160,img:"images/rajma-chawal.jpg",veg:true}, {name:"Chole",desc:"Spiced chickpea curry",price:120,orig:150,img:"images/chole.jpg",veg:true}, {name:"Aloo Gobi",desc:"Potato & cauliflower dry curry",price:110,orig:140,img:"images/aloo-gobi.jpg",veg:true} ],
+      "Breads":[ {name:"Makki Roti",desc:"Corn flour flatbread with ghee",price:40,orig:55,img:"images/makki-roti.jpg",veg:true}, {name:"Amritsari Kulcha",desc:"Stuffed baked flatbread",price:80,orig:100,img:"images/kulcha.jpg",veg:true} ] }
+  },
+  { id:17, name:"Noodle Box", cuisine:"Pan-Asian \u00B7 Thai \u00B7 Vietnamese", rating:4.0, ratingCount:"4K+", time:"20-30", discount:"40% OFF", discountAbove:"above \u20B9349", category:"Asian", img:"images/rest-noodle.jpg", ph:"\uD83C\uDF5D", area:"Madhapur", baseDistKm:11,
+    deal:"Pad Thai at \u20B9149", dealSub:"INTRO PRICE", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Pad Thai",desc:"Stir-fried rice noodles with tofu & peanuts",price:160,orig:210,img:"images/pad-thai.jpg",veg:true}, {name:"Pho",desc:"Vietnamese beef broth with rice noodles",price:200,orig:260,img:"images/pho.jpg",veg:false} ],
+      "Noodles":[ {name:"Tom Yum Noodles",desc:"Spicy Thai soup with noodles",price:180,orig:230,img:"images/tom-yum.jpg",veg:true}, {name:"Singapore Noodles",desc:"Thin rice noodles with curry powder",price:160,orig:200,img:"images/singapore-noodles.jpg",veg:true} ],
+      "Rice":[ {name:"Thai Green Curry",desc:"Fragrant green curry with jasmine rice",price:190,orig:240,img:"images/green-curry.jpg",veg:true} ] }
+  },
+  { id:18, name:"Healthy Bowl", cuisine:"Salads \u00B7 Bowls \u00B7 Smoothies", rating:4.4, ratingCount:"6K+", time:"15-25", discount:"25% OFF", discountAbove:"above \u20B9349", category:"Healthy", img:"images/rest-healthy.jpg", ph:"\uD83E\uDD57", area:"Jubilee Hills", baseDistKm:8,
+    deal:"Smoothie Free on \u20B9499+", dealSub:"ALL SMOOTHIES", dealCnt:"4/5",
+    menu:{ "Top Picks":[ {name:"Quinoa Buddha Bowl",desc:"Quinoa, roasted veg & tahini dressing",price:240,orig:300,img:"images/buddha-bowl.jpg",veg:true}, {name:"Green Detox Smoothie",desc:"Spinach, apple, cucumber & ginger blend",price:160,orig:200,img:"images/green-smoothie.jpg",veg:true} ],
+      "Bowls":[ {name:"Greek Bowl",desc:"Falafel, hummus, tabbouleh & pita",price:220,orig:280,img:"images/greek-bowl.jpg",veg:true}, {name:"Protein Bowl",desc:"Grilled chicken, eggs, edamame & greens",price:260,orig:320,img:"images/protein-bowl.jpg",veg:false} ],
+      "Salads":[ {name:"Watermelon Feta Salad",desc:"Fresh watermelon with feta & mint",price:180,orig:220,img:"images/watermelon-salad.jpg",veg:true}, {name:"Caesar Wrap",desc:"Romaine, croutons & caesar in a wrap",price:160,orig:200,img:"images/caesar-wrap.jpg",veg:true} ] }
+  },
+  { id:19, name:"Biryani Bros", cuisine:"Biryani \u00B7 Dum \u00B7 Hyderabadi", rating:4.6, ratingCount:"20K+", time:"35-50", discount:"\u20B9200 OFF", discountAbove:"above \u20B91299", category:"Biryani", img:"images/rest-biryani2.jpg", ph:"\uD83C\uDF5B", area:"Attapur", baseDistKm:10,
+    deal:"Raita Free with Biryani", dealSub:"ALL BIRYANI ORDERS", dealCnt:"5/5",
+    menu:{ "Top Picks":[ {name:"Dum Gosht Biryani",desc:"Slow-cooked mutton in sealed pot biryani",price:320,orig:400,img:"images/dum-biryani.jpg",veg:false}, {name:"Hyderabadi Chicken Biryani",desc:"Authentic Hyderabadi-style biryani",price:260,orig:330,img:"images/hyd-biryani.jpg",veg:false} ],
+      "Biryani":[ {name:"Kheema Biryani",desc:"Minced meat biryani with fried onions",price:240,orig:300,img:"images/kheema-biryani.jpg",veg:false}, {name:"Shahi Veg Biryani",desc:"Royal vegetable biryani with saffron",price:180,orig:230,img:"images/shahi-veg.jpg",veg:true} ],
+      "Sides":[ {name:"Bagara Baingan",desc:"Hyderabadi stuffed brinjal curry",price:140,orig:180,img:"images/bagara-baingan.jpg",veg:true}, {name:"Mirchi Ka Salan",desc:"Spicy chilli curry",price:120,orig:150,img:"images/mirchi-salan2.jpg",veg:true} ] }
+  },
+  { id:20, name:"Taco Town", cuisine:"Tex-Mex \u00B7 Tacos \u00B7 Quesadillas", rating:4.0, ratingCount:"3K+", time:"20-30", discount:"\u20B970 OFF", discountAbove:"above \u20B9349", category:"Mexican", img:"images/rest-taco.jpg", ph:"\uD83C\uDF2E", area:"Kukatpally", baseDistKm:13,
+    deal:"Free Salsa with Tacos", dealSub:"ALL ORDERS", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Fish Tacos (3 pcs)",desc:"Crispy fried fish with slaw & sriracha",price:180,orig:230,img:"images/fish-taco.jpg",veg:false}, {name:"Quesadilla",desc:"Grilled flour tortilla with cheese & peppers",price:150,orig:190,img:"images/quesadilla.jpg",veg:true} ],
+      "Tacos":[ {name:"Al Pastor Taco",desc:"Marinated pork with pineapple & cilantro",price:60,orig:80,img:"images/al-pastor.jpg",veg:false}, {name:"Black Bean Taco",desc:"Spiced black beans with avocado",price:50,orig:70,img:"images/bean-taco.jpg",veg:true} ],
+      "Extras":[ {name:"Churros",desc:"Fried dough sticks with chocolate dip",price:100,orig:130,img:"images/churros.jpg",veg:true} ] }
+  },
+  { id:21, name:"The Pasta Bar", cuisine:"Italian \u00B7 Pasta \u00B7 Risotto", rating:4.3, ratingCount:"7K+", time:"25-35", discount:"20% OFF", discountAbove:"above \u20B9499", category:"Italian", img:"images/rest-pasta.jpg", ph:"\uD83C\uDF5D", area:"Banjara Hills", baseDistKm:8,
+    deal:"Free Garlic Bread", dealSub:"ON PASTA ORDERS", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Carbonara",desc:"Spaghetti with egg, pancetta & parmesan",price:280,orig:360,img:"images/carbonara.jpg",veg:false}, {name:"Mushroom Risotto",desc:"Creamy arborio rice with forest mushrooms",price:260,orig:330,img:"images/mushroom-risotto.jpg",veg:true} ],
+      "Pasta":[ {name:"Bolognese",desc:"Rich slow-cooked meat sauce with tagliatelle",price:260,orig:330,img:"images/bolognese.jpg",veg:false}, {name:"Pesto Pasta",desc:"Basil pesto with pine nuts & parmesan",price:220,orig:280,img:"images/pesto-pasta.jpg",veg:true} ] }
+  },
+  { id:22, name:"Chaat Corner", cuisine:"Chaat \u00B7 Street Food \u00B7 Indian", rating:4.5, ratingCount:"16K+", time:"10-20", discount:"PLATES FROM \u20B940", discountAbove:"", category:"Chaat", img:"images/rest-chaat.jpg", ph:"\uD83E\uDD57", area:"Abids", baseDistKm:7,
+    deal:"Pani Puri Plate at \u20B940", dealSub:"ALL DAY", dealCnt:"5/5",
+    menu:{ "Top Picks":[ {name:"Dahi Puri",desc:"Crispy puris with yogurt & chutneys",price:70,orig:90,img:"images/dahi-puri.jpg",veg:true}, {name:"Papdi Chaat",desc:"Crispy papdi with chickpeas & chutneys",price:80,orig:100,img:"images/papdi-chaat.jpg",veg:true} ],
+      "Chaat":[ {name:"Raj Kachori",desc:"Giant kachori filled with sprouts & curd",price:100,orig:130,img:"images/raj-kachori.jpg",veg:true}, {name:"Aloo Tikki Chaat",desc:"Potato patties with chutney & yogurt",price:80,orig:100,img:"images/aloo-tikki.jpg",veg:true} ] }
+  },
+  { id:23, name:"Steak & Ale", cuisine:"Continental \u00B7 Steaks \u00B7 Beer", rating:4.2, ratingCount:"5K+", time:"35-50", discount:"\u20B9180 OFF", discountAbove:"above \u20B9999", category:"Continental", img:"images/rest-steak.jpg", ph:"\uD83E\uDD69", area:"Jubilee Hills", baseDistKm:9,
+    deal:"Free Mocktail with Steak", dealSub:"ON SELECTED STEAKS", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Ribeye Steak",desc:"350g prime ribeye with peppercorn sauce",price:650,orig:799,img:"images/ribeye.jpg",veg:false}, {name:"Mushroom Stroganoff",desc:"Creamy mushroom sauce over pasta",price:280,orig:350,img:"images/stroganoff.jpg",veg:true} ],
+      "Steaks":[ {name:"Sirloin",desc:"250g sirloin with garlic butter & fries",price:520,orig:650,img:"images/sirloin.jpg",veg:false}, {name:"Grilled Chicken Steak",desc:"Herb-marinated chicken breast",price:320,orig:400,img:"images/chicken-steak.jpg",veg:false} ] }
+  },
+  { id:24, name:"Ramen Republic", cuisine:"Japanese \u00B7 Ramen \u00B7 Noodles", rating:4.4, ratingCount:"8K+", time:"25-35", discount:"30% OFF", discountAbove:"above \u20B9499", category:"Japanese", img:"images/rest-ramen.jpg", ph:"\uD83C\uDF5C", area:"Hitech City", baseDistKm:10,
+    deal:"Gyoza Free on \u20B9599+", dealSub:"CHICKEN GYOZA", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Tonkotsu Ramen",desc:"Rich pork bone broth with chashu & noodles",price:280,orig:360,img:"images/tonkotsu.jpg",veg:false}, {name:"Spicy Miso Ramen",desc:"Fermented miso broth with tofu & bamboo",price:250,orig:320,img:"images/miso-ramen.jpg",veg:true} ],
+      "Ramen":[ {name:"Shoyu Ramen",desc:"Soy-sauce broth with chicken & egg",price:240,orig:300,img:"images/shoyu-ramen.jpg",veg:false}, {name:"Vegan Ramen",desc:"Kombu broth with mushrooms & tofu",price:220,orig:280,img:"images/vegan-ramen.jpg",veg:true} ],
+      "Sides":[ {name:"Gyoza (5 pcs)",desc:"Pan-fried dumplings with dipping sauce",price:160,orig:200,img:"images/gyoza.jpg",veg:false}, {name:"Karaage",desc:"Japanese fried chicken thigh bites",price:180,orig:230,img:"images/karaage.jpg",veg:false} ] }
+  },
+  { id:25, name:"Mughal Darbar", cuisine:"Mughlai \u00B7 Biryani \u00B7 Kebabs", rating:4.3, ratingCount:"9K+", time:"30-45", discount:"\u20B9140 OFF", discountAbove:"above \u20B9799", category:"Mughlai", img:"images/rest-mughal.jpg", ph:"\uD83C\uDFD5\uFE0F", area:"Chandrayangutta", baseDistKm:14,
+    deal:"Kulfi Free with Biryani", dealSub:"WEEKEND OFFER", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Shami Kebab",desc:"Spiced minced lamb patties",price:200,orig:250,img:"images/shami-kebab.jpg",veg:false}, {name:"Korma",desc:"Mild yogurt-based creamy curry",price:220,orig:280,img:"images/korma.jpg",veg:false} ],
+      "Mains":[ {name:"Paya Soup",desc:"Slow-cooked trotters in spiced broth",price:180,orig:230,img:"images/paya.jpg",veg:false}, {name:"Chicken Changezi",desc:"Creamy tomato-based chicken curry",price:230,orig:290,img:"images/changezi.jpg",veg:false} ] }
+  },
+  { id:26, name:"The Waffle Hut", cuisine:"Waffles \u00B7 Pancakes \u00B7 Brunch", rating:4.1, ratingCount:"5K+", time:"20-30", discount:"\u20B960 OFF", discountAbove:"above \u20B9299", category:"Desserts", img:"images/rest-waffle.jpg", ph:"\uD83E\uDDC7", area:"Somajiguda", baseDistKm:7,
+    deal:"Free Topping of Choice", dealSub:"ON WAFFLES", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Blueberry Pancakes",desc:"Fluffy pancakes loaded with fresh blueberries",price:160,orig:200,img:"images/blueberry-pancakes.jpg",veg:true}, {name:"S'mores Waffle",desc:"Chocolate, marshmallow & graham cracker waffle",price:190,orig:240,img:"images/smores-waffle.jpg",veg:true} ],
+      "Waffles":[ {name:"Classic Waffle",desc:"Plain crispy waffle with butter & syrup",price:120,orig:150,img:"images/classic-waffle.jpg",veg:true}, {name:"Cheese & Herb Waffle",desc:"Savory waffle with cheddar & rosemary",price:150,orig:190,img:"images/cheese-waffle.jpg",veg:true} ],
+      "Pancakes":[ {name:"Banana Foster Pancakes",desc:"Caramelized banana with rum sauce",price:170,orig:220,img:"images/banana-pancakes.jpg",veg:true} ] }
+  },
+  { id:27, name:"Chettinad Spice", cuisine:"Chettinad \u00B7 Tamil \u00B7 Non-Veg", rating:4.4, ratingCount:"7K+", time:"30-40", discount:"\u20B9110 OFF", discountAbove:"above \u20B9599", category:"South Indian", img:"images/rest-chettinad.jpg", ph:"\uD83C\uDF36\uFE0F", area:"L.B. Nagar", baseDistKm:16,
+    deal:"Kuzhambu Free on \u20B9499+", dealSub:"SIDE DISH", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Chettinad Chicken",desc:"Fiery chicken curry with black pepper & kalpasi",price:240,orig:300,img:"images/chettinad-chicken.jpg",veg:false}, {name:"Kavuni Arisi",desc:"Black rice pudding with coconut milk",price:90,orig:120,img:"images/kavuni-arisi.jpg",veg:true} ],
+      "Curries":[ {name:"Mutton Kuzhambu",desc:"Spiced mutton in tangy tamarind gravy",price:280,orig:360,img:"images/mutton-kuzhambu.jpg",veg:false}, {name:"Keerai Masiyal",desc:"Mashed spinach with shallots",price:120,orig:150,img:"images/keerai.jpg",veg:true} ] }
+  },
+  { id:28, name:"Protein Palace", cuisine:"Fitness \u00B7 High-Protein \u00B7 Keto", rating:4.2, ratingCount:"4K+", time:"20-30", discount:"15% OFF", discountAbove:"above \u20B9399", category:"Healthy", img:"images/rest-protein.jpg", ph:"\uD83D\uDCAA", area:"Gachibowli", baseDistKm:15,
+    deal:"Protein Shake at \u20B9129", dealSub:"POST-WORKOUT SPECIAL", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Chicken Breast Meal",desc:"Grilled chicken with sweet potato & greens",price:280,orig:350,img:"images/chicken-breast.jpg",veg:false}, {name:"Egg White Omelette",desc:"4 egg whites with spinach & feta",price:160,orig:200,img:"images/egg-omelette.jpg",veg:false} ],
+      "High-Protein":[ {name:"Paneer Steak",desc:"Thick paneer slice with low-fat sauce",price:220,orig:280,img:"images/paneer-steak.jpg",veg:true}, {name:"Tuna Salad Bowl",desc:"Tuna with chickpeas & lemon dressing",price:240,orig:300,img:"images/tuna-salad.jpg",veg:false} ] }
+  },
+  { id:29, name:"Andhra Spice", cuisine:"Andhra \u00B7 Telugu \u00B7 Non-Veg", rating:4.5, ratingCount:"12K+", time:"25-35", discount:"\u20B9130 OFF", discountAbove:"above \u20B9699", category:"Andhra", img:"images/rest-andhra.jpg", ph:"\uD83C\uDF36\uFE0F", area:"Uppal", baseDistKm:17,
+    deal:"Free Papad & Pickle", dealSub:"ALL MEALS", dealCnt:"5/5",
+    menu:{ "Top Picks":[ {name:"Andhra Chicken Curry",desc:"Fiery red curry with farm chicken",price:220,orig:280,img:"images/andhra-chicken.jpg",veg:false}, {name:"Pesarattu",desc:"Green moong dal crepe with ginger chutney",price:80,orig:100,img:"images/pesarattu.jpg",veg:true} ],
+      "Curries":[ {name:"Gongura Mutton",desc:"Sorrel leaf lamb curry",price:280,orig:360,img:"images/gongura-mutton.jpg",veg:false}, {name:"Tomato Pappu",desc:"Tomato lentil dal Andhra style",price:100,orig:130,img:"images/tomato-pappu.jpg",veg:true} ],
+      "Rice":[ {name:"Andhra Meals",desc:"Rice with dal, sambar, rasam & sides",price:140,orig:180,img:"images/andhra-meals.jpg",veg:true} ] }
+  },
+  { id:30, name:"Frankie's Rolls", cuisine:"Rolls \u00B7 Frankie \u00B7 Fast Food", rating:4.0, ratingCount:"6K+", time:"15-20", discount:"40% OFF", discountAbove:"above \u20B9249", category:"Street Food", img:"images/rest-frankie.jpg", ph:"\uD83C\uDF2F", area:"Koti", baseDistKm:8,
+    deal:"Double Roll at \u20B9149", dealSub:"COMBO DEAL", dealCnt:"4/5",
+    menu:{ "Top Picks":[ {name:"Mumbai Frankie",desc:"Egg-wrapped paratha with spiced filling",price:90,orig:120,img:"images/mumbai-frankie.jpg",veg:false}, {name:"Paneer Frankie",desc:"Grilled paneer with onion & chutney in wrap",price:100,orig:130,img:"images/paneer-frankie.jpg",veg:true} ],
+      "Frankies":[ {name:"Egg Frankie",desc:"Fluffy egg filling in paratha roll",price:80,orig:100,img:"images/egg-frankie.jpg",veg:false}, {name:"Aloo Frankie",desc:"Spicy potato masala in paratha",price:70,orig:90,img:"images/aloo-frankie.jpg",veg:true} ] }
+  },
+  { id:31, name:"Dal Baati Express", cuisine:"Rajasthani \u00B7 Indian \u00B7 Thali", rating:4.3, ratingCount:"5K+", time:"30-40", discount:"THALI AT \u20B9199", discountAbove:"", category:"Rajasthani", img:"images/rest-rajasthani.jpg", ph:"\uD83E\uDD58", area:"Bahadurpura", baseDistKm:12,
+    deal:"Free Churma with Dal Baati", dealSub:"FULL THALI", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Dal Baati Churma",desc:"Baked wheat balls with lentils & sweet churma",price:199,orig:260,img:"images/dal-baati.jpg",veg:true}, {name:"Laal Maas",desc:"Fiery Rajasthani red mutton curry",price:280,orig:360,img:"images/laal-maas.jpg",veg:false} ],
+      "Thali":[ {name:"Rajasthani Thali",desc:"Dal, baati, churma, sabzi & more",price:220,orig:280,img:"images/rajasthani-thali.jpg",veg:true} ] }
+  },
+  { id:32, name:"Pizza Paradise", cuisine:"Italian \u00B7 Pizza \u00B7 Calzone", rating:4.2, ratingCount:"8K+", time:"25-35", discount:"BUY 2 GET 1", discountAbove:"on medium pizzas", category:"Pizza", img:"images/rest-pizza2.jpg", ph:"\uD83C\uDF55", area:"Secunderabad", baseDistKm:11,
+    deal:"Personal Pizza at \u20B9129", dealSub:"WEEKDAY ONLY", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Paneer Makhani Pizza",desc:"Indian-fusion pizza with paneer in makhani sauce",price:280,orig:360,img:"images/paneer-pizza.jpg",veg:true}, {name:"Calzone",desc:"Folded pizza stuffed with cheese & chicken",price:320,orig:400,img:"images/calzone.jpg",veg:false} ],
+      "Pizzas":[ {name:"Four Cheese Pizza",desc:"Mozzarella, cheddar, parmesan & blue cheese",price:340,orig:430,img:"images/four-cheese.jpg",veg:true}, {name:"Meat Lovers",desc:"Pepperoni, sausage & chicken overload",price:380,orig:480,img:"images/meat-lovers.jpg",veg:false} ] }
+  },
+  { id:33, name:"Darjeeling Express", cuisine:"Bengali \u00B7 Momos \u00B7 North East", rating:4.1, ratingCount:"5K+", time:"20-30", discount:"35% OFF", discountAbove:"above \u20B9299", category:"Bengali", img:"images/rest-bengali.jpg", ph:"\uD83E\uDD9F", area:"Bowenpally", baseDistKm:14,
+    deal:"Momo 12 pcs at \u20B9129", dealSub:"STEAMED OR FRIED", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Chicken Momos (8 pcs)",desc:"Steamed chicken dumplings with spicy sauce",price:130,orig:170,img:"images/chicken-momos.jpg",veg:false}, {name:"Fish Curry & Rice",desc:"Bengali mustard fish curry with steamed rice",price:190,orig:240,img:"images/fish-rice.jpg",veg:false} ],
+      "Momos":[ {name:"Veg Momos (8 pcs)",desc:"Cabbage & paneer steamed dumplings",price:110,orig:140,img:"images/veg-momos.jpg",veg:true}, {name:"Fried Momos",desc:"Crispy fried chicken momos",price:150,orig:190,img:"images/fried-momos.jpg",veg:false} ],
+      "Bengali":[ {name:"Mishti Doi",desc:"Sweetened fermented yogurt",price:70,orig:90,img:"images/mishti-doi.jpg",veg:true} ] }
+  },
+  { id:34, name:"Cloud Kitchen Co.", cuisine:"Multi-Cuisine \u00B7 Cloud \u00B7 Quick Bites", rating:4.0, ratingCount:"3K+", time:"15-25", discount:"\u20B950 OFF", discountAbove:"above \u20B9249", category:"Quick Bites", img:"images/rest-cloud.jpg", ph:"\u2601\uFE0F", area:"Miyapur", baseDistKm:16,
+    deal:"Mystery Box at \u20B999", dealSub:"RANDOM SURPRISE", dealCnt:"1/5",
+    menu:{ "Top Picks":[ {name:"Club Sandwich",desc:"Triple-decker chicken & egg sandwich",price:160,orig:200,img:"images/club-sandwich.jpg",veg:false}, {name:"Loaded Nachos",desc:"Tortilla chips with cheese, jalape\u00F1os & salsa",price:150,orig:190,img:"images/loaded-nachos.jpg",veg:true} ],
+      "Quick Bites":[ {name:"Mini Sliders (3 pcs)",desc:"Bite-sized beef patty sliders",price:180,orig:230,img:"images/sliders.jpg",veg:false}, {name:"Wraps",desc:"Assorted wraps of the day",price:130,orig:170,img:"images/wraps.jpg",veg:true} ] }
+  },
+  { id:35, name:"Udipi Bhavan", cuisine:"Udipi \u00B7 South Indian \u00B7 Tiffin", rating:4.4, ratingCount:"14K+", time:"20-30", discount:"THALI AT \u20B9149", discountAbove:"", category:"South Indian", img:"images/rest-udipi.jpg", ph:"\uD83E\uDD65", area:"Begumpet", baseDistKm:9,
+    deal:"Free Payasam with Meals", dealSub:"LUNCH HOURS", dealCnt:"4/5",
+    menu:{ "Top Picks":[ {name:"Udipi Thali",desc:"Rice, sambar, rasam, kootu & papad",price:149,orig:199,img:"images/udipi-thali.jpg",veg:true}, {name:"Rava Idli",desc:"Semolina idli with cashew & mustard",price:80,orig:100,img:"images/rava-idli.jpg",veg:true} ],
+      "Tiffin":[ {name:"Set Dosa",desc:"Three small soft dosas with sambar",price:70,orig:90,img:"images/set-dosa.jpg",veg:true}, {name:"Uttapam",desc:"Thick dosa with vegetable toppings",price:90,orig:115,img:"images/uttapam.jpg",veg:true} ],
+      "Sweets":[ {name:"Payasam",desc:"South Indian vermicelli kheer",price:60,orig:80,img:"images/payasam.jpg",veg:true} ] }
+  },
+  { id:36, name:"Goan Shack", cuisine:"Goan \u00B7 Seafood \u00B7 Beach Food", rating:4.3, ratingCount:"4K+", time:"30-40", discount:"\u20B9120 OFF", discountAbove:"above \u20B9699", category:"Goan", img:"images/rest-goan.jpg", ph:"\uD83D\uDC20", area:"Madhapur", baseDistKm:12,
+    deal:"Free Sol Kadhi with Meals", dealSub:"GOAN SPECIAL", dealCnt:"3/5",
+    menu:{ "Top Picks":[ {name:"Goan Fish Curry",desc:"Coconut-based tangy fish curry",price:220,orig:280,img:"images/goan-fish.jpg",veg:false}, {name:"Prawn Balchao",desc:"Fiery pickled prawn curry",price:260,orig:330,img:"images/balchao.jpg",veg:false} ],
+      "Seafood":[ {name:"Crab Xacuti",desc:"Crab in spiced Goan masala",price:340,orig:430,img:"images/crab-xacuti.jpg",veg:false}, {name:"Caldine",desc:"Mild coconut milk curry with vegetables",price:160,orig:200,img:"images/caldine.jpg",veg:true} ] }
+  },
+  { id:37, name:"Bowl of Seoul", cuisine:"Korean \u00B7 Bibimbap \u00B7 Korean BBQ", rating:4.2, ratingCount:"4K+", time:"25-35", discount:"20% OFF", discountAbove:"above \u20B9449", category:"Korean", img:"images/rest-korean.jpg", ph:"\uD83C\uDF5A", area:"Kondapur", baseDistKm:11,
+    deal:"Free Kimchi with Bibimbap", dealSub:"ALL ORDERS", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Bibimbap",desc:"Mixed rice bowl with vegetables & gochujang",price:220,orig:280,img:"images/bibimbap.jpg",veg:true}, {name:"Korean Fried Chicken",desc:"Double-fried crispy chicken in sweet chilli",price:260,orig:330,img:"images/korean-chicken.jpg",veg:false} ],
+      "Korean BBQ":[ {name:"Bulgogi",desc:"Thin marinated beef grilled at table",price:320,orig:400,img:"images/bulgogi.jpg",veg:false}, {name:"Japchae",desc:"Glass noodles stir-fried with vegetables",price:180,orig:230,img:"images/japchae.jpg",veg:true} ] }
+  },
+  { id:38, name:"Curry Leaf", cuisine:"Konkan \u00B7 Coastal \u00B7 Indian", rating:4.4, ratingCount:"6K+", time:"25-40", discount:"\u20B9100 OFF", discountAbove:"above \u20B9549", category:"Coastal", img:"images/rest-konkan.jpg", ph:"\uD83C\uDF3F", area:"Tarnaka", baseDistKm:15,
+    deal:"Sol Kadhi Free", dealSub:"WITH FISH THALI", dealCnt:"4/5",
+    menu:{ "Top Picks":[ {name:"Surmai Thali",desc:"King fish thali with rice & kokum curry",price:280,orig:360,img:"images/surmai-thali.jpg",veg:false}, {name:"Malvani Mutton",desc:"Spiced coconut-based mutton curry",price:260,orig:330,img:"images/malvani-mutton.jpg",veg:false} ],
+      "Coastal":[ {name:"Solkadhi",desc:"Pink coconut & kokum cooler",price:60,orig:80,img:"images/solkadhi.jpg",veg:true}, {name:"Amboli Dosa",desc:"Thick soft Konkani dosa",price:90,orig:115,img:"images/amboli.jpg",veg:true} ] }
+  },
+  { id:39, name:"Midnight Munchies", cuisine:"Late Night \u00B7 Junk Food \u00B7 Fast Food", rating:3.9, ratingCount:"8K+", time:"20-35", discount:"\u20B9100 OFF", discountAbove:"above \u20B9499", category:"Quick Bites", img:"images/rest-midnight.jpg", ph:"\uD83C\uDF19", area:"Jubilee Hills", baseDistKm:8,
+    deal:"Midnight Snack Box at \u20B9199", dealSub:"10 PM - 4 AM", dealCnt:"2/5",
+    menu:{ "Top Picks":[ {name:"Loaded Cheese Fries",desc:"Crispy fries with cheese sauce & jalape\u00F1os",price:160,orig:200,img:"images/cheese-fries.jpg",veg:true}, {name:"Chicken Quesadilla",desc:"Grilled chicken in crispy quesadilla",price:180,orig:230,img:"images/chicken-quesadilla.jpg",veg:false} ],
+      "Junk Food":[ {name:"Hot Dog",desc:"All-beef frank in a toasted bun",price:120,orig:150,img:"images/hot-dog.jpg",veg:false}, {name:"Cheese Corn Dog",desc:"Mozzarella-stuffed corn dog",price:130,orig:170,img:"images/corn-dog.jpg",veg:true} ] }
+  },
+  { id:40, name:"Spice Route", cuisine:"Pan-Indian \u00B7 Fusion \u00B7 Specials", rating:4.5, ratingCount:"10K+", time:"30-45", discount:"\u20B9175 OFF", discountAbove:"above \u20B9899", category:"Indian", img:"images/rest-spiceroute.jpg", ph:"\uD83C\uDF36\uFE0F", area:"Attapur", baseDistKm:13,
+    deal:"Fusion Platter at \u20B9349", dealSub:"CHEF SPECIAL", dealCnt:"5/5",
+    menu:{ "Top Picks":[ {name:"Butter Chicken Pizza",desc:"Pizza topped with butter chicken & naan crust",price:320,orig:400,img:"images/butter-chicken-pizza.jpg",veg:false}, {name:"Paneer Tikka Tacos",desc:"Indian-Mexican fusion with paneer tikka",price:180,orig:230,img:"images/paneer-tacos.jpg",veg:true} ],
+      "Fusion":[ {name:"Dosa Quesadilla",desc:"Crispy dosa folded with cheese & masala",price:150,orig:190,img:"images/dosa-quesadilla.jpg",veg:true}, {name:"Biryani Risotto",desc:"Biryani spices meets creamy Italian risotto",price:260,orig:330,img:"images/biryani-risotto.jpg",veg:true} ],
+      "Specials":[ {name:"Chef's Surprise Bowl",desc:"Mystery of the day with seasonal ingredients",price:220,orig:280,img:"images/surprise-bowl.jpg",veg:true} ] }
+  }
+];
+
+/* STATE */
+let cartItems=[], placedOrders=[], currentRestId=null, customLocation='', regressionLineDrawn=false;
+
+/* ── WEATHER MODE STATE ── */
+let trafficOn=false, rainOn=false;
+function toggleMode(mode){
+  if(mode==='traffic'){
+    trafficOn=!trafficOn;
+    document.getElementById('btnTraffic').classList.toggle('active',trafficOn);
+  } else {
+    rainOn=!rainOn;
+    document.getElementById('btnRain').classList.toggle('active',rainOn);
+  }
+  const both=trafficOn&&rainOn, any=trafficOn||rainOn;
+  const ind=document.getElementById('modeIndicator');
+  if(both) ind.textContent='\u23F1 3× Longer Delivery';
+  else if(trafficOn) ind.textContent='\uD83D\uDE97 Traffic: +15-25 min';
+  else if(rainOn) ind.textContent='\uD83C\uDF27\uFE0F Rain: +10-20 min';
+  ind.classList.toggle('show',any);
+  showToast(both?'\uD83C\uDF27\uFE0F + \uD83D\uDE97 Both modes ON — 3× delivery time!':trafficOn?'\uD83D\uDE97 Traffic mode ON — longer delivery':rainOn?'\uD83C\uDF27\uFE0F Rain mode ON — longer delivery':'Mode disabled');
+}
+function getDeliveryMultiplier(){
+  if(trafficOn&&rainOn) return 3;
+  if(trafficOn) return 1.8;
+  if(rainOn) return 1.5;
+  return 1;
+}
+function getAdjustedTime(timeStr){
+  // timeStr like "30-40"
+  const m=getDeliveryMultiplier();
+  if(m===1)return timeStr;
+  const parts=timeStr.split('-').map(Number);
+  return parts.map(t=>Math.round(t*m)).join('-');
+}
+// Re-render home when mode changes so times update
+const _origToggleMode=toggleMode;
+// patch renderHome to use dynamic times (already done in template)
+
+/* ── BIG HERO SLIDESHOW ── */
+const HERO_SLIDES=[
+  {bg:'linear-gradient(135deg,#4a0f00 0%,#8a2500 55%,#4a0f00 100%)',eyebrow:'Limited Time Offer',title:'CRAVE<span>-ATHON</span>',sub:'Min. \u20B9150 OFF & More',cta:'Order Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'View Deals',img:'\uD83C\uDF5B',imgSrc:'images/hero-craveathon.jpg',eyebrowColor:'rgba(255,200,150,.85)',titleColor:'var(--orange)',subColor:'rgba(255,255,255,.65)'},
+  {bg:'linear-gradient(135deg,#0a2744 0%,#1565c0 55%,#0a2744 100%)',eyebrow:'Summer Fest',title:'60%<span> OFF</span>',sub:'Up to 60% off on your favourites',cta:'Grab Deals \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Browse Menu',img:'\uD83C\uDF66',imgSrc:'images/hero-summer-fest.jpg',eyebrowColor:'rgba(180,220,255,.85)',titleColor:'#64b5f6',subColor:'rgba(255,255,255,.7)'},
+  {bg:'linear-gradient(135deg,#1a3300 0%,#2e7d32 55%,#1a3300 100%)',eyebrow:'Free Delivery',title:'FREE<span> DELIVERY</span>',sub:'On all orders above \u20B999',cta:'Order Free \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'How it works',img:'\uD83D\uDEB4',imgSrc:'images/hero-free-delivery.jpg',eyebrowColor:'rgba(200,255,180,.85)',titleColor:'#81c784',subColor:'rgba(255,255,255,.7)'},
+  {bg:'linear-gradient(135deg,#2d0040 0%,#7b1fa2 55%,#2d0040 100%)',eyebrow:'Binge Saver',title:'\u20B9150<span> OFF</span>',sub:'Min \u20B9150 off on orders above \u20B9499',cta:'Save Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Best Deals',img:'\uD83C\uDF54',imgSrc:'images/hero-binge-saver.jpg',eyebrowColor:'rgba(240,180,255,.85)',titleColor:'#ce93d8',subColor:'rgba(255,255,255,.7)'},
+  {bg:'linear-gradient(135deg,#1a1500 0%,#f57f17 55%,#1a1500 100%)',eyebrow:'Value Pick',title:'MEALS<span> AT \u20B999</span>',sub:'Budget meals starting at just \u20B999',cta:'Explore \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'See Menu',img:'\uD83C\uDF5C',imgSrc:'images/hero-value-pick.jpg',eyebrowColor:'rgba(255,240,180,.85)',titleColor:'#ffcc02',subColor:'rgba(255,255,255,.7)'},
+];
+let heroIdx=0, heroTimer=null;
+function initHeroSlideshow(){
+  const dotsEl=document.getElementById('heroBigDots');
+  dotsEl.innerHTML=HERO_SLIDES.map((_,i)=>`<div class="hero-big-dot${i===0?' active':''}" onclick="goHeroSlide(${i})"></div>`).join('');
+  applyHeroSlide(0);
+  heroTimer=setInterval(()=>{heroIdx=(heroIdx+1)%HERO_SLIDES.length;goHeroSlide(heroIdx);},5000);
+}
+function goHeroSlide(i){
+  heroIdx=i;
+  applyHeroSlide(i);
+  document.querySelectorAll('.hero-big-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+  clearInterval(heroTimer);heroTimer=setInterval(()=>{heroIdx=(heroIdx+1)%HERO_SLIDES.length;goHeroSlide(heroIdx);},5000);
+}
+function applyHeroSlide(i){
+  const s=HERO_SLIDES[i];
+  const card=document.getElementById('heroBigCard');
+  card.style.background=s.bg;
+  document.getElementById('heroBigEyebrow').style.color=s.eyebrowColor;
+  document.getElementById('heroBigEyebrow').textContent=s.eyebrow;
+  document.getElementById('heroBigTitle').innerHTML=s.title;
+  document.getElementById('heroBigTitle').style.color=s.titleColor;
+  document.getElementById('heroBigSub').textContent=s.sub;
+  document.getElementById('heroBigSub').style.color=s.subColor;
+  // Full-bleed background image
+  const bg=document.getElementById('heroBgImg');
+  if(bg && s.imgSrc){
+    bg.src=s.imgSrc;
+    bg.style.opacity='0.38';
+    bg.onerror=function(){ bg.style.opacity='0'; };
+  } else if(bg){
+    bg.src=''; bg.style.opacity='0';
+  }
+  const cta=document.getElementById('heroBigCta');
+  cta.innerHTML=s.cta;
+  cta.onclick=new Function(s.ctaFn);
+  document.getElementById('heroBigSecBtn').textContent=s.sec;
+}
+function heroPrev(){goHeroSlide((heroIdx-1+HERO_SLIDES.length)%HERO_SLIDES.length);}
+function heroNext(){goHeroSlide((heroIdx+1)%HERO_SLIDES.length);}
+
+/* RENDER HOME */
+function renderHome(){
+  document.getElementById('restaurantGrid').innerHTML=RESTAURANTS.map(r=>`
+    <div class="rest-card" onclick="openRestaurant(${r.id})">
+      <div class="rest-img-wrap">
+        <img src="${r.img}" alt="${r.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="rest-img-ph" style="display:none">${r.ph}</div>
+        <button class="rest-fav" onclick="event.stopPropagation();this.textContent=this.textContent==='\u2764\uFE0F'?'\uD83E\uDD0D':'\u2764\uFE0F'">\uD83E\uDD0D</button>
+        <div class="rest-offer-badge"><div class="rest-offer-tag">one ${r.discount}</div></div>
+      </div>
+      <div class="rest-info">
+        <div class="rest-name">${r.name}</div>
+        <div class="rest-meta"><span class="rest-rating">\u2605 ${r.rating}</span><span class="rest-dot"></span><span>${getAdjustedTime(r.time)} mins${(trafficOn||rainOn)?'<span style="font-size:10px;color:var(--orange);margin-left:3px">&uarr;</span>':''}</span></div>
+        <div class="rest-cuisine">${r.cuisine}</div>
+        <div class="rest-dist-row"><span>\uD83D\uDCCD ${r.baseDistKm} km away</span><span class="rest-dot" style="display:inline-block;background:#ccc"></span><span>${r.area}</span></div>
+      </div>
+    </div>`).join('');
+}
+
+/* OPEN RESTAURANT */
+function openRestaurant(id){
+  currentRestId=id;
+  const r=RESTAURANTS.find(x=>x.id===id);
+  showPage('restPage'); window.scrollTo(0,0);
+  // Hero background — same image as the restaurant card
+  const heroImg = document.getElementById('restHeroImg');
+  heroImg.src = r.img;
+  heroImg.onerror = function(){ heroImg.style.opacity='0'; };
+  heroImg.onload  = function(){ heroImg.style.opacity='0.75'; };
+  document.getElementById('restCat').textContent='Best in '+r.category;
+  document.getElementById('restCatItalic').textContent=r.category.toLowerCase();
+  document.getElementById('restInfoName').textContent=r.name;
+  document.getElementById('restInfoTime').textContent=r.time+' mins';
+  document.getElementById('restInfoArea').textContent=r.area;
+  document.getElementById('restInfoRating').textContent=r.rating;
+  document.getElementById('restInfoRatingCt').textContent=r.ratingCount+' ratings';
+  document.getElementById('restDealText').textContent=r.deal;
+  document.getElementById('restDealSub').textContent=r.dealSub;
+  document.getElementById('restDealCnt').textContent=r.dealCnt;
+  const cats=Object.keys(r.menu);
+  document.getElementById('menuFilters').innerHTML='<div class="filter-pill active" onclick="filterCategory(this,\'all\')">All</div>'+cats.map(c=>`<div class="filter-pill" onclick="filterCategory(this,'${encodeURIComponent(c)}')">${c}</div>`).join('');
+  renderMenu(r,'all','');
+  document.getElementById('menuSearchInput').value='';
+}
+
+function renderMenu(r,fcat,sq){
+  let html='';
+  for(const[cat,items]of Object.entries(r.menu)){
+    if(fcat!=='all'&&fcat!==cat&&decodeURIComponent(fcat)!==cat)continue;
+    const filt=sq?items.filter(i=>i.name.toLowerCase().includes(sq)||i.desc.toLowerCase().includes(sq)):items;
+    if(!filt.length)continue;
+    if(cat==='Top Picks'){
+      html+=`<div class="menu-section"><div class="menu-section-title">${cat}</div><div class="top-picks-grid">${filt.map(item=>topPickCard(r.id,cat,items.indexOf(item),item)).join('')}</div></div>`;
+    }else{
+      html+=`<div class="menu-section"><div class="menu-section-title">${cat}</div><div class="menu-list">${filt.map(item=>menuItemRow(r.id,cat,items.indexOf(item),item)).join('')}</div></div>`;
+    }
+  }
+  document.getElementById('menuBody').innerHTML=html||'<p style="padding:24px;color:var(--gray);text-align:center">No items found.</p>';
+}
+
+function topPickCard(rId,cat,idx,item){
+  const q=cartQty(rId,item.name);
+  return`<div class="top-pick-card"><div class="top-pick-img"><img src="${item.img}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="top-pick-img-ph" style="display:none">\uD83C\uDF7D\uFE0F</div><div class="top-pick-veg ${item.veg?'':'nonveg'}" style="${item.veg?'':'border-color:#c0392b'}"></div></div><div class="top-pick-overlay"><div class="top-pick-name">${item.name}</div><div class="top-pick-price-row"><div class="top-pick-prices"><span class="top-pick-original">\u20B9${item.orig}</span><span class="top-pick-discounted">\u20B9${item.price}</span></div><button class="top-pick-add ${q?'in-cart':''}" onclick="addToCart(${rId},'${cat}',${idx})">${q?q+' IN CART':'ADD'}</button></div></div></div>`;
+}
+
+function menuItemRow(rId,cat,idx,item){
+  const q=cartQty(rId,item.name);
+  return`<div class="menu-item"><div class="menu-item-veg ${item.veg?'':'nv'}"></div><div class="menu-item-info"><div class="menu-item-name">${item.name}</div><div class="menu-item-desc">${item.desc}</div><div class="menu-item-price-row"><span class="menu-item-price">\u20B9${item.price}</span>${item.orig?`<span class="menu-item-original">\u20B9${item.orig}</span>`:''}</div></div><div class="menu-item-img-wrap"><img src="${item.img}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="menu-item-img-ph" style="display:none">\uD83C\uDF7D\uFE0F</div><div class="menu-item-add-wrap">${q===0?`<button class="menu-item-add-btn" onclick="addToCart(${rId},'${cat}',${idx})">ADD</button>`:`<div class="qty-stepper"><button class="qty-btn" onclick="changeQty(${rId},'${cat}',${idx},-1)">\u2212</button><span class="qty-val">${q}</span><button class="qty-btn" onclick="changeQty(${rId},'${cat}',${idx},+1)">+</button></div>`}</div></div></div>`;
+}
+
+function filterCategory(el,cat){
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderMenu(RESTAURANTS.find(x=>x.id===currentRestId),cat,document.getElementById('menuSearchInput').value.trim().toLowerCase());
+}
+function filterMenu(){
+  const q=document.getElementById('menuSearchInput').value.trim().toLowerCase();
+  const ap=document.querySelector('.filter-pill.active');
+  renderMenu(RESTAURANTS.find(x=>x.id===currentRestId),(!ap||ap.textContent==='All')?'all':encodeURIComponent(ap.textContent),q);
+}
+
+/* CART */
+function cartQty(rId,nm){const f=cartItems.find(c=>c.restId==rId&&c.itemName===nm);return f?f.qty:0;}
+function addToCart(rId,cat,idx){
+  const r=RESTAURANTS.find(x=>x.id===rId),item=r.menu[cat][idx];
+  const ex=cartItems.find(c=>c.restId===rId&&c.itemName===item.name);
+  if(ex)ex.qty++;else cartItems.push({restId:rId,restName:r.name,itemName:item.name,itemImg:item.img,qty:1,price:item.price});
+  refreshCartUI();
+  const ap=document.querySelector('.filter-pill.active');
+  renderMenu(r,(!ap||ap.textContent==='All')?'all':encodeURIComponent(ap.textContent),document.getElementById('menuSearchInput').value.trim().toLowerCase());
+  showToast(item.name+' added! \uD83C\uDF89');
+}
+function changeQty(rId,cat,idx,delta){
+  const r=RESTAURANTS.find(x=>x.id===rId),item=r.menu[cat][idx];
+  const ex=cartItems.find(c=>c.restId===rId&&c.itemName===item.name);
+  if(!ex)return;ex.qty+=delta;
+  if(ex.qty<=0)cartItems=cartItems.filter(c=>!(c.restId===rId&&c.itemName===item.name));
+  refreshCartUI();
+  const ap=document.querySelector('.filter-pill.active');
+  renderMenu(r,(!ap||ap.textContent==='All')?'all':encodeURIComponent(ap.textContent),document.getElementById('menuSearchInput').value.trim().toLowerCase());
+}
+function refreshCartUI(){
+  const pill=document.querySelector('.cart-pill');
+  if(pill){pill.classList.remove('bump');void pill.offsetWidth;pill.classList.add('bump');}
+  const total=cartItems.reduce((s,c)=>s+c.price*c.qty,0),count=cartItems.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cartNum').textContent=count;
+  document.getElementById('cartDrawerCount').textContent=count?`(${count})`:'';
+  if(!cartItems.length){document.getElementById('cartEmptyState').style.display='flex';document.getElementById('cartItemsWrap').style.display='none';document.getElementById('cartFooter').style.display='none';return;}
+  document.getElementById('cartEmptyState').style.display='none';document.getElementById('cartItemsWrap').style.display='block';document.getElementById('cartFooter').style.display='block';
+  const byRest={};cartItems.forEach(c=>{(byRest[c.restName]=byRest[c.restName]||[]).push(c);});
+  document.getElementById('cartLineItems').innerHTML=Object.entries(byRest).map(([rn,items])=>`<div class="cart-rest-group"><div class="cart-rest-name">${rn}</div>${items.map(c=>`<div class="cart-line"><div class="cart-line-img"><img src="${c.itemImg}" onerror="this.style.display='none';this.parentElement.textContent='\uD83C\uDF7D\uFE0F'"></div><div class="cart-line-info"><div class="cart-line-name">${c.itemName}</div><div class="cart-line-price">\u20B9${c.price} \xD7 ${c.qty} = \u20B9${c.price*c.qty}</div></div><div class="cart-line-stepper"><button class="cls-btn" onclick="cartStep(${c.restId},'${c.itemName}',-1)">\u2212</button><span class="cls-val">${c.qty}</span><button class="cls-btn" onclick="cartStep(${c.restId},'${c.itemName}',+1)">+</button></div></div>`).join('')}</div>`).join('');
+  document.getElementById('billItemTotal').textContent='\u20B9'+total;document.getElementById('billTotal').textContent='\u20B9'+(total+5);
+}
+function cartStep(rId,nm,delta){const c=cartItems.find(x=>x.restId==rId&&x.itemName===nm);if(!c)return;c.qty+=delta;if(c.qty<=0)cartItems=cartItems.filter(x=>!(x.restId==rId&&x.itemName===nm));refreshCartUI();}
+function openCart(){document.getElementById('cartOverlay').classList.add('open');document.getElementById('cartDrawer').classList.add('open');}
+function closeCart(){document.getElementById('cartOverlay').classList.remove('open');document.getElementById('cartDrawer').classList.remove('open');}
+
+/* CHECKOUT */
+function openCheckout(){
+  closeCart();showPage('checkoutPage');window.scrollTo(0,0);
+  const sub=cartItems.reduce((s,c)=>s+c.price*c.qty,0);
+  document.getElementById('checkoutSummaryItems').innerHTML=cartItems.map(c=>`<div class="checkout-order-item"><span>${c.itemName} \xD7 ${c.qty}</span><span>\u20B9${c.price*c.qty}</span></div>`).join('');
+  document.getElementById('checkoutTotal').textContent='\u20B9'+(sub+5);
+}
+function closeCheckout(){showPage(currentRestId?'restPage':'homePage');window.scrollTo(0,0);}
+function selectAddr(el){document.querySelectorAll('.addr-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');customLocation='';document.getElementById('locConfirmMsg').style.display='none';validateCheckout();}
+function useTypedLocation(){
+  const val=document.getElementById('customLocInput').value.trim();
+  if(!val){showToast('Please type your location first');return;}
+  customLocation=val;document.querySelectorAll('.addr-option').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('locConfirmMsg').style.display='block';document.getElementById('locConfirmText').textContent=val;
+  showToast('Location set: '+val+' \u2705');validateCheckout();
+}
+function selectPay(el){document.querySelectorAll('.pay-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');validateCheckout();}
+function validateCheckout(){
+  const name=document.getElementById('coName').value.trim(),phone=document.getElementById('coPhone').value.trim();
+  const locOk=customLocation||document.querySelector('.addr-option.selected');
+  document.getElementById('btnPay').disabled=!(name.length>=2&&phone.length===10&&/^\d+$/.test(phone)&&locOk);
+}
+
+/* PROCESS PAYMENT — distance = baseDistKm +/- small random so each user gets unique value */
+function processPayment(){
+  const r=RESTAURANTS.find(x=>x.id===cartItems[0]?.restId)||RESTAURANTS[0];
+  const variation=(Math.random()*3-1.5);
+  const dist=Math.max(1,Math.round(r.baseDistKm+variation));
+  const mult=getDeliveryMultiplier();const time=Math.max(8,Math.round((10+dist*2.5+(Math.random()*10-5))*mult));
+  const sub=cartItems.reduce((s,c)=>s+c.price*c.qty,0);
+  const loc=customLocation||(document.querySelector('.addr-option.selected .addr-text')?.textContent)||'User Location';
+  cartItems.forEach(ci=>{placedOrders.push({restaurant:ci.restName,item:ci.itemName,customer:document.getElementById('coName').value.trim(),location:loc,distance:dist,time});});
+  document.getElementById('modalDist').textContent=dist+' km';
+  document.getElementById('modalTime').textContent=time+' min';
+  document.getElementById('modalAmt').textContent='\u20B9'+(sub+5);
+  document.getElementById('successModal').classList.add('open');
+  cartItems=[];customLocation='';refreshCartUI();
+  ['coName','coPhone','coEmail','customLocInput'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('locConfirmMsg').style.display='none';
+  document.querySelectorAll('.addr-option').forEach((o,i)=>o.classList.toggle('selected',i===0));
+  document.getElementById('btnPay').disabled=true;currentRestId=null;
+  document.getElementById('genTableBtn').disabled=false;document.getElementById('plotGraphBtn').disabled=false;
+  document.getElementById('dataHint').textContent=placedOrders.length+' order(s) placed \u2014 generate table or plot graph.';
+}
+function closeSuccessModal(){document.getElementById('successModal').classList.remove('open');showPage('homePage');window.scrollTo(0,0);}
+
+/* DATA TABLE */
+function generateTable(){
+  if(!placedOrders.length)return;
+  document.getElementById('dataTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td>${o.restaurant}</td><td>${o.item}</td><td>${o.customer}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
+  const avgD=Math.round(placedOrders.reduce((s,o)=>s+o.distance,0)/placedOrders.length);
+  const avgT=Math.round(placedOrders.reduce((s,o)=>s+o.time,0)/placedOrders.length);
+  document.getElementById('ftAvgDist').textContent='Avg Distance: '+avgD+' km';
+  document.getElementById('ftAvgTime').textContent='Avg Time: '+avgT+' min';
+  document.getElementById('ftTotal').textContent='Total: '+placedOrders.length+' orders';
+  document.getElementById('dataTableInfo').textContent=placedOrders.length+' records';
+  const w=document.getElementById('dataTableWrap');w.classList.add('show');w.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* GRAPH PAGE */
+function openGraphPage(){
+  if(!placedOrders.length){showToast('Place orders first!');return;}
+  showPage('graphPage');window.scrollTo(0,0);
+  regressionLineDrawn=false;readingLines=[];sgManualLine=null;sgLineStart=null;
+  document.getElementById('btnDrawLine').classList.remove('active-line');
+  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
+  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
+  document.getElementById('graphSideTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
+  setSGMode('readX');
+  setTimeout(()=>{drawScatterPlot();initExistingGraphClick();},80);
+}
+function closeGraphPage(){showPage('homePage');window.scrollTo(0,0);}
+function openNewGraphPage(){showPage('newGraphPage');window.scrollTo(0,0);setTimeout(()=>ngDraw(),80);}
+function closeNewGraphPage(){showPage('graphPage');window.scrollTo(0,0);setTimeout(()=>{drawScatterPlot();initExistingGraphClick();},80);}
+
+
+
+function setSGMode(mode){
+  sgMode = mode;
+  ['sgModeNone','sgModeLine','sgModeReadX','sgModeReadY'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.classList.remove('active');
+  });
+  const map={none:'sgModeNone',line:'sgModeLine',readX:'sgModeReadX',readY:'sgModeReadY'};
+  const btn=document.getElementById(map[mode]); if(btn) btn.classList.add('active');
+  const hints={
+    none:'Click "Draw Best-Fit Line" button to toggle the regression line.',
+    line:'Click & drag on the canvas (axes included) to draw your own straight line.',
+    readX:'Click anywhere on a line to drop dashed reading lines to both axes.',
+    readY:'Click anywhere on a line to drop dashed reading lines to both axes.'
+  };
+  const h=document.getElementById('sgHint'); if(h) h.textContent='💡 '+hints[mode];
+  const canvas=document.getElementById('regressionCanvas');
+  if(canvas) canvas.style.cursor=mode==='line'?'copy':'crosshair';
+  drawScatterPlot();
+}
+
+function clearSGReadings(){ readingLines=[]; drawScatterPlot(); showToast('Readings cleared'); }
+function clearSGManualLine(){ sgManualLine=null; sgLineStart=null; drawScatterPlot(); showToast('Manual line cleared'); }
+
+/* ── nice integer step for axis ticks (e.g. 2,4,5,10,20) ── */
+function niceStep(range, targetTicks){
+  const rough=range/targetTicks, mag=Math.pow(10,Math.floor(Math.log10(rough))), norm=rough/mag;
+  let step; if(norm<1.5) step=1; else if(norm<3) step=2; else if(norm<7) step=5; else step=10;
+  return step*mag;
+}
+
+function drawScatterPlot(){
+  const canvas=document.getElementById('regressionCanvas');
+  const wrap=canvas.parentElement;
+  const dpr=window.devicePixelRatio||1;
+  const cw=wrap.clientWidth, ch=Math.round(cw*(3/4));
+  canvas.width=cw*dpr; canvas.height=ch*dpr;
+  canvas.style.width=cw+'px'; canvas.style.height=ch+'px';
+  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  const W=cw, H=ch;
+  const pad={left:60,right:30,top:30,bottom:58};
+  const pW=W-pad.left-pad.right, pH=H-pad.top-pad.bottom;
+
+  /* ── Dynamic axes: scale to actual data, clean integer ticks ── */
+  const xVals=placedOrders.map(o=>o.distance), yVals=placedOrders.map(o=>o.time);
+  const xDataMax=xVals.length?Math.max(...xVals):18;
+  const yDataMax=yVals.length?Math.max(...yVals):80;
+  const xStep=niceStep(xDataMax*1.3||20, 6);
+  const yStep=niceStep(yDataMax*1.3||60, 6);
+  const xMin=0, xMax=Math.ceil((xDataMax*1.2||20)/xStep)*xStep;
+  const yMin=0, yMax=Math.ceil((yDataMax*1.2||60)/yStep)*yStep;
+  /* ─────────────────────────────────────────────────────────── */
+
+  const toSX=x=>pad.left+((x-xMin)/(xMax-xMin))*pW;
+  const toSY=y=>pad.top+((yMax-y)/(yMax-yMin))*pH;
+  const fromSX=sx=>(sx-pad.left)/pW*(xMax-xMin)+xMin;
+  const fromSY=sy=>yMax-(sy-pad.top)/pH*(yMax-yMin);
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#f5fcf5'; ctx.fillRect(0,0,W,H);
+
+  /* ── Minor grid lines at ¼ of each major step ── */
+  const xMinor=xStep/4, yMinor=yStep/4;
+  ctx.strokeStyle='#d6eed6'; ctx.lineWidth=0.5;
+  for(let v=xMin;v<=xMax+0.001;v+=xMinor){
+    ctx.beginPath(); ctx.moveTo(toSX(v),pad.top); ctx.lineTo(toSX(v),H-pad.bottom); ctx.stroke();
+  }
+  for(let v=yMin;v<=yMax+0.001;v+=yMinor){
+    ctx.beginPath(); ctx.moveTo(pad.left,toSY(v)); ctx.lineTo(W-pad.right,toSY(v)); ctx.stroke();
+  }
+
+  /* ── Major grid lines + integer tick labels ── */
+  ctx.fillStyle='#333'; ctx.font='11px DM Sans,sans-serif';
+  for(let v=xMin;v<=xMax+0.001;v+=xStep){
+    ctx.strokeStyle='#a5d6a7'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(toSX(v),pad.top); ctx.lineTo(toSX(v),H-pad.bottom); ctx.stroke();
+    ctx.strokeStyle='#555'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(toSX(v),H-pad.bottom); ctx.lineTo(toSX(v),H-pad.bottom+5); ctx.stroke();
+    ctx.textAlign='center'; ctx.fillText(String(Math.round(v)),toSX(v),H-pad.bottom+18);
+  }
+  for(let v=yMin;v<=yMax+0.001;v+=yStep){
+    ctx.strokeStyle='#a5d6a7'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.left,toSY(v)); ctx.lineTo(W-pad.right,toSY(v)); ctx.stroke();
+    ctx.strokeStyle='#555'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(pad.left,toSY(v)); ctx.lineTo(pad.left-5,toSY(v)); ctx.stroke();
+    ctx.textAlign='right'; ctx.fillText(String(Math.round(v)),pad.left-9,toSY(v)+4);
+  }
+
+  /* ── Axes ── */
+  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=2; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left,H-pad.bottom); ctx.lineTo(W-pad.right,H-pad.bottom); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W-pad.right,H-pad.bottom); ctx.lineTo(W-pad.right-8,H-pad.bottom-5); ctx.moveTo(W-pad.right,H-pad.bottom); ctx.lineTo(W-pad.right-8,H-pad.bottom+5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left-5,pad.top+8); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left+5,pad.top+8); ctx.stroke();
+  ctx.fillStyle='#1a1a1a'; ctx.font='bold 13px DM Sans,sans-serif';
+  ctx.textAlign='center'; ctx.fillText('Distance (km)',pad.left+pW/2,H-5);
+  ctx.save(); ctx.translate(14,pad.top+pH/2); ctx.rotate(-Math.PI/2); ctx.fillText('Time (min)',0,0); ctx.restore();
+  ctx.font='bold 11px DM Sans,sans-serif'; ctx.textAlign='left'; ctx.fillText('→ x',W-pad.right+3,H-pad.bottom+16);
+  ctx.textAlign='center'; ctx.fillText('↑ y',pad.left,pad.top-10);
+
+  /* ── Data points as × marks ── */
+  placedOrders.forEach(o=>{
+    const sx=toSX(o.distance), sy=toSY(o.time), s=7;
+    ctx.strokeStyle='#FF5200'; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(sx-s,sy-s); ctx.lineTo(sx+s,sy+s); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx+s,sy-s); ctx.lineTo(sx-s,sy+s); ctx.stroke();
+  });
+
+  // Best-fit regression line
+  let slope=null, intercept=null;
+  if(regressionLineDrawn && placedOrders.length>=2){
+    const pts=placedOrders.map(o=>({x:o.distance,y:o.time}));
+    const n=pts.length, sx=pts.reduce((a,p)=>a+p.x,0), sy=pts.reduce((a,p)=>a+p.y,0);
+    const sxy=pts.reduce((a,p)=>a+p.x*p.y,0), sxx=pts.reduce((a,p)=>a+p.x*p.x,0);
+    slope=(n*sxy-sx*sy)/(n*sxx-sx*sx)||0; intercept=(sy-slope*sx)/n;
+    ctx.strokeStyle='#1C1C1C'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(toSX(xMin),toSY(slope*xMin+intercept)); ctx.lineTo(toSX(xMax),toSY(slope*xMax+intercept)); ctx.stroke();
+  }
+
+  // Manual drawn line
+  if(sgManualLine){
+    ctx.strokeStyle='#7b1fa2'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(sgManualLine.x1,sgManualLine.y1); ctx.lineTo(sgManualLine.x2,sgManualLine.y2); ctx.stroke();
+  }
+
+  // Line drag preview
+  if(sgLineStart && sgLineStart.curSx!==undefined){
+    ctx.strokeStyle='rgba(123,31,162,0.4)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(sgLineStart.sx,sgLineStart.sy); ctx.lineTo(sgLineStart.curSx,sgLineStart.curSy); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Reading/corresponding lines
+  readingLines.forEach(rl=>{
+    const sx=toSX(rl.x), sy=toSY(rl.y);
+    ctx.strokeStyle='#1565c0'; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(sx,H-pad.bottom); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(pad.left,sy); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#1565c0';
+    ctx.beginPath(); ctx.arc(sx,H-pad.bottom,5,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(pad.left,sy,5,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(sx,sy,5,0,Math.PI*2); ctx.fill();
+    ctx.font='bold 11px DM Sans,sans-serif';
+    ctx.textAlign='center'; ctx.fillText(rl.x.toFixed(1),sx,H-pad.bottom+14);
+    ctx.textAlign='right'; ctx.fillText(rl.y.toFixed(1),pad.left-8,sy+4);
+  });
+  ctx.setLineDash([]);
+
+  // Store helpers on canvas (dynamic xMax/yMax so reading lines stay accurate)
+  canvas._toSX=toSX; canvas._toSY=toSY; canvas._fromSX=fromSX; canvas._fromSY=fromSY;
+  canvas._pad=pad; canvas._W=W; canvas._H=H;
+  canvas._slope=slope; canvas._intercept=intercept;
+  canvas._xMin=xMin; canvas._xMax=xMax; canvas._yMin=yMin; canvas._yMax=yMax;
+}
+
+function sgGetCanvasPoint(e,canvas){
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=(canvas.width/(window.devicePixelRatio||1))/rect.width;
+  const scaleY=(canvas.height/(window.devicePixelRatio||1))/rect.height;
+  return {cx:(e.clientX-rect.left)*scaleX, cy:(e.clientY-rect.top)*scaleY};
+}
+
+function sgSnapToAxis(cx,cy){
+  const canvas=document.getElementById('regressionCanvas');
+  const pad=canvas._pad||{left:56,right:28,top:28,bottom:56};
+  const snapDist=14;
+  if(Math.abs(cx-pad.left)<snapDist) cx=pad.left;
+  if(Math.abs(cy-(canvas._H-pad.bottom))<snapDist) cy=canvas._H-pad.bottom;
+  return {cx,cy};
+}
+
+function initExistingGraphClick(){
+  const canvas=document.getElementById('regressionCanvas');
+
+  canvas.onmousedown=function(e){
+    const {cx,cy}=sgGetCanvasPoint(e,canvas);
+    if(sgMode==='line'){
+      const s=sgSnapToAxis(cx,cy);
+      sgLineStart={sx:s.cx,sy:s.cy,curSx:s.cx,curSy:s.cy};
+      drawScatterPlot();
+    }
+  };
+
+  canvas.onmousemove=function(e){
+    if(sgMode!=='line'||!sgLineStart) return;
+    const {cx,cy}=sgGetCanvasPoint(e,canvas);
+    const s=sgSnapToAxis(cx,cy);
+    sgLineStart.curSx=s.cx; sgLineStart.curSy=s.cy;
+    drawScatterPlot();
+  };
+
+  canvas.onmouseup=function(e){
+    if(sgMode==='line' && sgLineStart){
+      const {cx,cy}=sgGetCanvasPoint(e,canvas);
+      const s=sgSnapToAxis(cx,cy);
+      const dist=Math.hypot(s.cx-sgLineStart.sx, s.cy-sgLineStart.sy);
+      if(dist>10){
+        sgManualLine={x1:sgLineStart.sx,y1:sgLineStart.sy,x2:s.cx,y2:s.cy};
+        showToast('Line drawn! Switch to Read X/Y to take readings.');
+      }
+      sgLineStart=null;
+      drawScatterPlot();
+      return;
+    }
+    if(sgMode==='readX'||sgMode==='readY'){
+      const {cx,cy}=sgGetCanvasPoint(e,canvas);
+      const pad=canvas._pad;
+      if(cx<pad.left||cx>canvas._W-pad.right||cy<pad.top||cy>canvas._H-pad.bottom) return;
+
+      // Try best-fit line first, then manual line
+      let lineY=null;
+      if(sgManualLine){
+        const {x1,y1,x2,y2}=sgManualLine;
+        if(x2!==x1){ const t=(cx-x1)/(x2-x1); lineY=y1+t*(y2-y1); }
+      }
+      if(lineY===null && canvas._slope!==null && regressionLineDrawn){
+        const dataX=canvas._fromSX(cx);
+        const dataY=canvas._slope*dataX+canvas._intercept;
+        lineY=canvas._toSY(dataY);
+      }
+      if(lineY===null){ showToast('Draw a line first, then read values!'); return; }
+
+      const dataX=canvas._fromSX(cx);
+      const dataY=canvas._fromSY(lineY);
+      if(dataX<canvas._xMin||dataX>canvas._xMax||dataY<canvas._yMin||dataY>canvas._yMax) return;
+      readingLines.push({x:Math.round(dataX*10)/10, y:Math.round(dataY*10)/10});
+      drawScatterPlot();
+      showToast('Reading: x='+readingLines[readingLines.length-1].x+', y='+readingLines[readingLines.length-1].y);
+    }
+  };
+
+  canvas.onmouseleave=function(){
+    if(sgLineStart){ sgLineStart=null; drawScatterPlot(); }
+  };
+}
+
+function toggleRegressionLine(){
+  if(placedOrders.length < 2){ showToast('Need at least 2 orders to draw best-fit line!'); return; }
+  regressionLineDrawn = !regressionLineDrawn;
+  readingLines = [];
+  const btn = document.getElementById('btnDrawLine');
+  if(regressionLineDrawn){
+    btn.classList.add('active-line');
+    btn.textContent = '✅ Best-Fit Line Drawn — Click to Remove';
+    // Compute and show equation
+    const pts = placedOrders.map(o=>({x:o.distance, y:o.time}));
+    const n = pts.length;
+    const sumX = pts.reduce((a,p)=>a+p.x,0);
+    const sumY = pts.reduce((a,p)=>a+p.y,0);
+    const sumXY= pts.reduce((a,p)=>a+p.x*p.y,0);
+    const sumXX= pts.reduce((a,p)=>a+p.x*p.x,0);
+    const m = (n*sumXY - sumX*sumY)/(n*sumXX - sumX*sumX) || 0;
+    const c = (sumY - m*sumX)/n;
+    const sign = c>=0?'+':'-';
+    showToast('Line drawn! y = ' + m.toFixed(2) + 'x ' + sign + ' ' + Math.abs(c).toFixed(2));
+    // Show equation below the button
+    const eq = document.getElementById('sgEquation');
+    if(eq){ eq.style.display='block'; eq.innerHTML='&#x1F4C8; Regression Equation: <strong>y = '+m.toFixed(2)+'x '+sign+' '+Math.abs(c).toFixed(2)+'</strong>'; }
+  } else {
+    btn.classList.remove('active-line');
+    btn.textContent = '📏 Draw Best-Fit Line';
+    const eq = document.getElementById('sgEquation');
+    if(eq) eq.style.display='none';
+  }
+  drawScatterPlot();
+}
+function replotGraph(){
+  regressionLineDrawn=false; readingLines=[];
+  document.getElementById('btnDrawLine').classList.remove('active-line');
+  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
+  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
+  drawScatterPlot(); showToast('Graph replotted');
+}
+window.addEventListener('resize',()=>{if(document.getElementById('graphPage').classList.contains('active'))drawScatterPlot();});
+
+/* ══════════════════════════════════════════════════════
+   NEW GRAPH — manual plot + draw line + read values
+   ══════════════════════════════════════════════════════ */
+let ngData = [];          // [{x, y}]
+let ngPlottedPts = [];    // actual plotted points
+let ngLine = null;        // {x1,y1,x2,y2} drawn line
+let ngReadingLines = [];  // [{x, y}] reading/corresponding lines
+let ngMode = 'point';     // 'point' | 'line' | 'readX' | 'readY'
+let ngLineStart = null;   // while dragging to draw line
+
+// Fixed axes same as scatter plot
+const NG_XMIN=0,NG_XMAX=20,NG_YMIN=0,NG_YMAX=100;
+
+function setNGMode(mode){
+  ngMode=mode;
+  ['ngModePoint','ngModeLine','ngModeReadX','ngModeReadY'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  const map={point:'ngModePoint',line:'ngModeLine',readX:'ngModeReadX',readY:'ngModeReadY'};
+  document.getElementById(map[mode]).classList.add('active');
+  const canvas=document.getElementById('newGraphCanvas');
+  canvas.style.cursor=mode==='point'?'crosshair':mode==='line'?'copy':mode==='readX'||mode==='readY'?'crosshair':'default';
+  ngDraw();
+}
+
+function ngGetCoords(){
+  const canvas=document.getElementById('newGraphCanvas');
+  const wrap=canvas.parentElement;
+  const cw=wrap.clientWidth, ch=Math.round(cw*(3/4));
+  const pad={left:58,right:28,top:28,bottom:56};
+  const pW=cw-pad.left-pad.right, pH=ch-pad.top-pad.bottom;
+  const toSX=x=>pad.left+((x-NG_XMIN)/(NG_XMAX-NG_XMIN))*pW;
+  const toSY=y=>pad.top+((NG_YMAX-y)/(NG_YMAX-NG_YMIN))*pH;
+  const fromSX=sx=>(sx-pad.left)/pW*(NG_XMAX-NG_XMIN)+NG_XMIN;
+  const fromSY=sy=>NG_YMAX-(sy-pad.top)/pH*(NG_YMAX-NG_YMIN);
+  return {pad,pW,pH,cw,ch,toSX,toSY,fromSX,fromSY};
+}
+
+function ngDraw(){
+  const canvas=document.getElementById('newGraphCanvas');
+  const wrap=canvas.parentElement;
+  const dpr=window.devicePixelRatio||1;
+  const {pad,pW,pH,cw,ch,toSX,toSY} = ngGetCoords();
+  const W=cw,H=ch;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+
+  ctx.fillStyle='#f5fcf5';ctx.fillRect(0,0,W,H);
+
+  // Grid: X 0-20 step 2, Y 0-100 step 10
+  for(let v=NG_XMIN;v<=NG_XMAX;v+=2){
+    ctx.strokeStyle=v%10===0?'#a5d6a7':'#c8e6c9';ctx.lineWidth=v%10===0?1:0.5;
+    ctx.beginPath();ctx.moveTo(toSX(v),pad.top);ctx.lineTo(toSX(v),H-pad.bottom);ctx.stroke();
+  }
+  for(let v=NG_YMIN;v<=NG_YMAX;v+=10){
+    ctx.strokeStyle=v%50===0?'#a5d6a7':'#c8e6c9';ctx.lineWidth=v%50===0?1:0.5;
+    ctx.beginPath();ctx.moveTo(pad.left,toSY(v));ctx.lineTo(W-pad.right,toSY(v));ctx.stroke();
+  }
+
+  // Labels
+  ctx.fillStyle='#444';ctx.font='11px DM Sans,sans-serif';
+  for(let v=NG_XMIN;v<=NG_XMAX;v+=2){ctx.textAlign='center';ctx.fillText(v,toSX(v),H-pad.bottom+16);}
+  for(let v=NG_YMIN;v<=NG_YMAX;v+=10){ctx.textAlign='right';ctx.fillText(v,pad.left-6,toSY(v)+4);}
+
+  // Axes
+  ctx.strokeStyle='#1a1a1a';ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(pad.left,pad.top);ctx.lineTo(pad.left,H-pad.bottom);ctx.lineTo(W-pad.right,H-pad.bottom);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(W-pad.right,H-pad.bottom);ctx.lineTo(W-pad.right-8,H-pad.bottom-5);ctx.moveTo(W-pad.right,H-pad.bottom);ctx.lineTo(W-pad.right-8,H-pad.bottom+5);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad.left,pad.top);ctx.lineTo(pad.left-5,pad.top+8);ctx.moveTo(pad.left,pad.top);ctx.lineTo(pad.left+5,pad.top+8);ctx.stroke();
+  ctx.fillStyle='#1a1a1a';ctx.font='bold 13px DM Sans,sans-serif';
+  ctx.textAlign='center';ctx.fillText('Distance (km)',pad.left+pW/2,H-6);
+  ctx.save();ctx.translate(14,pad.top+pH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Time (min)',0,0);ctx.restore();
+  ctx.font='bold 12px DM Sans,sans-serif';ctx.textAlign='left';ctx.fillText('→ x',W-pad.right+3,H-pad.bottom+20);
+  ctx.textAlign='center';ctx.fillText('↑ y',pad.left,pad.top-8);
+
+  // Plotted points as × marks
+  ngPlottedPts.forEach(p=>{
+    const sx=toSX(p.x),sy=toSY(p.y),s=7;
+    ctx.strokeStyle='#FF5200';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(sx-s,sy-s);ctx.lineTo(sx+s,sy+s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sx+s,sy-s);ctx.lineTo(sx-s,sy+s);ctx.stroke();
+  });
+
+  // Drawn line (fully flexible — can start from axis edge or anywhere)
+  if(ngLine){
+    ctx.strokeStyle='#1C1C1C';ctx.lineWidth=2.5;ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(ngLine.x1,ngLine.y1);ctx.lineTo(ngLine.x2,ngLine.y2);ctx.stroke();
+  }
+
+  // Line being dragged (preview)
+  if(ngLineStart){
+    ctx.strokeStyle='rgba(28,28,28,0.4)';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(ngLineStart.sx,ngLineStart.sy);ctx.lineTo(ngLineStart.curSx||ngLineStart.sx,ngLineStart.curSy||ngLineStart.sy);ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Reading/corresponding lines
+  ngReadingLines.forEach(rl=>{
+    const sx=toSX(rl.x),sy=toSY(rl.y);
+    ctx.strokeStyle='#1565c0';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx,H-pad.bottom);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(pad.left,sy);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#1565c0';
+    ctx.beginPath();ctx.arc(sx,H-pad.bottom,5,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(pad.left,sy,5,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(sx,sy,5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#1565c0';ctx.font='bold 11px DM Sans,sans-serif';
+    ctx.textAlign='center';ctx.fillText(rl.x.toFixed(1),sx,H-pad.bottom+14);
+    ctx.textAlign='right';ctx.fillText(rl.y.toFixed(1),pad.left-8,sy+4);
+  });
+  ctx.setLineDash([]);
+
+  // Mode hint overlay
+  const hints={point:'Click on graph to plot a point',line:'Click & drag to draw a line from any point (axes included)',readX:'Click on the line to read X & Y values',readY:'Click on the line to read X & Y values'};
+  ctx.fillStyle='rgba(255,82,0,0.12)';ctx.beginPath();ctx.roundRect?ctx.roundRect(pad.left+6,pad.top+6,220,24,6):ctx.rect(pad.left+6,pad.top+6,220,24);ctx.fill();
+  ctx.fillStyle='#d94600';ctx.font='bold 11px DM Sans,sans-serif';ctx.textAlign='left';ctx.fillText('Mode: '+hints[ngMode],pad.left+12,pad.top+22);
+}
+
+function ngGetCanvasPoint(e,canvas){
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=(canvas.width/(window.devicePixelRatio||1))/rect.width;
+  const scaleY=(canvas.height/(window.devicePixelRatio||1))/rect.height;
+  return {cx:(e.clientX-rect.left)*scaleX, cy:(e.clientY-rect.top)*scaleY};
+}
+
+function ngSnapToAxis(cx,cy,coords){
+  // If near y-axis, snap to y-axis; if near x-axis, snap to x-axis
+  const {pad,cw,ch} = coords;
+  const snapDist=14;
+  let snappedCx=cx, snappedCy=cy;
+  if(Math.abs(cx-pad.left)<snapDist) snappedCx=pad.left;
+  if(Math.abs(cy-(ch-pad.bottom))<snapDist) snappedCy=ch-pad.bottom;
+  return {cx:snappedCx, cy:snappedCy};
+}
+
+function ngInitCanvas(){
+  const canvas=document.getElementById('newGraphCanvas');
+
+  canvas.onmousedown=function(e){
+    const {cx,cy}=ngGetCanvasPoint(e,canvas);
+    const coords=ngGetCoords();
+    const {pad,toSX,toSY,fromSX,fromSY,cw,ch}=coords;
+    if(ngMode==='point'){
+      // Only plot if inside plot area
+      if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
+      const xV=Math.round(fromSX(cx)), yV=Math.round(fromSY(cy));
+      if(xV<NG_XMIN||xV>NG_XMAX||yV<NG_YMIN||yV>NG_YMAX) return;
+      ngPlottedPts.push({x:xV,y:yV});
+      ngDraw();
+      showToast('Point plotted: ('+xV+', '+yV+')');
+    } else if(ngMode==='line'){
+      // Allow starting from anywhere including axes
+      const snapped=ngSnapToAxis(cx,cy,coords);
+      ngLineStart={sx:snapped.cx, sy:snapped.cy, curSx:snapped.cx, curSy:snapped.cy};
+      ngDraw();
+    } else if(ngMode==='readX'||ngMode==='readY'){
+      if(!ngLine) return;
+      if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
+      // Find Y on line at given X (line goes from canvas pixel coords)
+      const {x1,y1,x2,y2}=ngLine;
+      if(x2===x1) return;
+      const t=(cx-x1)/(x2-x1);
+      const lineY=y1+t*(y2-y1);
+      const dataX=fromSX(cx), dataY=fromSY(lineY);
+      if(dataX<NG_XMIN||dataX>NG_XMAX||dataY<NG_YMIN||dataY>NG_YMAX) return;
+      ngReadingLines.push({x:Math.round(dataX*2)/2, y:Math.round(dataY*2)/2});
+      ngDraw();
+      showToast('Reading: x='+ngReadingLines[ngReadingLines.length-1].x+', y='+ngReadingLines[ngReadingLines.length-1].y);
+    }
+  };
+
+  canvas.onmousemove=function(e){
+    if(ngMode!=='line'||!ngLineStart) return;
+    const {cx,cy}=ngGetCanvasPoint(e,canvas);
+    const coords=ngGetCoords();
+    const snapped=ngSnapToAxis(cx,cy,coords);
+    ngLineStart.curSx=snapped.cx; ngLineStart.curSy=snapped.cy;
+    ngDraw();
+  };
+
+  canvas.onmouseup=function(e){
+    if(ngMode!=='line'||!ngLineStart) return;
+    const {cx,cy}=ngGetCanvasPoint(e,canvas);
+    const coords=ngGetCoords();
+    const snapped=ngSnapToAxis(cx,cy,coords);
+    const dist=Math.hypot(snapped.cx-ngLineStart.sx, snapped.cy-ngLineStart.sy);
+    if(dist>10){
+      ngLine={x1:ngLineStart.sx,y1:ngLineStart.sy,x2:snapped.cx,y2:snapped.cy};
+      showToast('Line drawn! Switch to Read X/Y to take readings.');
+    }
+    ngLineStart=null;
+    ngDraw();
+  };
+
+  canvas.onmouseleave=function(){
+    if(ngLineStart && ngMode==='line'){ngLineStart=null;ngDraw();}
+  };
+}
+
+function ngAddRow(){
+  const x=parseFloat(document.getElementById('ngInputX').value);
+  const y=parseFloat(document.getElementById('ngInputY').value);
+  if(isNaN(x)||isNaN(y)){showToast('Enter valid X and Y values');return;}
+  if(x<0||x>20){showToast('X must be between 0 and 20');return;}
+  if(y<0||y>100){showToast('Y must be between 0 and 100');return;}
+  ngData.push({x,y});
+  document.getElementById('ngInputX').value='';
+  document.getElementById('ngInputY').value='';
+  ngRefreshTable();
+  document.getElementById('ngInputX').focus();
+}
+
+function ngRefreshTable(){
+  const empty=document.getElementById('ngTableEmpty');
+  const table=document.getElementById('ngDataTable');
+  if(!ngData.length){empty.style.display='block';table.style.display='none';return;}
+  empty.style.display='none';table.style.display='table';
+  document.getElementById('ngTableBody').innerHTML=ngData.map((r,i)=>
+    `<tr><td>${i+1}</td><td class="dist-val">${r.x}</td><td class="time-val">${r.y}</td><td><button onclick="ngDeleteRow(${i})" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:14px;font-weight:700;">✕</button></td></tr>`
+  ).join('');
+}
+
+function ngDeleteRow(i){ngData.splice(i,1);ngRefreshTable();}
+
+function ngPlotPoints(){
+  if(!ngData.length){showToast('Add data rows first!');return;}
+  ngPlottedPts=[...ngData];
+  ngDraw();
+  showToast(ngData.length+' points plotted! Switch to Draw Line mode to draw your line.');
+}
+
+function ngClearPoints(){ngPlottedPts=[];ngDraw();showToast('Points cleared');}
+function ngClearLine(){ngLine=null;ngReadingLines=[];ngDraw();showToast('Line cleared');}
+function ngClearAll(){ngPlottedPts=[];ngLine=null;ngReadingLines=[];ngLineStart=null;ngDraw();showToast('All cleared');}
+function ngClearData(){ngData=[];ngRefreshTable();}
+
+window.addEventListener('resize',()=>{
+  if(document.getElementById('newGraphPage').classList.contains('active')) ngDraw();
+});
+
+
+function showPage(id){
+  const hp=document.getElementById('homePage');
+  if(hp) hp.style.display=(id==='homePage')?'block':'none';
+  ['restPage','checkoutPage','graphPage','newGraphPage'].forEach(p=>{
+    const el=document.getElementById(p);
+    if(el) el.classList.toggle('active',p===id);
+  });
+}
+function goHome(){showPage('homePage');currentRestId=null;window.scrollTo(0,0);}
+
+/* TOAST */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+
+/* ADD ADDRESS MODAL */
+let newAddrIcon='&#x1F3E0;';
+function openAddrModal(){
+  document.getElementById('addrModalBackdrop').classList.add('open');
+  // reset
+  document.getElementById('newAddrLabel').value='Home';
+  document.getElementById('newAddrLine1').value='';
+  document.getElementById('newAddrLocality').value='';
+  document.getElementById('newAddrCity').value='Hyderabad';
+  document.getElementById('newAddrPin').value='';
+  document.querySelectorAll('.addr-type-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  newAddrIcon='\uD83C\uDFE0';
+}
+function closeAddrModal(e){
+  if(e&&e.target!==document.getElementById('addrModalBackdrop'))return;
+  document.getElementById('addrModalBackdrop').classList.remove('open');
+}
+function setAddrType(btn,icon,label){
+  document.querySelectorAll('.addr-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  newAddrIcon=icon;
+  document.getElementById('newAddrLabel').value=label;
+}
+function saveNewAddress(){
+  const label=document.getElementById('newAddrLabel').value.trim();
+  const line1=document.getElementById('newAddrLine1').value.trim();
+  const locality=document.getElementById('newAddrLocality').value.trim();
+  const city=document.getElementById('newAddrCity').value.trim()||'Hyderabad';
+  const pin=document.getElementById('newAddrPin').value.trim();
+  if(!label){showToast('Please enter a label for this address');return;}
+  if(!line1&&!locality){showToast('Please enter your address details');return;}
+  const fullAddr=[line1,locality,city,pin?'- '+pin:''].filter(Boolean).join(', ').replace(/,\s*-/,',');
+  const container=document.getElementById('addrOptions');
+  const newEl=document.createElement('div');
+  newEl.className='addr-option';
+  newEl.dataset.label=label;
+  newEl.onclick=function(){selectAddr(this)};
+  newEl.innerHTML=`<div class="addr-radio"></div><div class="addr-icon">${newAddrIcon}</div><div class="addr-info"><div class="addr-label">${label}</div><div class="addr-text">${fullAddr}</div></div>`;
+  container.appendChild(newEl);
+  document.getElementById('addrModalBackdrop').classList.remove('open');
+  // auto-select the new address
+  selectAddr(newEl);
+  showToast('\u2705 '+label+' address saved!');
+}
+
+/* INIT */
+try{renderHome();}catch(e){console.error('renderHome failed',e);}
+try{initHeroSlideshow();}catch(e){console.error('heroSlideshow failed',e);}
+showPage('homePage');
+setTimeout(ngInitCanvas, 100);
+</script>
+</body>
+</html>
