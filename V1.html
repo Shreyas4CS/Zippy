@@ -142,39 +142,20 @@ button:not(.qty-btn):not(.cls-btn):active{transform:scale(.97)}
 .hero-img img{width:100%;height:100%;object-fit:cover}
 .hero-img-ph{font-size:80px;opacity:.6}
 
-/* BIG DYNAMIC HERO CARD */
-.hero-big-card{position:relative;border-radius:var(--r-xl);overflow:hidden;min-height:240px;display:flex;align-items:center;justify-content:space-between;padding:40px 48px;gap:24px;transition:background .7s ease}
-.hero-big-left{position:relative;z-index:2;flex:1;min-width:0}
-.hero-big-eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px;opacity:.85}
-.hero-big-title{font-family:'Nunito',sans-serif;font-size:clamp(36px,5.5vw,60px);font-weight:900;line-height:1;letter-spacing:-1.5px;margin-bottom:8px}
-.hero-big-title span{opacity:.85}
-.hero-big-sub{font-size:14px;font-weight:500;margin-bottom:24px;opacity:.8}
-.hero-big-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.hero-big-cta{font-size:15px;padding:13px 28px}
-.hero-big-secondary{background:rgba(255,255,255,.18);color:white;border-radius:50px;padding:12px 22px;font-weight:700;font-size:13px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.3);transition:all .2s;cursor:pointer}
-.hero-big-secondary:hover{background:rgba(255,255,255,.28)}
-.hero-big-img{position:relative;z-index:2;width:220px;height:190px;flex-shrink:0;border-radius:var(--r-lg);overflow:hidden;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);box-shadow:0 12px 40px rgba(0,0,0,.25)}
-.hero-big-img-inner{font-size:90px;animation:float 4s ease-in-out infinite;line-height:1;text-align:center;padding:20px}
-.hero-big-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
-.hero-big-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:all .25s}
-.hero-big-dot.active{background:white;width:24px;border-radius:4px}
-.hero-big-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:white;border-radius:50%;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(4px);transition:all .2s;line-height:1}
-.hero-big-arrow:hover{background:rgba(255,255,255,.32)}
-.hero-big-prev{left:14px}
-.hero-big-next{right:14px}
-
-/* WEATHER MODE BUTTONS */
-.weather-modes{display:flex;align-items:center;gap:8px;margin-right:4px}
-.mode-btn{display:flex;align-items:center;gap:6px;border-radius:50px;padding:6px 14px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:white;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
-.mode-btn:hover{border-color:var(--orange);color:var(--orange)}
-.mode-btn.active.traffic{background:#fff3e0;border-color:#e65100;color:#e65100}
-.mode-btn.active.rain{background:#e3f2fd;border-color:#1565c0;color:#1565c0}
-.mode-indicator{display:none;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--orange);background:var(--orange-bg);border-radius:50px;padding:4px 12px;border:1px solid rgba(255,82,0,.2)}
-.mode-indicator.show{display:flex}
-@media(max-width:640px){.weather-modes{gap:5px}.mode-btn{padding:5px 10px;font-size:11px}}
-@media(max-width:480px){.weather-modes{display:none}}
-
-/* DEAL SLIDESHOW (kept for dots CSS reuse) */
+/* DEAL SLIDESHOW */
+.deals-banner{max-width:1280px;margin:0 auto;padding:0 24px 28px;position:relative;overflow:hidden}
+.deals-track-wrap{overflow:hidden;border-radius:var(--r-md)}
+.deals-track{display:flex;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.deal-slide{flex-shrink:0;width:100%;background:linear-gradient(135deg,var(--yellow),#f09000);border-radius:var(--r-md);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:90px}
+.deal-slide:nth-child(2){background:linear-gradient(135deg,#e84393,#c0186a)}
+.deal-slide:nth-child(3){background:linear-gradient(135deg,#00b09b,#007a6a)}
+.deal-slide:nth-child(4){background:linear-gradient(135deg,#8e44ad,#5b2c6f)}
+.deal-slide:nth-child(5){background:linear-gradient(135deg,#2980b9,#1a5276)}
+.deal-slide-left{display:flex;flex-direction:column;gap:4px}
+.deal-slide-tag{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:rgba(255,255,255,.8)}
+.deal-slide-value{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(22px,4vw,34px);color:white;line-height:1}
+.deal-slide-sub{font-size:12px;color:rgba(255,255,255,.85);font-weight:600}
+.deal-slide-img{font-size:clamp(40px,6vw,60px);flex-shrink:0}
 .deals-dots{display:flex;justify-content:center;gap:7px;margin-top:12px}
 .deals-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .2s}
 .deals-dot.active{background:var(--orange);width:22px;border-radius:4px}
@@ -274,7 +255,7 @@ button:not(.qty-btn):not(.cls-btn):active{transform:scale(.97)}
 .menu-item-price-row{display:flex;align-items:center;gap:8px}
 .menu-item-price{font-weight:800;font-size:14px;color:var(--black)}
 .menu-item-original{font-size:12px;color:var(--gray);text-decoration:line-through}
-.menu-item-img-wrap{width:130px;height:120px;flex-shrink:0;border-radius:10px;overflow:hidden;position:relative;background:var(--orange-bg)}
+.menu-item-img-wrap{width:100px;height:90px;flex-shrink:0;border-radius:10px;overflow:hidden;position:relative;background:var(--orange-bg)}
 .menu-item-img-wrap img{width:100%;height:100%;object-fit:cover}
 .menu-item-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px}
 .menu-item-add-wrap{position:absolute;bottom:-1px;left:0;right:0;display:flex;justify-content:center}
@@ -466,23 +447,6 @@ td.time-val{font-weight:700;color:var(--green)}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--black);color:white;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;z-index:9999;white-space:nowrap;transition:transform .3s ease;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
-/* FOOTER */
-.site-footer{background:#1a0800;color:rgba(255,255,255,.7);margin-top:60px}
-.footer-inner{max-width:1280px;margin:0 auto;padding:44px 24px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap}
-.footer-brand{display:flex;align-items:center;gap:14px}
-.footer-logo-mark{width:44px;height:44px;background:var(--orange);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:white;flex-shrink:0}
-.footer-brand-name{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:white}
-.footer-brand-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:2px}
-.footer-links{display:flex;gap:48px;flex-wrap:wrap}
-.footer-col{display:flex;flex-direction:column;gap:10px}
-.footer-col-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:rgba(255,255,255,.4);margin-bottom:4px}
-.footer-col a{font-size:13px;color:rgba(255,255,255,.65);transition:color .2s;text-decoration:none}
-.footer-col a:hover{color:var(--orange)}
-.footer-bottom{max-width:1280px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap}
-.footer-credit{color:rgba(255,255,255,.5)}
-.footer-credit a{color:var(--orange);font-weight:700;text-decoration:none}
-.footer-credit a:hover{text-decoration:underline}
-
 /* RESPONSIVE */
 @media(max-width:1024px){.graph-inner{grid-template-columns:1fr}.graph-side-scroll{max-height:300px}}
 @media(max-width:900px){.hero-banner{flex-direction:column;text-align:center;padding:28px 20px}.hero-img{width:100%;height:180px}.restaurant-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.form-row{grid-template-columns:1fr}}
@@ -501,11 +465,6 @@ td.time-val{font-weight:700;color:var(--green)}
       </div>
     </div>
     <div class="header-actions">
-      <div class="weather-modes">
-        <button class="mode-btn traffic" id="btnTraffic" onclick="toggleMode('traffic')" title="Enable traffic mode — increases delivery time">&#x1F6A6; Traffic</button>
-        <button class="mode-btn rain" id="btnRain" onclick="toggleMode('rain')" title="Enable rain mode — increases delivery time">&#x1F327;&#xFE0F; Rain</button>
-        <div class="mode-indicator" id="modeIndicator">&#x23F1; Extended ETA</div>
-      </div>
       <a href="https://www.cognospace.in" target="_blank" rel="noopener" class="cognospace-logo-link" title="Visit Cognospace">
         <img src="images/cognospace_logo.png" alt="Cognospace" onerror="this.style.display='none'">
       </a>
@@ -518,26 +477,30 @@ td.time-val{font-weight:700;color:var(--green)}
 <div id="homePage">
   <div class="hero">
     <div class="hero-inner">
-      <!-- SINGLE DYNAMIC BIG HERO CARD -->
-      <div class="hero-big-card" id="heroBigCard">
-        <div class="hero-big-left" id="heroBigLeft">
-          <div class="hero-big-eyebrow" id="heroBigEyebrow">Limited Time Offer</div>
-          <div class="hero-big-title" id="heroBigTitle">CRAVE<span>-ATHON</span></div>
-          <div class="hero-big-sub" id="heroBigSub">Min. &#x20B9;150 OFF &amp; More</div>
-          <div class="hero-big-actions">
-            <button class="hero-cta hero-big-cta" id="heroBigCta" onclick="document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})">Order Now &#x2192;</button>
-            <button class="hero-big-secondary" id="heroBigSecBtn">Explore Deals</button>
-          </div>
+      <div class="hero-banner">
+        <div class="hero-text">
+          <div class="hero-eyebrow">Limited Time Offer</div>
+          <div class="hero-title">CRAVE<span>-</span>ATHON</div>
+          <div class="hero-subtitle">Min. &#x20B9;150 OFF &amp; More</div>
+          <button class="hero-cta" onclick="document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})">Order Now &#x2192;</button>
         </div>
-        <div class="hero-big-img" id="heroBigImg">
-          <div class="hero-big-img-inner" id="heroBigImgInner">&#x1F35B;</div>
+        <div class="hero-img">
+          <!-- <img src="images/hero-food.jpg" alt="Food"> -->
+          <div class="hero-img-ph">&#x1F35B;</div>
         </div>
-        <!-- Slide dots -->
-        <div class="hero-big-dots" id="heroBigDots"></div>
-        <!-- Arrow controls -->
-        <button class="hero-big-arrow hero-big-prev" onclick="heroPrev()">&#x2039;</button>
-        <button class="hero-big-arrow hero-big-next" onclick="heroNext()">&#x203A;</button>
       </div>
+    </div>
+    <div class="deals-banner">
+      <div class="deals-track-wrap">
+        <div class="deals-track" id="dealsTrack">
+          <div class="deal-slide"><div class="deal-slide-left"><div class="deal-slide-tag">Deal Feast</div><div class="deal-slide-value">50% OFF</div><div class="deal-slide-sub">On Your Favourites</div></div><div class="deal-slide-img">&#x1F3F7;</div></div>
+          <div class="deal-slide"><div class="deal-slide-left"><div class="deal-slide-tag">Binge Saver</div><div class="deal-slide-value">&#x20B9;150 OFF</div><div class="deal-slide-sub">Min &#x20B9;150 Off on orders</div></div><div class="deal-slide-img">&#x1F354;</div></div>
+          <div class="deal-slide"><div class="deal-slide-left"><div class="deal-slide-tag">Summer Fest</div><div class="deal-slide-value">60% OFF</div><div class="deal-slide-sub">Up To 60% Off</div></div><div class="deal-slide-img">&#x1F366;</div></div>
+          <div class="deal-slide"><div class="deal-slide-left"><div class="deal-slide-tag">Value Pick</div><div class="deal-slide-value">&#x20B9;99</div><div class="deal-slide-sub">Meals starting at &#x20B9;99</div></div><div class="deal-slide-img">&#x1F35C;</div></div>
+          <div class="deal-slide"><div class="deal-slide-left"><div class="deal-slide-tag">Free Delivery</div><div class="deal-slide-value">FREE</div><div class="deal-slide-sub">On All Orders Above &#x20B9;99</div></div><div class="deal-slide-img">&#x1F6F5;</div></div>
+        </div>
+      </div>
+      <div class="deals-dots" id="dealsDots"></div>
     </div>
   </div>
 
@@ -725,43 +688,6 @@ td.time-val{font-weight:700;color:var(--green)}
 
 <div class="toast" id="toast"></div>
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-logo-mark">Z</div>
-      <div>
-        <div class="footer-brand-name">Zippy</div>
-        <div class="footer-brand-sub">Fast food. Faster delivery.</div>
-      </div>
-    </div>
-    <div class="footer-links">
-      <div class="footer-col">
-        <div class="footer-col-title">Company</div>
-        <a href="#">About Us</a>
-        <a href="#">Careers</a>
-        <a href="#">Press</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Help</div>
-        <a href="#">Support</a>
-        <a href="#">Track Order</a>
-        <a href="#">Partner with Us</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Legal</div>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Refund Policy</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>&#xa9; 2025 Zippy. All rights reserved.</span>
-    <span class="footer-credit">Designed &amp; Developed by <a href="https://www.cognospace.in" target="_blank" rel="noopener">CognoSpace</a> &#x2728;</span>
-  </div>
-</footer>
-
 <!-- ADD NEW ADDRESS MODAL -->
 <div class="addr-modal-backdrop" id="addrModalBackdrop" onclick="closeAddrModal(event)">
   <div class="addr-modal" onclick="event.stopPropagation()">
@@ -852,276 +778,24 @@ const RESTAURANTS = [
       "Cakes":[ {name:"Red Velvet Cake",desc:"Moist red velvet with cream cheese frosting",price:160,orig:200,img:"images/red-velvet.jpg",veg:true}, {name:"Tiramisu",desc:"Classic Italian espresso-soaked dessert",price:180,orig:220,img:"images/tiramisu.jpg",veg:true}, {name:"Brownie",desc:"Dense fudgy chocolate brownie",price:90,orig:120,img:"images/brownie.jpg",veg:true} ],
       "Indian Sweets":[ {name:"Gulab Jamun (4 pcs)",desc:"Soft milk solid balls in rose syrup",price:80,orig:100,img:"images/gulab-jamun.jpg",veg:true}, {name:"Rasmalai",desc:"Cottage cheese in saffron cream",price:90,orig:120,img:"images/rasmalai.jpg",veg:true} ],
       "Ice Cream":[ {name:"Brownie Sundae",desc:"Warm brownie with vanilla ice cream",price:150,orig:190,img:"images/brownie-sundae.jpg",veg:true}, {name:"Mango Sorbet",desc:"Refreshing natural mango sorbet",price:80,orig:100,img:"images/mango-sorbet.jpg",veg:true} ] }
-  },
-  { id:7, name:"Chinese Dragon", cuisine:"Chinese \u00B7 Asian \u00B7 Noodles", rating:4.2, ratingCount:"7K+", time:"25-35", discount:"30% OFF", discountAbove:"above \u20B9399", category:"Chinese", img:"images/rest-chinese.jpg", ph:"\uD83C\uDF5C", area:"Kondapur", baseDistKm:9,
-    deal:"Free Spring Rolls", dealSub:"ON ORDERS ABOVE \u20B9399", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Hakka Noodles",desc:"Stir-fried noodles with veggies & soy sauce",price:140,orig:180,img:"images/hakka-noodles.jpg",veg:true}, {name:"Chicken Manchurian",desc:"Crispy chicken in spicy Manchurian gravy",price:190,orig:240,img:"images/manchurian.jpg",veg:false} ],
-      "Rice & Noodles":[ {name:"Fried Rice",desc:"Wok-tossed rice with egg & vegetables",price:120,orig:150,img:"images/fried-rice.jpg",veg:true}, {name:"Chow Mein",desc:"Crispy fried noodles with vegetables",price:130,orig:170,img:"images/chow-mein.jpg",veg:true}, {name:"Schezwan Rice",desc:"Spicy Schezwan sauce fried rice",price:150,orig:190,img:"images/schezwan-rice.jpg",veg:true} ],
-      "Starters":[ {name:"Spring Rolls (4 pcs)",desc:"Crispy rolls filled with vegetables",price:100,orig:130,img:"images/spring-rolls.jpg",veg:true}, {name:"Chilli Paneer",desc:"Paneer tossed in spicy chilli sauce",price:170,orig:210,img:"images/chilli-paneer.jpg",veg:true} ] }
-  },
-  { id:8, name:"Tandoor Tales", cuisine:"Mughlai \u00B7 Kebabs \u00B7 North Indian", rating:4.4, ratingCount:"9K+", time:"30-45", discount:"\u20B9120 OFF", discountAbove:"above \u20B9699", category:"Mughlai", img:"images/rest-tandoor.jpg", ph:"\uD83C\uDF96\uFE0F", area:"Mehdipatnam", baseDistKm:11,
-    deal:"Kebab Platter at \u20B9299", dealSub:"SELECTED PLATTERS", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Seekh Kebab",desc:"Minced lamb with herbs on skewers",price:220,orig:280,img:"images/seekh-kebab.jpg",veg:false}, {name:"Paneer Tikka",desc:"Marinated paneer grilled in tandoor",price:180,orig:230,img:"images/paneer-tikka.jpg",veg:true} ],
-      "Kebabs":[ {name:"Chicken Tandoori",desc:"Whole chicken marinated in spiced yogurt",price:250,orig:320,img:"images/tandoori-chicken.jpg",veg:false}, {name:"Reshmi Kebab",desc:"Silky smooth chicken kebab",price:240,orig:300,img:"images/reshmi-kebab.jpg",veg:false} ],
-      "Curries":[ {name:"Nihari",desc:"Slow-cooked meat stew with bone marrow",price:260,orig:320,img:"images/nihari.jpg",veg:false}, {name:"Shahi Paneer",desc:"Paneer in rich cream-based gravy",price:190,orig:240,img:"images/shahi-paneer.jpg",veg:true} ] }
-  },
-  { id:9, name:"Cafe Latte", cuisine:"Cafe \u00B7 Beverages \u00B7 Snacks", rating:4.3, ratingCount:"11K+", time:"15-20", discount:"20% OFF", discountAbove:"above \u20B9299", category:"Cafe", img:"images/rest-cafe.jpg", ph:"\u2615", area:"Hitech City", baseDistKm:7,
-    deal:"Free Cookie with Coffee", dealSub:"ON ALL ORDERS", dealCnt:"4/5",
-    menu:{ "Top Picks":[ {name:"Caramel Latte",desc:"Espresso with steamed milk & caramel drizzle",price:160,orig:200,img:"images/caramel-latte.jpg",veg:true}, {name:"Avocado Toast",desc:"Smashed avocado on sourdough",price:180,orig:220,img:"images/avocado-toast.jpg",veg:true} ],
-      "Coffee":[ {name:"Americano",desc:"Double espresso with hot water",price:110,orig:140,img:"images/americano.jpg",veg:true}, {name:"Cappuccino",desc:"Espresso with frothed milk",price:130,orig:160,img:"images/cappuccino.jpg",veg:true}, {name:"Cold Brew",desc:"12-hour cold-brewed smooth coffee",price:180,orig:220,img:"images/cold-brew.jpg",veg:true} ],
-      "Food":[ {name:"Croissant",desc:"Buttery flaky French croissant",price:90,orig:120,img:"images/croissant.jpg",veg:true}, {name:"Egg Sandwich",desc:"Scrambled egg on toasted bread",price:130,orig:160,img:"images/egg-sandwich.jpg",veg:false} ] }
-  },
-  { id:10, name:"Sushi Zen", cuisine:"Japanese \u00B7 Sushi \u00B7 Asian", rating:4.5, ratingCount:"6K+", time:"30-45", discount:"15% OFF", discountAbove:"above \u20B9799", category:"Japanese", img:"images/rest-sushi.jpg", ph:"\uD83C\uDF63", area:"Banjara Hills", baseDistKm:8,
-    deal:"Free Miso Soup", dealSub:"WITH SUSHI PLATTERS", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Salmon Nigiri (4 pcs)",desc:"Fresh salmon over seasoned rice",price:320,orig:400,img:"images/salmon-nigiri.jpg",veg:false}, {name:"California Roll (8 pcs)",desc:"Crab, avocado & cucumber maki",price:280,orig:350,img:"images/california-roll.jpg",veg:false} ],
-      "Sushi":[ {name:"Dragon Roll",desc:"Shrimp tempura topped with avocado",price:350,orig:440,img:"images/dragon-roll.jpg",veg:false}, {name:"Veggie Roll",desc:"Cucumber, avocado & pickled radish",price:220,orig:280,img:"images/veggie-roll.jpg",veg:true} ],
-      "Sides":[ {name:"Edamame",desc:"Steamed salted soybeans",price:120,orig:150,img:"images/edamame.jpg",veg:true}, {name:"Miso Soup",desc:"Traditional Japanese fermented soybean soup",price:80,orig:100,img:"images/miso-soup.jpg",veg:true} ] }
-  },
-  { id:11, name:"Wrap It Up", cuisine:"Mexican \u00B7 Tacos \u00B7 Burritos", rating:4.1, ratingCount:"5K+", time:"20-30", discount:"\u20B980 OFF", discountAbove:"above \u20B9449", category:"Mexican", img:"images/rest-mexican.jpg", ph:"\uD83C\uDF2E", area:"Gachibowli", baseDistKm:14,
-    deal:"Free Nachos on \u20B9399+", dealSub:"SELECT COMBOS", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Chicken Burrito",desc:"Grilled chicken, rice & beans in a flour tortilla",price:199,orig:249,img:"images/chicken-burrito.jpg",veg:false}, {name:"Veggie Tacos (3 pcs)",desc:"Loaded tacos with beans, salsa & guacamole",price:160,orig:210,img:"images/veggie-taco.jpg",veg:true} ],
-      "Burritos":[ {name:"Beef Burrito",desc:"Slow-cooked beef with rice & cheese",price:229,orig:289,img:"images/beef-burrito.jpg",veg:false}, {name:"Bean & Cheese Burrito",desc:"Refried beans with melted cheddar",price:150,orig:190,img:"images/bean-burrito.jpg",veg:true} ],
-      "Extras":[ {name:"Nachos",desc:"Corn chips with cheese dip & jalape\u00F1os",price:130,orig:160,img:"images/nachos.jpg",veg:true}, {name:"Guacamole",desc:"Fresh avocado dip with lime & coriander",price:90,orig:120,img:"images/guacamole.jpg",veg:true} ] }
-  },
-  { id:12, name:"Pav Bhaji Stall", cuisine:"Street Food \u00B7 Mumbai \u00B7 Chaat", rating:4.4, ratingCount:"18K+", time:"15-25", discount:"50% OFF", discountAbove:"above \u20B9199", category:"Street Food", img:"images/rest-pavbhaji.jpg", ph:"\uD83E\uDD56", area:"Nampally", baseDistKm:6,
-    deal:"Extra Butter Pav Free", dealSub:"ON ALL ORDERS", dealCnt:"5/5",
-    menu:{ "Top Picks":[ {name:"Pav Bhaji",desc:"Spiced vegetable mash with buttered pav",price:90,orig:120,img:"images/pav-bhaji.jpg",veg:true}, {name:"Vada Pav",desc:"Spiced potato fritter in soft bun",price:50,orig:70,img:"images/vada-pav.jpg",veg:true} ],
-      "Chaat":[ {name:"Pani Puri",desc:"Crispy shells with spiced tamarind water",price:60,orig:80,img:"images/pani-puri.jpg",veg:true}, {name:"Bhel Puri",desc:"Puffed rice with chutneys & vegetables",price:70,orig:90,img:"images/bhel-puri.jpg",veg:true}, {name:"Sev Puri",desc:"Crispy puris with potato & chutneys",price:80,orig:100,img:"images/sev-puri.jpg",veg:true} ],
-      "Extras":[ {name:"Misal Pav",desc:"Spicy sprouted lentil curry with pav",price:100,orig:130,img:"images/misal-pav.jpg",veg:true} ] }
-  },
-  { id:13, name:"The Grill House", cuisine:"BBQ \u00B7 Grills \u00B7 American", rating:4.3, ratingCount:"8K+", time:"30-40", discount:"\u20B9150 OFF", discountAbove:"above \u20B9799", category:"BBQ", img:"images/rest-grill.jpg", ph:"\uD83E\uDD69", area:"Secunderabad", baseDistKm:13,
-    deal:"Half-Price Wings", dealSub:"TUESDAYS ONLY", dealCnt:"1/5",
-    menu:{ "Top Picks":[ {name:"BBQ Ribs",desc:"Slow-smoked pork ribs with BBQ glaze",price:390,orig:490,img:"images/bbq-ribs.jpg",veg:false}, {name:"Grilled Corn",desc:"Char-grilled corn with spice butter",price:80,orig:110,img:"images/grilled-corn.jpg",veg:true} ],
-      "Grills":[ {name:"Chicken Wings (6 pcs)",desc:"Crispy wings with buffalo sauce",price:220,orig:280,img:"images/wings.jpg",veg:false}, {name:"Grilled Fish",desc:"Lemon-herb marinated grilled fish fillet",price:280,orig:360,img:"images/grilled-fish.jpg",veg:false} ],
-      "Sides":[ {name:"Coleslaw",desc:"Creamy cabbage & carrot salad",price:70,orig:90,img:"images/coleslaw.jpg",veg:true}, {name:"Corn Bread",desc:"Southern-style sweet corn muffin",price:80,orig:100,img:"images/corn-bread.jpg",veg:true} ] }
-  },
-  { id:14, name:"Kerala Kitchen", cuisine:"Kerala \u00B7 Seafood \u00B7 South Indian", rating:4.5, ratingCount:"7K+", time:"30-40", discount:"\u20B9100 OFF", discountAbove:"above \u20B9599", category:"Kerala", img:"images/rest-kerala.jpg", ph:"\uD83E\uDD65", area:"Tolichowki", baseDistKm:9,
-    deal:"Appam Combo at \u20B9149", dealSub:"WITH FISH CURRY", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Fish Curry",desc:"Kerala-style tangy fish curry with coconut milk",price:200,orig:260,img:"images/fish-curry.jpg",veg:false}, {name:"Appam & Stew",desc:"Lacy hoppers with white vegetable stew",price:130,orig:170,img:"images/appam-stew.jpg",veg:true} ],
-      "Seafood":[ {name:"Prawn Masala",desc:"Succulent prawns in spiced Kerala gravy",price:280,orig:360,img:"images/prawn-masala.jpg",veg:false}, {name:"Karimeen Pollichathu",desc:"Pearl spot fish wrapped & grilled in banana leaf",price:320,orig:400,img:"images/karimeen.jpg",veg:false} ],
-      "Rice":[ {name:"Kerala Puttu",desc:"Steamed rice cylinders with coconut",price:80,orig:100,img:"images/puttu.jpg",veg:true}, {name:"Malabar Parotta",desc:"Layered flaky flatbread",price:50,orig:65,img:"images/parotta.jpg",veg:true} ] }
-  },
-  { id:15, name:"Shake & Bake", cuisine:"Milkshakes \u00B7 Waffles \u00B7 Crepes", rating:4.2, ratingCount:"9K+", time:"20-30", discount:"COMBO DEALS", discountAbove:"starting \u20B9199", category:"Desserts", img:"images/rest-shake.jpg", ph:"\uD83E\uDD64", area:"Himayatnagar", baseDistKm:7,
-    deal:"Buy 2 Shakes Get 1 Free", dealSub:"ALL FLAVOURS", dealCnt:"4/5",
-    menu:{ "Top Picks":[ {name:"Nutella Waffle",desc:"Crispy waffle with Nutella & fresh berries",price:180,orig:220,img:"images/nutella-waffle.jpg",veg:true}, {name:"Strawberry Shake",desc:"Fresh strawberry blended with vanilla ice cream",price:150,orig:190,img:"images/strawberry-shake.jpg",veg:true} ],
-      "Waffles":[ {name:"Classic Belgian Waffle",desc:"Golden crispy waffle with maple syrup",price:140,orig:180,img:"images/belgian-waffle.jpg",veg:true}, {name:"Chicken & Waffle",desc:"Fried chicken on a savoury waffle",price:220,orig:280,img:"images/chicken-waffle.jpg",veg:false} ],
-      "Shakes":[ {name:"Oreo Shake",desc:"Crushed Oreo with vanilla ice cream",price:160,orig:200,img:"images/oreo-shake2.jpg",veg:true}, {name:"Banana Caramel Shake",desc:"Banana blend with caramel drizzle",price:140,orig:180,img:"images/banana-shake.jpg",veg:true} ] }
-  },
-  { id:16, name:"Punjabi Dhaba", cuisine:"Punjabi \u00B7 North Indian \u00B7 Rotis", rating:4.3, ratingCount:"13K+", time:"25-35", discount:"\u20B9130 OFF", discountAbove:"above \u20B9699", category:"North Indian", img:"images/rest-dhaba.jpg", ph:"\uD83E\uDD58", area:"Dilsukhnagar", baseDistKm:12,
-    deal:"Lassi Free on \u20B9399+", dealSub:"MANGO OR PLAIN", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Butter Naan & Dal",desc:"Tandoor naan with creamy black dal",price:120,orig:150,img:"images/naan-dal.jpg",veg:true}, {name:"Sarson Ka Saag",desc:"Mustard greens cooked with ghee & spices",price:160,orig:200,img:"images/sarson-saag.jpg",veg:true} ],
-      "Curries":[ {name:"Rajma Chawal",desc:"Kidney bean curry with steamed rice",price:130,orig:160,img:"images/rajma-chawal.jpg",veg:true}, {name:"Chole",desc:"Spiced chickpea curry",price:120,orig:150,img:"images/chole.jpg",veg:true}, {name:"Aloo Gobi",desc:"Potato & cauliflower dry curry",price:110,orig:140,img:"images/aloo-gobi.jpg",veg:true} ],
-      "Breads":[ {name:"Makki Roti",desc:"Corn flour flatbread with ghee",price:40,orig:55,img:"images/makki-roti.jpg",veg:true}, {name:"Amritsari Kulcha",desc:"Stuffed baked flatbread",price:80,orig:100,img:"images/kulcha.jpg",veg:true} ] }
-  },
-  { id:17, name:"Noodle Box", cuisine:"Pan-Asian \u00B7 Thai \u00B7 Vietnamese", rating:4.0, ratingCount:"4K+", time:"20-30", discount:"40% OFF", discountAbove:"above \u20B9349", category:"Asian", img:"images/rest-noodle.jpg", ph:"\uD83C\uDF5D", area:"Madhapur", baseDistKm:11,
-    deal:"Pad Thai at \u20B9149", dealSub:"INTRO PRICE", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Pad Thai",desc:"Stir-fried rice noodles with tofu & peanuts",price:160,orig:210,img:"images/pad-thai.jpg",veg:true}, {name:"Pho",desc:"Vietnamese beef broth with rice noodles",price:200,orig:260,img:"images/pho.jpg",veg:false} ],
-      "Noodles":[ {name:"Tom Yum Noodles",desc:"Spicy Thai soup with noodles",price:180,orig:230,img:"images/tom-yum.jpg",veg:true}, {name:"Singapore Noodles",desc:"Thin rice noodles with curry powder",price:160,orig:200,img:"images/singapore-noodles.jpg",veg:true} ],
-      "Rice":[ {name:"Thai Green Curry",desc:"Fragrant green curry with jasmine rice",price:190,orig:240,img:"images/green-curry.jpg",veg:true} ] }
-  },
-  { id:18, name:"Healthy Bowl", cuisine:"Salads \u00B7 Bowls \u00B7 Smoothies", rating:4.4, ratingCount:"6K+", time:"15-25", discount:"25% OFF", discountAbove:"above \u20B9349", category:"Healthy", img:"images/rest-healthy.jpg", ph:"\uD83E\uDD57", area:"Jubilee Hills", baseDistKm:8,
-    deal:"Smoothie Free on \u20B9499+", dealSub:"ALL SMOOTHIES", dealCnt:"4/5",
-    menu:{ "Top Picks":[ {name:"Quinoa Buddha Bowl",desc:"Quinoa, roasted veg & tahini dressing",price:240,orig:300,img:"images/buddha-bowl.jpg",veg:true}, {name:"Green Detox Smoothie",desc:"Spinach, apple, cucumber & ginger blend",price:160,orig:200,img:"images/green-smoothie.jpg",veg:true} ],
-      "Bowls":[ {name:"Greek Bowl",desc:"Falafel, hummus, tabbouleh & pita",price:220,orig:280,img:"images/greek-bowl.jpg",veg:true}, {name:"Protein Bowl",desc:"Grilled chicken, eggs, edamame & greens",price:260,orig:320,img:"images/protein-bowl.jpg",veg:false} ],
-      "Salads":[ {name:"Watermelon Feta Salad",desc:"Fresh watermelon with feta & mint",price:180,orig:220,img:"images/watermelon-salad.jpg",veg:true}, {name:"Caesar Wrap",desc:"Romaine, croutons & caesar in a wrap",price:160,orig:200,img:"images/caesar-wrap.jpg",veg:true} ] }
-  },
-  { id:19, name:"Biryani Bros", cuisine:"Biryani \u00B7 Dum \u00B7 Hyderabadi", rating:4.6, ratingCount:"20K+", time:"35-50", discount:"\u20B9200 OFF", discountAbove:"above \u20B91299", category:"Biryani", img:"images/rest-biryani2.jpg", ph:"\uD83C\uDF5B", area:"Attapur", baseDistKm:10,
-    deal:"Raita Free with Biryani", dealSub:"ALL BIRYANI ORDERS", dealCnt:"5/5",
-    menu:{ "Top Picks":[ {name:"Dum Gosht Biryani",desc:"Slow-cooked mutton in sealed pot biryani",price:320,orig:400,img:"images/dum-biryani.jpg",veg:false}, {name:"Hyderabadi Chicken Biryani",desc:"Authentic Hyderabadi-style biryani",price:260,orig:330,img:"images/hyd-biryani.jpg",veg:false} ],
-      "Biryani":[ {name:"Kheema Biryani",desc:"Minced meat biryani with fried onions",price:240,orig:300,img:"images/kheema-biryani.jpg",veg:false}, {name:"Shahi Veg Biryani",desc:"Royal vegetable biryani with saffron",price:180,orig:230,img:"images/shahi-veg.jpg",veg:true} ],
-      "Sides":[ {name:"Bagara Baingan",desc:"Hyderabadi stuffed brinjal curry",price:140,orig:180,img:"images/bagara-baingan.jpg",veg:true}, {name:"Mirchi Ka Salan",desc:"Spicy chilli curry",price:120,orig:150,img:"images/mirchi-salan2.jpg",veg:true} ] }
-  },
-  { id:20, name:"Taco Town", cuisine:"Tex-Mex \u00B7 Tacos \u00B7 Quesadillas", rating:4.0, ratingCount:"3K+", time:"20-30", discount:"\u20B970 OFF", discountAbove:"above \u20B9349", category:"Mexican", img:"images/rest-taco.jpg", ph:"\uD83C\uDF2E", area:"Kukatpally", baseDistKm:13,
-    deal:"Free Salsa with Tacos", dealSub:"ALL ORDERS", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Fish Tacos (3 pcs)",desc:"Crispy fried fish with slaw & sriracha",price:180,orig:230,img:"images/fish-taco.jpg",veg:false}, {name:"Quesadilla",desc:"Grilled flour tortilla with cheese & peppers",price:150,orig:190,img:"images/quesadilla.jpg",veg:true} ],
-      "Tacos":[ {name:"Al Pastor Taco",desc:"Marinated pork with pineapple & cilantro",price:60,orig:80,img:"images/al-pastor.jpg",veg:false}, {name:"Black Bean Taco",desc:"Spiced black beans with avocado",price:50,orig:70,img:"images/bean-taco.jpg",veg:true} ],
-      "Extras":[ {name:"Churros",desc:"Fried dough sticks with chocolate dip",price:100,orig:130,img:"images/churros.jpg",veg:true} ] }
-  },
-  { id:21, name:"The Pasta Bar", cuisine:"Italian \u00B7 Pasta \u00B7 Risotto", rating:4.3, ratingCount:"7K+", time:"25-35", discount:"20% OFF", discountAbove:"above \u20B9499", category:"Italian", img:"images/rest-pasta.jpg", ph:"\uD83C\uDF5D", area:"Banjara Hills", baseDistKm:8,
-    deal:"Free Garlic Bread", dealSub:"ON PASTA ORDERS", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Carbonara",desc:"Spaghetti with egg, pancetta & parmesan",price:280,orig:360,img:"images/carbonara.jpg",veg:false}, {name:"Mushroom Risotto",desc:"Creamy arborio rice with forest mushrooms",price:260,orig:330,img:"images/mushroom-risotto.jpg",veg:true} ],
-      "Pasta":[ {name:"Bolognese",desc:"Rich slow-cooked meat sauce with tagliatelle",price:260,orig:330,img:"images/bolognese.jpg",veg:false}, {name:"Pesto Pasta",desc:"Basil pesto with pine nuts & parmesan",price:220,orig:280,img:"images/pesto-pasta.jpg",veg:true} ] }
-  },
-  { id:22, name:"Chaat Corner", cuisine:"Chaat \u00B7 Street Food \u00B7 Indian", rating:4.5, ratingCount:"16K+", time:"10-20", discount:"PLATES FROM \u20B940", discountAbove:"", category:"Chaat", img:"images/rest-chaat.jpg", ph:"\uD83E\uDD57", area:"Abids", baseDistKm:7,
-    deal:"Pani Puri Plate at \u20B940", dealSub:"ALL DAY", dealCnt:"5/5",
-    menu:{ "Top Picks":[ {name:"Dahi Puri",desc:"Crispy puris with yogurt & chutneys",price:70,orig:90,img:"images/dahi-puri.jpg",veg:true}, {name:"Papdi Chaat",desc:"Crispy papdi with chickpeas & chutneys",price:80,orig:100,img:"images/papdi-chaat.jpg",veg:true} ],
-      "Chaat":[ {name:"Raj Kachori",desc:"Giant kachori filled with sprouts & curd",price:100,orig:130,img:"images/raj-kachori.jpg",veg:true}, {name:"Aloo Tikki Chaat",desc:"Potato patties with chutney & yogurt",price:80,orig:100,img:"images/aloo-tikki.jpg",veg:true} ] }
-  },
-  { id:23, name:"Steak & Ale", cuisine:"Continental \u00B7 Steaks \u00B7 Beer", rating:4.2, ratingCount:"5K+", time:"35-50", discount:"\u20B9180 OFF", discountAbove:"above \u20B9999", category:"Continental", img:"images/rest-steak.jpg", ph:"\uD83E\uDD69", area:"Jubilee Hills", baseDistKm:9,
-    deal:"Free Mocktail with Steak", dealSub:"ON SELECTED STEAKS", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Ribeye Steak",desc:"350g prime ribeye with peppercorn sauce",price:650,orig:799,img:"images/ribeye.jpg",veg:false}, {name:"Mushroom Stroganoff",desc:"Creamy mushroom sauce over pasta",price:280,orig:350,img:"images/stroganoff.jpg",veg:true} ],
-      "Steaks":[ {name:"Sirloin",desc:"250g sirloin with garlic butter & fries",price:520,orig:650,img:"images/sirloin.jpg",veg:false}, {name:"Grilled Chicken Steak",desc:"Herb-marinated chicken breast",price:320,orig:400,img:"images/chicken-steak.jpg",veg:false} ] }
-  },
-  { id:24, name:"Ramen Republic", cuisine:"Japanese \u00B7 Ramen \u00B7 Noodles", rating:4.4, ratingCount:"8K+", time:"25-35", discount:"30% OFF", discountAbove:"above \u20B9499", category:"Japanese", img:"images/rest-ramen.jpg", ph:"\uD83C\uDF5C", area:"Hitech City", baseDistKm:10,
-    deal:"Gyoza Free on \u20B9599+", dealSub:"CHICKEN GYOZA", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Tonkotsu Ramen",desc:"Rich pork bone broth with chashu & noodles",price:280,orig:360,img:"images/tonkotsu.jpg",veg:false}, {name:"Spicy Miso Ramen",desc:"Fermented miso broth with tofu & bamboo",price:250,orig:320,img:"images/miso-ramen.jpg",veg:true} ],
-      "Ramen":[ {name:"Shoyu Ramen",desc:"Soy-sauce broth with chicken & egg",price:240,orig:300,img:"images/shoyu-ramen.jpg",veg:false}, {name:"Vegan Ramen",desc:"Kombu broth with mushrooms & tofu",price:220,orig:280,img:"images/vegan-ramen.jpg",veg:true} ],
-      "Sides":[ {name:"Gyoza (5 pcs)",desc:"Pan-fried dumplings with dipping sauce",price:160,orig:200,img:"images/gyoza.jpg",veg:false}, {name:"Karaage",desc:"Japanese fried chicken thigh bites",price:180,orig:230,img:"images/karaage.jpg",veg:false} ] }
-  },
-  { id:25, name:"Mughal Darbar", cuisine:"Mughlai \u00B7 Biryani \u00B7 Kebabs", rating:4.3, ratingCount:"9K+", time:"30-45", discount:"\u20B9140 OFF", discountAbove:"above \u20B9799", category:"Mughlai", img:"images/rest-mughal.jpg", ph:"\uD83C\uDFD5\uFE0F", area:"Chandrayangutta", baseDistKm:14,
-    deal:"Kulfi Free with Biryani", dealSub:"WEEKEND OFFER", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Shami Kebab",desc:"Spiced minced lamb patties",price:200,orig:250,img:"images/shami-kebab.jpg",veg:false}, {name:"Korma",desc:"Mild yogurt-based creamy curry",price:220,orig:280,img:"images/korma.jpg",veg:false} ],
-      "Mains":[ {name:"Paya Soup",desc:"Slow-cooked trotters in spiced broth",price:180,orig:230,img:"images/paya.jpg",veg:false}, {name:"Chicken Changezi",desc:"Creamy tomato-based chicken curry",price:230,orig:290,img:"images/changezi.jpg",veg:false} ] }
-  },
-  { id:26, name:"The Waffle Hut", cuisine:"Waffles \u00B7 Pancakes \u00B7 Brunch", rating:4.1, ratingCount:"5K+", time:"20-30", discount:"\u20B960 OFF", discountAbove:"above \u20B9299", category:"Desserts", img:"images/rest-waffle.jpg", ph:"\uD83E\uDDC7", area:"Somajiguda", baseDistKm:7,
-    deal:"Free Topping of Choice", dealSub:"ON WAFFLES", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Blueberry Pancakes",desc:"Fluffy pancakes loaded with fresh blueberries",price:160,orig:200,img:"images/blueberry-pancakes.jpg",veg:true}, {name:"S'mores Waffle",desc:"Chocolate, marshmallow & graham cracker waffle",price:190,orig:240,img:"images/smores-waffle.jpg",veg:true} ],
-      "Waffles":[ {name:"Classic Waffle",desc:"Plain crispy waffle with butter & syrup",price:120,orig:150,img:"images/classic-waffle.jpg",veg:true}, {name:"Cheese & Herb Waffle",desc:"Savory waffle with cheddar & rosemary",price:150,orig:190,img:"images/cheese-waffle.jpg",veg:true} ],
-      "Pancakes":[ {name:"Banana Foster Pancakes",desc:"Caramelized banana with rum sauce",price:170,orig:220,img:"images/banana-pancakes.jpg",veg:true} ] }
-  },
-  { id:27, name:"Chettinad Spice", cuisine:"Chettinad \u00B7 Tamil \u00B7 Non-Veg", rating:4.4, ratingCount:"7K+", time:"30-40", discount:"\u20B9110 OFF", discountAbove:"above \u20B9599", category:"South Indian", img:"images/rest-chettinad.jpg", ph:"\uD83C\uDF36\uFE0F", area:"L.B. Nagar", baseDistKm:16,
-    deal:"Kuzhambu Free on \u20B9499+", dealSub:"SIDE DISH", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Chettinad Chicken",desc:"Fiery chicken curry with black pepper & kalpasi",price:240,orig:300,img:"images/chettinad-chicken.jpg",veg:false}, {name:"Kavuni Arisi",desc:"Black rice pudding with coconut milk",price:90,orig:120,img:"images/kavuni-arisi.jpg",veg:true} ],
-      "Curries":[ {name:"Mutton Kuzhambu",desc:"Spiced mutton in tangy tamarind gravy",price:280,orig:360,img:"images/mutton-kuzhambu.jpg",veg:false}, {name:"Keerai Masiyal",desc:"Mashed spinach with shallots",price:120,orig:150,img:"images/keerai.jpg",veg:true} ] }
-  },
-  { id:28, name:"Protein Palace", cuisine:"Fitness \u00B7 High-Protein \u00B7 Keto", rating:4.2, ratingCount:"4K+", time:"20-30", discount:"15% OFF", discountAbove:"above \u20B9399", category:"Healthy", img:"images/rest-protein.jpg", ph:"\uD83D\uDCAA", area:"Gachibowli", baseDistKm:15,
-    deal:"Protein Shake at \u20B9129", dealSub:"POST-WORKOUT SPECIAL", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Chicken Breast Meal",desc:"Grilled chicken with sweet potato & greens",price:280,orig:350,img:"images/chicken-breast.jpg",veg:false}, {name:"Egg White Omelette",desc:"4 egg whites with spinach & feta",price:160,orig:200,img:"images/egg-omelette.jpg",veg:false} ],
-      "High-Protein":[ {name:"Paneer Steak",desc:"Thick paneer slice with low-fat sauce",price:220,orig:280,img:"images/paneer-steak.jpg",veg:true}, {name:"Tuna Salad Bowl",desc:"Tuna with chickpeas & lemon dressing",price:240,orig:300,img:"images/tuna-salad.jpg",veg:false} ] }
-  },
-  { id:29, name:"Andhra Spice", cuisine:"Andhra \u00B7 Telugu \u00B7 Non-Veg", rating:4.5, ratingCount:"12K+", time:"25-35", discount:"\u20B9130 OFF", discountAbove:"above \u20B9699", category:"Andhra", img:"images/rest-andhra.jpg", ph:"\uD83C\uDF36\uFE0F", area:"Uppal", baseDistKm:17,
-    deal:"Free Papad & Pickle", dealSub:"ALL MEALS", dealCnt:"5/5",
-    menu:{ "Top Picks":[ {name:"Andhra Chicken Curry",desc:"Fiery red curry with farm chicken",price:220,orig:280,img:"images/andhra-chicken.jpg",veg:false}, {name:"Pesarattu",desc:"Green moong dal crepe with ginger chutney",price:80,orig:100,img:"images/pesarattu.jpg",veg:true} ],
-      "Curries":[ {name:"Gongura Mutton",desc:"Sorrel leaf lamb curry",price:280,orig:360,img:"images/gongura-mutton.jpg",veg:false}, {name:"Tomato Pappu",desc:"Tomato lentil dal Andhra style",price:100,orig:130,img:"images/tomato-pappu.jpg",veg:true} ],
-      "Rice":[ {name:"Andhra Meals",desc:"Rice with dal, sambar, rasam & sides",price:140,orig:180,img:"images/andhra-meals.jpg",veg:true} ] }
-  },
-  { id:30, name:"Frankie's Rolls", cuisine:"Rolls \u00B7 Frankie \u00B7 Fast Food", rating:4.0, ratingCount:"6K+", time:"15-20", discount:"40% OFF", discountAbove:"above \u20B9249", category:"Street Food", img:"images/rest-frankie.jpg", ph:"\uD83C\uDF2F", area:"Koti", baseDistKm:8,
-    deal:"Double Roll at \u20B9149", dealSub:"COMBO DEAL", dealCnt:"4/5",
-    menu:{ "Top Picks":[ {name:"Mumbai Frankie",desc:"Egg-wrapped paratha with spiced filling",price:90,orig:120,img:"images/mumbai-frankie.jpg",veg:false}, {name:"Paneer Frankie",desc:"Grilled paneer with onion & chutney in wrap",price:100,orig:130,img:"images/paneer-frankie.jpg",veg:true} ],
-      "Frankies":[ {name:"Egg Frankie",desc:"Fluffy egg filling in paratha roll",price:80,orig:100,img:"images/egg-frankie.jpg",veg:false}, {name:"Aloo Frankie",desc:"Spicy potato masala in paratha",price:70,orig:90,img:"images/aloo-frankie.jpg",veg:true} ] }
-  },
-  { id:31, name:"Dal Baati Express", cuisine:"Rajasthani \u00B7 Indian \u00B7 Thali", rating:4.3, ratingCount:"5K+", time:"30-40", discount:"THALI AT \u20B9199", discountAbove:"", category:"Rajasthani", img:"images/rest-rajasthani.jpg", ph:"\uD83E\uDD58", area:"Bahadurpura", baseDistKm:12,
-    deal:"Free Churma with Dal Baati", dealSub:"FULL THALI", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Dal Baati Churma",desc:"Baked wheat balls with lentils & sweet churma",price:199,orig:260,img:"images/dal-baati.jpg",veg:true}, {name:"Laal Maas",desc:"Fiery Rajasthani red mutton curry",price:280,orig:360,img:"images/laal-maas.jpg",veg:false} ],
-      "Thali":[ {name:"Rajasthani Thali",desc:"Dal, baati, churma, sabzi & more",price:220,orig:280,img:"images/rajasthani-thali.jpg",veg:true} ] }
-  },
-  { id:32, name:"Pizza Paradise", cuisine:"Italian \u00B7 Pizza \u00B7 Calzone", rating:4.2, ratingCount:"8K+", time:"25-35", discount:"BUY 2 GET 1", discountAbove:"on medium pizzas", category:"Pizza", img:"images/rest-pizza2.jpg", ph:"\uD83C\uDF55", area:"Secunderabad", baseDistKm:11,
-    deal:"Personal Pizza at \u20B9129", dealSub:"WEEKDAY ONLY", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Paneer Makhani Pizza",desc:"Indian-fusion pizza with paneer in makhani sauce",price:280,orig:360,img:"images/paneer-pizza.jpg",veg:true}, {name:"Calzone",desc:"Folded pizza stuffed with cheese & chicken",price:320,orig:400,img:"images/calzone.jpg",veg:false} ],
-      "Pizzas":[ {name:"Four Cheese Pizza",desc:"Mozzarella, cheddar, parmesan & blue cheese",price:340,orig:430,img:"images/four-cheese.jpg",veg:true}, {name:"Meat Lovers",desc:"Pepperoni, sausage & chicken overload",price:380,orig:480,img:"images/meat-lovers.jpg",veg:false} ] }
-  },
-  { id:33, name:"Darjeeling Express", cuisine:"Bengali \u00B7 Momos \u00B7 North East", rating:4.1, ratingCount:"5K+", time:"20-30", discount:"35% OFF", discountAbove:"above \u20B9299", category:"Bengali", img:"images/rest-bengali.jpg", ph:"\uD83E\uDD9F", area:"Bowenpally", baseDistKm:14,
-    deal:"Momo 12 pcs at \u20B9129", dealSub:"STEAMED OR FRIED", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Chicken Momos (8 pcs)",desc:"Steamed chicken dumplings with spicy sauce",price:130,orig:170,img:"images/chicken-momos.jpg",veg:false}, {name:"Fish Curry & Rice",desc:"Bengali mustard fish curry with steamed rice",price:190,orig:240,img:"images/fish-rice.jpg",veg:false} ],
-      "Momos":[ {name:"Veg Momos (8 pcs)",desc:"Cabbage & paneer steamed dumplings",price:110,orig:140,img:"images/veg-momos.jpg",veg:true}, {name:"Fried Momos",desc:"Crispy fried chicken momos",price:150,orig:190,img:"images/fried-momos.jpg",veg:false} ],
-      "Bengali":[ {name:"Mishti Doi",desc:"Sweetened fermented yogurt",price:70,orig:90,img:"images/mishti-doi.jpg",veg:true} ] }
-  },
-  { id:34, name:"Cloud Kitchen Co.", cuisine:"Multi-Cuisine \u00B7 Cloud \u00B7 Quick Bites", rating:4.0, ratingCount:"3K+", time:"15-25", discount:"\u20B950 OFF", discountAbove:"above \u20B9249", category:"Quick Bites", img:"images/rest-cloud.jpg", ph:"\u2601\uFE0F", area:"Miyapur", baseDistKm:16,
-    deal:"Mystery Box at \u20B999", dealSub:"RANDOM SURPRISE", dealCnt:"1/5",
-    menu:{ "Top Picks":[ {name:"Club Sandwich",desc:"Triple-decker chicken & egg sandwich",price:160,orig:200,img:"images/club-sandwich.jpg",veg:false}, {name:"Loaded Nachos",desc:"Tortilla chips with cheese, jalape\u00F1os & salsa",price:150,orig:190,img:"images/loaded-nachos.jpg",veg:true} ],
-      "Quick Bites":[ {name:"Mini Sliders (3 pcs)",desc:"Bite-sized beef patty sliders",price:180,orig:230,img:"images/sliders.jpg",veg:false}, {name:"Wraps",desc:"Assorted wraps of the day",price:130,orig:170,img:"images/wraps.jpg",veg:true} ] }
-  },
-  { id:35, name:"Udipi Bhavan", cuisine:"Udipi \u00B7 South Indian \u00B7 Tiffin", rating:4.4, ratingCount:"14K+", time:"20-30", discount:"THALI AT \u20B9149", discountAbove:"", category:"South Indian", img:"images/rest-udipi.jpg", ph:"\uD83E\uDD65", area:"Begumpet", baseDistKm:9,
-    deal:"Free Payasam with Meals", dealSub:"LUNCH HOURS", dealCnt:"4/5",
-    menu:{ "Top Picks":[ {name:"Udipi Thali",desc:"Rice, sambar, rasam, kootu & papad",price:149,orig:199,img:"images/udipi-thali.jpg",veg:true}, {name:"Rava Idli",desc:"Semolina idli with cashew & mustard",price:80,orig:100,img:"images/rava-idli.jpg",veg:true} ],
-      "Tiffin":[ {name:"Set Dosa",desc:"Three small soft dosas with sambar",price:70,orig:90,img:"images/set-dosa.jpg",veg:true}, {name:"Uttapam",desc:"Thick dosa with vegetable toppings",price:90,orig:115,img:"images/uttapam.jpg",veg:true} ],
-      "Sweets":[ {name:"Payasam",desc:"South Indian vermicelli kheer",price:60,orig:80,img:"images/payasam.jpg",veg:true} ] }
-  },
-  { id:36, name:"Goan Shack", cuisine:"Goan \u00B7 Seafood \u00B7 Beach Food", rating:4.3, ratingCount:"4K+", time:"30-40", discount:"\u20B9120 OFF", discountAbove:"above \u20B9699", category:"Goan", img:"images/rest-goan.jpg", ph:"\uD83D\uDC20", area:"Madhapur", baseDistKm:12,
-    deal:"Free Sol Kadhi with Meals", dealSub:"GOAN SPECIAL", dealCnt:"3/5",
-    menu:{ "Top Picks":[ {name:"Goan Fish Curry",desc:"Coconut-based tangy fish curry",price:220,orig:280,img:"images/goan-fish.jpg",veg:false}, {name:"Prawn Balchao",desc:"Fiery pickled prawn curry",price:260,orig:330,img:"images/balchao.jpg",veg:false} ],
-      "Seafood":[ {name:"Crab Xacuti",desc:"Crab in spiced Goan masala",price:340,orig:430,img:"images/crab-xacuti.jpg",veg:false}, {name:"Caldine",desc:"Mild coconut milk curry with vegetables",price:160,orig:200,img:"images/caldine.jpg",veg:true} ] }
-  },
-  { id:37, name:"Bowl of Seoul", cuisine:"Korean \u00B7 Bibimbap \u00B7 Korean BBQ", rating:4.2, ratingCount:"4K+", time:"25-35", discount:"20% OFF", discountAbove:"above \u20B9449", category:"Korean", img:"images/rest-korean.jpg", ph:"\uD83C\uDF5A", area:"Kondapur", baseDistKm:11,
-    deal:"Free Kimchi with Bibimbap", dealSub:"ALL ORDERS", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Bibimbap",desc:"Mixed rice bowl with vegetables & gochujang",price:220,orig:280,img:"images/bibimbap.jpg",veg:true}, {name:"Korean Fried Chicken",desc:"Double-fried crispy chicken in sweet chilli",price:260,orig:330,img:"images/korean-chicken.jpg",veg:false} ],
-      "Korean BBQ":[ {name:"Bulgogi",desc:"Thin marinated beef grilled at table",price:320,orig:400,img:"images/bulgogi.jpg",veg:false}, {name:"Japchae",desc:"Glass noodles stir-fried with vegetables",price:180,orig:230,img:"images/japchae.jpg",veg:true} ] }
-  },
-  { id:38, name:"Curry Leaf", cuisine:"Konkan \u00B7 Coastal \u00B7 Indian", rating:4.4, ratingCount:"6K+", time:"25-40", discount:"\u20B9100 OFF", discountAbove:"above \u20B9549", category:"Coastal", img:"images/rest-konkan.jpg", ph:"\uD83C\uDF3F", area:"Tarnaka", baseDistKm:15,
-    deal:"Sol Kadhi Free", dealSub:"WITH FISH THALI", dealCnt:"4/5",
-    menu:{ "Top Picks":[ {name:"Surmai Thali",desc:"King fish thali with rice & kokum curry",price:280,orig:360,img:"images/surmai-thali.jpg",veg:false}, {name:"Malvani Mutton",desc:"Spiced coconut-based mutton curry",price:260,orig:330,img:"images/malvani-mutton.jpg",veg:false} ],
-      "Coastal":[ {name:"Solkadhi",desc:"Pink coconut & kokum cooler",price:60,orig:80,img:"images/solkadhi.jpg",veg:true}, {name:"Amboli Dosa",desc:"Thick soft Konkani dosa",price:90,orig:115,img:"images/amboli.jpg",veg:true} ] }
-  },
-  { id:39, name:"Midnight Munchies", cuisine:"Late Night \u00B7 Junk Food \u00B7 Fast Food", rating:3.9, ratingCount:"8K+", time:"20-35", discount:"\u20B9100 OFF", discountAbove:"above \u20B9499", category:"Quick Bites", img:"images/rest-midnight.jpg", ph:"\uD83C\uDF19", area:"Jubilee Hills", baseDistKm:8,
-    deal:"Midnight Snack Box at \u20B9199", dealSub:"10 PM - 4 AM", dealCnt:"2/5",
-    menu:{ "Top Picks":[ {name:"Loaded Cheese Fries",desc:"Crispy fries with cheese sauce & jalape\u00F1os",price:160,orig:200,img:"images/cheese-fries.jpg",veg:true}, {name:"Chicken Quesadilla",desc:"Grilled chicken in crispy quesadilla",price:180,orig:230,img:"images/chicken-quesadilla.jpg",veg:false} ],
-      "Junk Food":[ {name:"Hot Dog",desc:"All-beef frank in a toasted bun",price:120,orig:150,img:"images/hot-dog.jpg",veg:false}, {name:"Cheese Corn Dog",desc:"Mozzarella-stuffed corn dog",price:130,orig:170,img:"images/corn-dog.jpg",veg:true} ] }
-  },
-  { id:40, name:"Spice Route", cuisine:"Pan-Indian \u00B7 Fusion \u00B7 Specials", rating:4.5, ratingCount:"10K+", time:"30-45", discount:"\u20B9175 OFF", discountAbove:"above \u20B9899", category:"Indian", img:"images/rest-spiceroute.jpg", ph:"\uD83C\uDF36\uFE0F", area:"Attapur", baseDistKm:13,
-    deal:"Fusion Platter at \u20B9349", dealSub:"CHEF SPECIAL", dealCnt:"5/5",
-    menu:{ "Top Picks":[ {name:"Butter Chicken Pizza",desc:"Pizza topped with butter chicken & naan crust",price:320,orig:400,img:"images/butter-chicken-pizza.jpg",veg:false}, {name:"Paneer Tikka Tacos",desc:"Indian-Mexican fusion with paneer tikka",price:180,orig:230,img:"images/paneer-tacos.jpg",veg:true} ],
-      "Fusion":[ {name:"Dosa Quesadilla",desc:"Crispy dosa folded with cheese & masala",price:150,orig:190,img:"images/dosa-quesadilla.jpg",veg:true}, {name:"Biryani Risotto",desc:"Biryani spices meets creamy Italian risotto",price:260,orig:330,img:"images/biryani-risotto.jpg",veg:true} ],
-      "Specials":[ {name:"Chef's Surprise Bowl",desc:"Mystery of the day with seasonal ingredients",price:220,orig:280,img:"images/surprise-bowl.jpg",veg:true} ] }
   }
 ];
 
 /* STATE */
 let cartItems=[], placedOrders=[], currentRestId=null, customLocation='', regressionLineDrawn=false;
 
-/* ── WEATHER MODE STATE ── */
-let trafficOn=false, rainOn=false;
-function toggleMode(mode){
-  if(mode==='traffic'){
-    trafficOn=!trafficOn;
-    document.getElementById('btnTraffic').classList.toggle('active',trafficOn);
-  } else {
-    rainOn=!rainOn;
-    document.getElementById('btnRain').classList.toggle('active',rainOn);
-  }
-  const both=trafficOn&&rainOn, any=trafficOn||rainOn;
-  const ind=document.getElementById('modeIndicator');
-  if(both) ind.textContent='\u23F1 3× Longer Delivery';
-  else if(trafficOn) ind.textContent='\uD83D\uDE97 Traffic: +15-25 min';
-  else if(rainOn) ind.textContent='\uD83C\uDF27\uFE0F Rain: +10-20 min';
-  ind.classList.toggle('show',any);
-  showToast(both?'\uD83C\uDF27\uFE0F + \uD83D\uDE97 Both modes ON — 3× delivery time!':trafficOn?'\uD83D\uDE97 Traffic mode ON — longer delivery':rainOn?'\uD83C\uDF27\uFE0F Rain mode ON — longer delivery':'Mode disabled');
+/* SLIDESHOW */
+let slideIdx=0;
+function initSlideshow(){
+  const track=document.getElementById('dealsTrack'), slides=track.children, dotsEl=document.getElementById('dealsDots');
+  dotsEl.innerHTML=Array.from(slides).map((_,i)=>`<div class="deals-dot${i===0?' active':''}" onclick="goSlide(${i})"></div>`).join('');
+  setInterval(()=>{slideIdx=(slideIdx+1)%slides.length;goSlide(slideIdx);},4000);
 }
-function getDeliveryMultiplier(){
-  if(trafficOn&&rainOn) return 3;
-  if(trafficOn) return 1.8;
-  if(rainOn) return 1.5;
-  return 1;
+function goSlide(i){
+  slideIdx=i;
+  document.getElementById('dealsTrack').style.transform=`translateX(-${i*100}%)`;
+  document.querySelectorAll('.deals-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
 }
-function getAdjustedTime(timeStr){
-  // timeStr like "30-40"
-  const m=getDeliveryMultiplier();
-  if(m===1)return timeStr;
-  const parts=timeStr.split('-').map(Number);
-  return parts.map(t=>Math.round(t*m)).join('-');
-}
-// Re-render home when mode changes so times update
-const _origToggleMode=toggleMode;
-// patch renderHome to use dynamic times (already done in template)
-
-/* ── BIG HERO SLIDESHOW ── */
-const HERO_SLIDES=[
-  {bg:'linear-gradient(135deg,#4a0f00 0%,#8a2500 55%,#4a0f00 100%)',eyebrow:'Limited Time Offer',title:'CRAVE<span>-ATHON</span>',sub:'Min. \u20B9150 OFF & More',cta:'Order Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'View Deals',img:'\uD83C\uDF5B',eyebrowColor:'rgba(255,200,150,.85)',titleColor:'var(--orange)',subColor:'rgba(255,255,255,.65)'},
-  {bg:'linear-gradient(135deg,#0a2744 0%,#1565c0 55%,#0a2744 100%)',eyebrow:'Summer Fest',title:'60%<span> OFF</span>',sub:'Up to 60% off on your favourites',cta:'Grab Deals \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Browse Menu',img:'\uD83C\uDF66',eyebrowColor:'rgba(180,220,255,.85)',titleColor:'#64b5f6',subColor:'rgba(255,255,255,.7)'},
-  {bg:'linear-gradient(135deg,#1a3300 0%,#2e7d32 55%,#1a3300 100%)',eyebrow:'Free Delivery',title:'FREE<span> DELIVERY</span>',sub:'On all orders above \u20B999',cta:'Order Free \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'How it works',img:'\uD83D\uDEB4',eyebrowColor:'rgba(200,255,180,.85)',titleColor:'#81c784',subColor:'rgba(255,255,255,.7)'},
-  {bg:'linear-gradient(135deg,#2d0040 0%,#7b1fa2 55%,#2d0040 100%)',eyebrow:'Binge Saver',title:'\u20B9150<span> OFF</span>',sub:'Min \u20B9150 off on orders above \u20B9499',cta:'Save Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Best Deals',img:'\uD83C\uDF54',eyebrowColor:'rgba(240,180,255,.85)',titleColor:'#ce93d8',subColor:'rgba(255,255,255,.7)'},
-  {bg:'linear-gradient(135deg,#1a1500 0%,#f57f17 55%,#1a1500 100%)',eyebrow:'Value Pick',title:'MEALS<span> AT \u20B999</span>',sub:'Budget meals starting at just \u20B999',cta:'Explore \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'See Menu',img:'\uD83C\uDF5C',eyebrowColor:'rgba(255,240,180,.85)',titleColor:'#ffcc02',subColor:'rgba(255,255,255,.7)'},
-];
-let heroIdx=0, heroTimer=null;
-function initHeroSlideshow(){
-  const dotsEl=document.getElementById('heroBigDots');
-  dotsEl.innerHTML=HERO_SLIDES.map((_,i)=>`<div class="hero-big-dot${i===0?' active':''}" onclick="goHeroSlide(${i})"></div>`).join('');
-  applyHeroSlide(0);
-  heroTimer=setInterval(()=>{heroIdx=(heroIdx+1)%HERO_SLIDES.length;goHeroSlide(heroIdx);},5000);
-}
-function goHeroSlide(i){
-  heroIdx=i;
-  applyHeroSlide(i);
-  document.querySelectorAll('.hero-big-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
-  clearInterval(heroTimer);heroTimer=setInterval(()=>{heroIdx=(heroIdx+1)%HERO_SLIDES.length;goHeroSlide(heroIdx);},5000);
-}
-function applyHeroSlide(i){
-  const s=HERO_SLIDES[i];
-  const card=document.getElementById('heroBigCard');
-  card.style.background=s.bg;
-  document.getElementById('heroBigEyebrow').style.color=s.eyebrowColor;
-  document.getElementById('heroBigEyebrow').textContent=s.eyebrow;
-  document.getElementById('heroBigTitle').innerHTML=s.title;
-  document.getElementById('heroBigTitle').style.color=s.titleColor;
-  document.getElementById('heroBigSub').textContent=s.sub;
-  document.getElementById('heroBigSub').style.color=s.subColor;
-  document.getElementById('heroBigImgInner').textContent=s.img;
-  const cta=document.getElementById('heroBigCta');
-  cta.innerHTML=s.cta;
-  cta.onclick=new Function(s.ctaFn);
-  document.getElementById('heroBigSecBtn').textContent=s.sec;
-}
-function heroPrev(){goHeroSlide((heroIdx-1+HERO_SLIDES.length)%HERO_SLIDES.length);}
-function heroNext(){goHeroSlide((heroIdx+1)%HERO_SLIDES.length);}
 
 /* RENDER HOME */
 function renderHome(){
@@ -1135,7 +809,7 @@ function renderHome(){
       </div>
       <div class="rest-info">
         <div class="rest-name">${r.name}</div>
-        <div class="rest-meta"><span class="rest-rating">\u2605 ${r.rating}</span><span class="rest-dot"></span><span>${getAdjustedTime(r.time)} mins${(trafficOn||rainOn)?'<span style="font-size:10px;color:var(--orange);margin-left:3px">&uarr;</span>':''}</span></div>
+        <div class="rest-meta"><span class="rest-rating">\u2605 ${r.rating}</span><span class="rest-dot"></span><span>${r.time} mins</span></div>
         <div class="rest-cuisine">${r.cuisine}</div>
         <div class="rest-dist-row"><span>\uD83D\uDCCD ${r.baseDistKm} km away</span><span class="rest-dot" style="display:inline-block;background:#ccc"></span><span>${r.area}</span></div>
       </div>
@@ -1265,7 +939,7 @@ function processPayment(){
   const r=RESTAURANTS.find(x=>x.id===cartItems[0]?.restId)||RESTAURANTS[0];
   const variation=(Math.random()*3-1.5);
   const dist=Math.max(1,Math.round(r.baseDistKm+variation));
-  const mult=getDeliveryMultiplier();const time=Math.max(8,Math.round((10+dist*2.5+(Math.random()*10-5))*mult));
+  const time=Math.max(8,Math.round(10+dist*2.5+(Math.random()*10-5)));
   const sub=cartItems.reduce((s,c)=>s+c.price*c.qty,0);
   const loc=customLocation||(document.querySelector('.addr-option.selected .addr-text')?.textContent)||'User Location';
   cartItems.forEach(ci=>{placedOrders.push({restaurant:ci.restName,item:ci.itemName,customer:document.getElementById('coName').value.trim(),location:loc,distance:dist,time});});
@@ -1444,7 +1118,7 @@ function saveNewAddress(){
 }
 
 /* INIT */
-renderHome();initHeroSlideshow();showPage('homePage');
+renderHome();initSlideshow();showPage('homePage');
 </script>
 </body>
 </html>
