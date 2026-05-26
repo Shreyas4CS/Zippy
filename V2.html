@@ -231,7 +231,7 @@ button:not(.qty-btn):not(.cls-btn):active{transform:scale(.97)}
 .rest-deal-text strong{color:var(--black);font-weight:700}
 .rest-deal-text small{color:var(--gray);font-size:12px;display:block}
 .rest-deal-count{color:var(--orange);font-weight:700}
-.free-del-bar{background:#2a1200;color:white;text-align:center;padding:10px;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 16px;border-radius:10px}
+.free-del-bar{background:#2a1200;color:white;text-align:center;padding:10px;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 16px}
 .free-del-bar .one-badge{background:var(--orange);color:white;border-radius:6px;padding:2px 8px;font-weight:800;font-size:11px}
 .menu-controls{padding:16px 16px 0;display:flex;flex-direction:column;gap:12px}
 .menu-search{display:flex;align-items:center;gap:10px;background:#f2f2f2;border-radius:10px;padding:10px 16px;border:1.5px solid transparent;transition:border-color .2s}
@@ -274,7 +274,7 @@ button:not(.qty-btn):not(.cls-btn):active{transform:scale(.97)}
 .menu-item-price-row{display:flex;align-items:center;gap:8px}
 .menu-item-price{font-weight:800;font-size:14px;color:var(--black)}
 .menu-item-original{font-size:12px;color:var(--gray);text-decoration:line-through}
-.menu-item-img-wrap{width:160px;height:150px;flex-shrink:0;border-radius:10px;overflow:hidden;position:relative;background:var(--orange-bg)}
+.menu-item-img-wrap{width:130px;height:120px;flex-shrink:0;border-radius:10px;overflow:hidden;position:relative;background:var(--orange-bg)}
 .menu-item-img-wrap img{width:100%;height:100%;object-fit:cover}
 .menu-item-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px}
 .menu-item-add-wrap{position:absolute;bottom:-1px;left:0;right:0;display:flex;justify-content:center}
@@ -444,49 +444,6 @@ td.time-val{font-weight:700;color:var(--green)}
 .graph-side-head p{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
 .graph-side-scroll{max-height:500px;overflow-y:auto}
 
-.btn-new-graph{background:var(--orange);color:white;border-radius:10px;padding:10px 22px;font-weight:700;font-size:14px;transition:all .2s;display:flex;align-items:center;gap:7px}
-.btn-new-graph:hover{background:var(--orange-dark);transform:translateY(-1px)}
-
-/* NEW GRAPH PAGE */
-.new-graph-page{display:none;animation:fadeInUp .3s ease}
-.new-graph-page.active{display:block}
-.new-graph-inner{max-width:1280px;margin:0 auto;padding:0 24px 60px;display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
-@media(max-width:1024px){.new-graph-inner{grid-template-columns:1fr}}
-@media(max-width:640px){.new-graph-inner{padding:0 14px 40px}}
-
-/* New graph canvas interaction modes */
-.ng-mode-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.ng-mode-btn{border:2px solid var(--border);border-radius:10px;padding:8px 18px;font-weight:700;font-size:13px;color:var(--gray);background:white;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
-.ng-mode-btn:hover{border-color:var(--orange);color:var(--orange)}
-.ng-mode-btn.active{border-color:var(--orange);background:var(--orange);color:white}
-.ng-canvas-wrap{position:relative;width:100%;background:#f5fcf5;border:2px solid #c8e6c9;border-radius:12px;overflow:hidden;cursor:crosshair}
-#newGraphCanvas{display:block;width:100%}
-.ng-controls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-.ng-hint-box{background:var(--orange-bg);border:1px solid rgba(255,82,0,.2);border-radius:10px;padding:12px 16px;margin-top:12px;font-size:12px;color:var(--black);line-height:1.6}
-.ng-hint-box b{color:var(--orange)}
-.ng-legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
-.ng-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);font-weight:600}
-
-/* Side panel for new graph */
-.ng-side{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm)}
-.ng-side-head{background:var(--orange);padding:14px 18px}
-.ng-side-head h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;color:white}
-.ng-side-head p{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
-.ng-input-row{display:flex;gap:8px;padding:14px 16px 0;align-items:flex-end}
-.ng-input-group{flex:1}
-.ng-input-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-.ng-input{border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;font-weight:700;color:var(--black);width:100%;transition:border-color .2s}
-.ng-input:focus{border-color:var(--orange)}
-.ng-add-row-btn{background:var(--orange);color:white;border-radius:8px;padding:9px 16px;font-weight:800;font-size:13px;white-space:nowrap;flex-shrink:0;transition:all .2s;align-self:flex-end}
-.ng-add-row-btn:hover{background:var(--orange-dark)}
-.ng-table-scroll{max-height:380px;overflow-y:auto;padding:10px 0 4px}
-.ng-table-empty{padding:24px;text-align:center;font-size:13px;color:var(--gray-light);font-style:italic}
-.ng-side-btns{padding:12px 16px;display:flex;gap:8px;border-top:1px solid var(--border);flex-wrap:wrap}
-.ng-plot-btn{flex:1;background:var(--green);color:white;border-radius:10px;padding:11px;font-weight:800;font-size:14px;transition:all .2s}
-.ng-plot-btn:hover{background:#178a5e}
-.ng-clear-btn{background:var(--bg);color:var(--gray);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-weight:700;font-size:13px;transition:all .2s}
-.ng-clear-btn:hover{border-color:var(--orange);color:var(--orange)}
-
 /* ADD ADDRESS MODAL */
 .addr-modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;align-items:center;justify-content:center;padding:20px}
 .addr-modal-backdrop.open{display:flex}
@@ -558,7 +515,7 @@ td.time-val{font-weight:700;color:var(--green)}
 </header>
 
 <!-- HOME PAGE -->
-<div id="homePage" style="display:block">
+<div id="homePage">
   <div class="hero">
     <div class="hero-inner">
       <!-- SINGLE DYNAMIC BIG HERO CARD -->
@@ -703,111 +660,23 @@ td.time-val{font-weight:700;color:var(--green)}
     <div class="graph-box">
       <div class="graph-title">Scatter Plot &#x2014; Distance vs Delivery Time</div>
       <div class="graph-subtitle">X&#x2011;axis: Distance (km) &nbsp;|&nbsp; Y&#x2011;axis: Time (min)</div>
-
-      <!-- Mode bar (same as new graph) -->
-      <div class="ng-mode-bar">
-        <button class="ng-mode-btn" id="sgModeNone" onclick="setSGMode('none')">&#x1F4CF; Best-Fit Line</button>
-        <button class="ng-mode-btn" id="sgModeLine" onclick="setSGMode('line')">&#x2014; Draw Line</button>
-        <button class="ng-mode-btn active" id="sgModeReadX" onclick="setSGMode('readX')">&#x21E3; Read X value</button>
-        <button class="ng-mode-btn" id="sgModeReadY" onclick="setSGMode('readY')">&#x21E2; Read Y value</button>
-      </div>
-
       <div class="graph-canvas-wrap">
         <canvas id="regressionCanvas"></canvas>
       </div>
-
       <div class="graph-controls">
         <button class="btn-draw-line" id="btnDrawLine" onclick="toggleRegressionLine()">&#x1F4CF; Draw Best-Fit Line</button>
-        <button class="btn-clear-pts" id="btnClearReadings" onclick="clearSGReadings()">&#x2715; Clear Readings</button>
-        <button class="btn-clear-pts" id="btnClearManualLine" onclick="clearSGManualLine()">&#x21BA; Clear Line</button>
-        <button class="btn-clear-pts" onclick="replotGraph()">&#x1F5D1; Clear All</button>
-        <button class="btn-new-graph" onclick="openNewGraphPage()">&#x2795; Plot New Graph</button>
+        <button class="btn-clear-pts" onclick="replotGraph()">&#x21BA; Replot</button>
       </div>
-      <div class="graph-hint" id="sgHint">&#x1F4A1; Use the mode buttons above to draw a line or read values. Click the canvas to interact.</div>
+      <div class="graph-hint">&#x1F4A1; Click "Draw Best-Fit Line" to draw the least-squares regression line through the data points.</div>
       <div class="graph-legend">
         <div class="legend-item"><span class="legend-x">&#xD7;</span> Data Point</div>
-        <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;background:var(--black);vertical-align:middle"></span> Best-fit / Drawn Line</div>
-        <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;border-top:2px dashed #1565c0;vertical-align:middle"></span> Reading Lines</div>
+        <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;background:var(--black);vertical-align:middle"></span> Best-fit Line</div>
       </div>
     </div>
     <div class="graph-side-table">
       <div class="graph-side-head"><h3>Data Table</h3><p>Distance &amp; Time values only</p></div>
       <div class="graph-side-scroll">
         <table><thead><tr><th>#</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="graphSideTableBody"></tbody></table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- NEW GRAPH PAGE -->
-<div id="newGraphPage" class="new-graph-page">
-  <div class="graph-back-bar"><div class="graph-back" onclick="closeNewGraphPage()">&#x2190; Back to Graph</div></div>
-  <div class="new-graph-inner">
-    <div class="graph-box">
-      <div class="graph-title">&#x1F4C8; Plot Your Own Graph</div>
-      <div class="graph-subtitle">Enter data in the table &#x2192; click <b>Plot Points</b> &#x2192; select a mode to draw lines &amp; read values</div>
-
-      <!-- Mode selector -->
-      <div class="ng-mode-bar">
-        <button class="ng-mode-btn active" id="ngModePoint" onclick="setNGMode('point')">&#x2715; Plot Point</button>
-        <button class="ng-mode-btn" id="ngModeLine" onclick="setNGMode('line')">&#x2014; Draw Line</button>
-        <button class="ng-mode-btn" id="ngModeReadX" onclick="setNGMode('readX')">&#x21E3; Read X value</button>
-        <button class="ng-mode-btn" id="ngModeReadY" onclick="setNGMode('readY')">&#x21E2; Read Y value</button>
-      </div>
-
-      <div class="ng-canvas-wrap">
-        <canvas id="newGraphCanvas"></canvas>
-      </div>
-
-      <div class="ng-controls">
-        <button class="btn-draw-line" onclick="ngPlotPoints()">&#x2715; Plot Points</button>
-        <button class="btn-clear-pts" onclick="ngClearPoints()">&#x2715; Clear Points</button>
-        <button class="btn-clear-pts" onclick="ngClearLine()">&#x21BA; Clear Line</button>
-        <button class="btn-clear-pts" onclick="ngClearAll()">&#x1F5D1; Clear All</button>
-      </div>
-
-      <div class="ng-hint-box">
-        <b>&#x1F4A1; How to use:</b><br>
-        1. Enter X &amp; Y values in the table on the right → <b>Add Row</b><br>
-        2. Click <b>Plot Points</b> to place the × marks on the graph<br>
-        3. Switch to <b>Draw Line</b> mode — click any start point on the graph (including on axes) and drag to draw a straight line<br>
-        4. Use <b>Read X</b> or <b>Read Y</b> mode — click the best-fit line to draw corresponding dashed lines to both axes and read the values
-      </div>
-
-      <div class="ng-legend">
-        <div class="ng-legend-item"><span style="color:var(--orange);font-weight:900;font-size:15px">&#x2715;</span> Plotted Point</div>
-        <div class="ng-legend-item"><span style="display:inline-block;width:20px;height:2.5px;background:#1C1C1C;vertical-align:middle"></span> Drawn Line</div>
-        <div class="ng-legend-item"><span style="display:inline-block;width:20px;height:2px;background:#1565c0;border-top:2px dashed #1565c0;vertical-align:middle"></span> Reading Lines</div>
-      </div>
-    </div>
-
-    <!-- Side table -->
-    <div class="ng-side">
-      <div class="ng-side-head">
-        <h3>&#x1F4CB; Data Table</h3>
-        <p>Enter X (Distance km) &amp; Y (Time min) values</p>
-      </div>
-      <div class="ng-input-row">
-        <div class="ng-input-group">
-          <div class="ng-input-label">X (Distance km)</div>
-          <input class="ng-input" type="number" id="ngInputX" placeholder="e.g. 4" min="0" max="20" step="1">
-        </div>
-        <div class="ng-input-group">
-          <div class="ng-input-label">Y (Time min)</div>
-          <input class="ng-input" type="number" id="ngInputY" placeholder="e.g. 30" min="0" max="100" step="1">
-        </div>
-        <button class="ng-add-row-btn" onclick="ngAddRow()">+ Add</button>
-      </div>
-      <div class="ng-table-scroll">
-        <div class="ng-table-empty" id="ngTableEmpty">No data yet. Add rows above.</div>
-        <table id="ngDataTable" style="display:none">
-          <thead><tr><th>#</th><th>X (km)</th><th>Y (min)</th><th></th></tr></thead>
-          <tbody id="ngTableBody"></tbody>
-        </table>
-      </div>
-      <div class="ng-side-btns">
-        <button class="ng-plot-btn" onclick="ngPlotPoints()">&#x1F4C9; Plot Points</button>
-        <button class="ng-clear-btn" onclick="ngClearData()">&#x1F5D1; Clear Data</button>
       </div>
     </div>
   </div>
@@ -1262,7 +1131,7 @@ function renderHome(){
         <img src="${r.img}" alt="${r.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="rest-img-ph" style="display:none">${r.ph}</div>
         <button class="rest-fav" onclick="event.stopPropagation();this.textContent=this.textContent==='\u2764\uFE0F'?'\uD83E\uDD0D':'\u2764\uFE0F'">\uD83E\uDD0D</button>
-        <div class="rest-offer-badge"><div class="rest-offer-tag">one ${r.discount}</div></div>
+        <div class="rest-offer-badge"><div class="rest-offer-tag">one ${r.discount}</div><div class="rest-offer-tag dark">AD</div></div>
       </div>
       <div class="rest-info">
         <div class="rest-name">${r.name}</div>
@@ -1431,484 +1300,98 @@ function generateTable(){
 function openGraphPage(){
   if(!placedOrders.length){showToast('Place orders first!');return;}
   showPage('graphPage');window.scrollTo(0,0);
-  regressionLineDrawn=false;readingLines=[];sgManualLine=null;sgLineStart=null;
+  regressionLineDrawn=false;
   document.getElementById('btnDrawLine').classList.remove('active-line');
-  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
+  document.getElementById('btnDrawLine').textContent='\uD83D\uDCCF Draw Best-Fit Line';
   document.getElementById('graphSideTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
-  setSGMode('readX');
-  setTimeout(()=>{drawScatterPlot();initExistingGraphClick();},80);
+  setTimeout(drawScatterPlot,80);
 }
 function closeGraphPage(){showPage('homePage');window.scrollTo(0,0);}
-function openNewGraphPage(){showPage('newGraphPage');window.scrollTo(0,0);setTimeout(()=>ngDraw(),80);}
-function closeNewGraphPage(){showPage('graphPage');window.scrollTo(0,0);setTimeout(()=>{drawScatterPlot();initExistingGraphClick();},80);}
 
-
-
-function setSGMode(mode){
-  sgMode = mode;
-  ['sgModeNone','sgModeLine','sgModeReadX','sgModeReadY'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.classList.remove('active');
-  });
-  const map={none:'sgModeNone',line:'sgModeLine',readX:'sgModeReadX',readY:'sgModeReadY'};
-  const btn=document.getElementById(map[mode]); if(btn) btn.classList.add('active');
-  const hints={
-    none:'Click "Draw Best-Fit Line" button to toggle the regression line.',
-    line:'Click & drag on the canvas (axes included) to draw your own straight line.',
-    readX:'Click anywhere on a line to drop dashed reading lines to both axes.',
-    readY:'Click anywhere on a line to drop dashed reading lines to both axes.'
-  };
-  const h=document.getElementById('sgHint'); if(h) h.textContent='💡 '+hints[mode];
-  const canvas=document.getElementById('regressionCanvas');
-  if(canvas) canvas.style.cursor=mode==='line'?'copy':'crosshair';
-  drawScatterPlot();
-}
-
-function clearSGReadings(){ readingLines=[]; drawScatterPlot(); showToast('Readings cleared'); }
-function clearSGManualLine(){ sgManualLine=null; sgLineStart=null; drawScatterPlot(); showToast('Manual line cleared'); }
-
+/* CANVAS GRAPH */
 function drawScatterPlot(){
   const canvas=document.getElementById('regressionCanvas');
   const wrap=canvas.parentElement;
   const dpr=window.devicePixelRatio||1;
-  const cw=wrap.clientWidth, ch=Math.round(cw*(3/4));
-  canvas.width=cw*dpr; canvas.height=ch*dpr;
-  canvas.style.width=cw+'px'; canvas.style.height=ch+'px';
-  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
-  const W=cw, H=ch;
+  const cw=wrap.clientWidth,ch=Math.round(cw*(3/4));
+  canvas.width=cw*dpr;canvas.height=ch*dpr;
+  canvas.style.width=cw+'px';canvas.style.height=ch+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const W=cw,H=ch;
   const pad={left:56,right:28,top:28,bottom:56};
-  const pW=W-pad.left-pad.right, pH=H-pad.top-pad.bottom;
-  const xMin=0,xMax=20,yMin=0,yMax=100;
+  const pW=W-pad.left-pad.right,pH=H-pad.top-pad.bottom;
+  const xVals=placedOrders.map(o=>o.distance),yVals=placedOrders.map(o=>o.time);
+  const xMax=Math.ceil(Math.max(...xVals)*1.25/5)*5||20;
+  const yMax=Math.ceil(Math.max(...yVals)*1.25/10)*10||60;
+  const xMin=0,yMin=0;
   const toSX=x=>pad.left+((x-xMin)/(xMax-xMin))*pW;
   const toSY=y=>pad.top+((yMax-y)/(yMax-yMin))*pH;
-  const fromSX=sx=>(sx-pad.left)/pW*(xMax-xMin)+xMin;
-  const fromSY=sy=>yMax-(sy-pad.top)/pH*(yMax-yMin);
-
   ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#f5fcf5'; ctx.fillRect(0,0,W,H);
 
-  // Grid
-  for(let v=xMin;v<=xMax;v+=2){
-    ctx.strokeStyle=v%10===0?'#a5d6a7':'#c8e6c9'; ctx.lineWidth=v%10===0?1:0.5;
-    ctx.beginPath(); ctx.moveTo(toSX(v),pad.top); ctx.lineTo(toSX(v),H-pad.bottom); ctx.stroke();
-  }
-  for(let v=yMin;v<=yMax;v+=10){
-    ctx.strokeStyle=v%50===0?'#a5d6a7':'#c8e6c9'; ctx.lineWidth=v%50===0?1:0.5;
-    ctx.beginPath(); ctx.moveTo(pad.left,toSY(v)); ctx.lineTo(W-pad.right,toSY(v)); ctx.stroke();
-  }
-
-  // Axis labels
-  ctx.fillStyle='#444'; ctx.font='11px DM Sans,sans-serif';
-  for(let v=xMin;v<=xMax;v+=2){ ctx.textAlign='center'; ctx.fillText(v,toSX(v),H-pad.bottom+16); }
-  for(let v=yMin;v<=yMax;v+=10){ ctx.textAlign='right'; ctx.fillText(v,pad.left-6,toSY(v)+4); }
-
-  // Axes
-  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=2; ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left,H-pad.bottom); ctx.lineTo(W-pad.right,H-pad.bottom); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(W-pad.right,H-pad.bottom); ctx.lineTo(W-pad.right-8,H-pad.bottom-5); ctx.moveTo(W-pad.right,H-pad.bottom); ctx.lineTo(W-pad.right-8,H-pad.bottom+5); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left-5,pad.top+8); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left+5,pad.top+8); ctx.stroke();
-  ctx.fillStyle='#1a1a1a'; ctx.font='bold 13px DM Sans,sans-serif';
-  ctx.textAlign='center'; ctx.fillText('Distance (km)',pad.left+pW/2,H-6);
-  ctx.save(); ctx.translate(14,pad.top+pH/2); ctx.rotate(-Math.PI/2); ctx.fillText('Time (min)',0,0); ctx.restore();
-  ctx.font='bold 12px DM Sans,sans-serif'; ctx.textAlign='left'; ctx.fillText('→ x',W-pad.right+3,H-pad.bottom+20);
-  ctx.textAlign='center'; ctx.fillText('↑ y',pad.left,pad.top-8);
-
-  // Data points
-  placedOrders.forEach(o=>{
-    const sx=toSX(o.distance), sy=toSY(o.time), s=7;
-    ctx.strokeStyle='#FF5200'; ctx.lineWidth=2.5;
-    ctx.beginPath(); ctx.moveTo(sx-s,sy-s); ctx.lineTo(sx+s,sy+s); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sx+s,sy-s); ctx.lineTo(sx-s,sy+s); ctx.stroke();
-  });
-
-  // Best-fit regression line
-  let slope=null, intercept=null;
-  if(regressionLineDrawn && placedOrders.length>=2){
-    const pts=placedOrders.map(o=>({x:o.distance,y:o.time}));
-    const n=pts.length, sx=pts.reduce((a,p)=>a+p.x,0), sy=pts.reduce((a,p)=>a+p.y,0);
-    const sxy=pts.reduce((a,p)=>a+p.x*p.y,0), sxx=pts.reduce((a,p)=>a+p.x*p.x,0);
-    slope=(n*sxy-sx*sy)/(n*sxx-sx*sx)||0; intercept=(sy-slope*sx)/n;
-    ctx.strokeStyle='#1C1C1C'; ctx.lineWidth=2.5; ctx.setLineDash([]);
-    ctx.beginPath(); ctx.moveTo(toSX(xMin),toSY(slope*xMin+intercept)); ctx.lineTo(toSX(xMax),toSY(slope*xMax+intercept)); ctx.stroke();
-  }
-
-  // Manual drawn line
-  if(sgManualLine){
-    ctx.strokeStyle='#7b1fa2'; ctx.lineWidth=2.5; ctx.setLineDash([]);
-    ctx.beginPath(); ctx.moveTo(sgManualLine.x1,sgManualLine.y1); ctx.lineTo(sgManualLine.x2,sgManualLine.y2); ctx.stroke();
-  }
-
-  // Line drag preview
-  if(sgLineStart && sgLineStart.curSx!==undefined){
-    ctx.strokeStyle='rgba(123,31,162,0.4)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
-    ctx.beginPath(); ctx.moveTo(sgLineStart.sx,sgLineStart.sy); ctx.lineTo(sgLineStart.curSx,sgLineStart.curSy); ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
-  // Reading/corresponding lines
-  readingLines.forEach(rl=>{
-    const sx=toSX(rl.x), sy=toSY(rl.y);
-    ctx.strokeStyle='#1565c0'; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
-    ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(sx,H-pad.bottom); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(pad.left,sy); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle='#1565c0';
-    ctx.beginPath(); ctx.arc(sx,H-pad.bottom,5,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(pad.left,sy,5,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(sx,sy,5,0,Math.PI*2); ctx.fill();
-    ctx.font='bold 11px DM Sans,sans-serif';
-    ctx.textAlign='center'; ctx.fillText(rl.x.toFixed(1),sx,H-pad.bottom+14);
-    ctx.textAlign='right'; ctx.fillText(rl.y.toFixed(1),pad.left-8,sy+4);
-  });
-  ctx.setLineDash([]);
-
-  // Store helpers on canvas
-  canvas._toSX=toSX; canvas._toSY=toSY; canvas._fromSX=fromSX; canvas._fromSY=fromSY;
-  canvas._pad=pad; canvas._W=W; canvas._H=H;
-  canvas._slope=slope; canvas._intercept=intercept;
-  canvas._xMin=xMin; canvas._xMax=xMax; canvas._yMin=yMin; canvas._yMax=yMax;
-}
-
-function sgGetCanvasPoint(e,canvas){
-  const rect=canvas.getBoundingClientRect();
-  const scaleX=(canvas.width/(window.devicePixelRatio||1))/rect.width;
-  const scaleY=(canvas.height/(window.devicePixelRatio||1))/rect.height;
-  return {cx:(e.clientX-rect.left)*scaleX, cy:(e.clientY-rect.top)*scaleY};
-}
-
-function sgSnapToAxis(cx,cy){
-  const canvas=document.getElementById('regressionCanvas');
-  const pad=canvas._pad||{left:56,right:28,top:28,bottom:56};
-  const snapDist=14;
-  if(Math.abs(cx-pad.left)<snapDist) cx=pad.left;
-  if(Math.abs(cy-(canvas._H-pad.bottom))<snapDist) cy=canvas._H-pad.bottom;
-  return {cx,cy};
-}
-
-function initExistingGraphClick(){
-  const canvas=document.getElementById('regressionCanvas');
-
-  canvas.onmousedown=function(e){
-    const {cx,cy}=sgGetCanvasPoint(e,canvas);
-    if(sgMode==='line'){
-      const s=sgSnapToAxis(cx,cy);
-      sgLineStart={sx:s.cx,sy:s.cy,curSx:s.cx,curSy:s.cy};
-      drawScatterPlot();
-    }
-  };
-
-  canvas.onmousemove=function(e){
-    if(sgMode!=='line'||!sgLineStart) return;
-    const {cx,cy}=sgGetCanvasPoint(e,canvas);
-    const s=sgSnapToAxis(cx,cy);
-    sgLineStart.curSx=s.cx; sgLineStart.curSy=s.cy;
-    drawScatterPlot();
-  };
-
-  canvas.onmouseup=function(e){
-    if(sgMode==='line' && sgLineStart){
-      const {cx,cy}=sgGetCanvasPoint(e,canvas);
-      const s=sgSnapToAxis(cx,cy);
-      const dist=Math.hypot(s.cx-sgLineStart.sx, s.cy-sgLineStart.sy);
-      if(dist>10){
-        sgManualLine={x1:sgLineStart.sx,y1:sgLineStart.sy,x2:s.cx,y2:s.cy};
-        showToast('Line drawn! Switch to Read X/Y to take readings.');
-      }
-      sgLineStart=null;
-      drawScatterPlot();
-      return;
-    }
-    if(sgMode==='readX'||sgMode==='readY'){
-      const {cx,cy}=sgGetCanvasPoint(e,canvas);
-      const pad=canvas._pad;
-      if(cx<pad.left||cx>canvas._W-pad.right||cy<pad.top||cy>canvas._H-pad.bottom) return;
-
-      // Try best-fit line first, then manual line
-      let lineY=null;
-      if(sgManualLine){
-        const {x1,y1,x2,y2}=sgManualLine;
-        if(x2!==x1){ const t=(cx-x1)/(x2-x1); lineY=y1+t*(y2-y1); }
-      }
-      if(lineY===null && canvas._slope!==null && regressionLineDrawn){
-        const dataX=canvas._fromSX(cx);
-        const dataY=canvas._slope*dataX+canvas._intercept;
-        lineY=canvas._toSY(dataY);
-      }
-      if(lineY===null){ showToast('Draw a line first, then read values!'); return; }
-
-      const dataX=canvas._fromSX(cx);
-      const dataY=canvas._fromSY(lineY);
-      if(dataX<canvas._xMin||dataX>canvas._xMax||dataY<canvas._yMin||dataY>canvas._yMax) return;
-      readingLines.push({x:Math.round(dataX*10)/10, y:Math.round(dataY*10)/10});
-      drawScatterPlot();
-      showToast('Reading: x='+readingLines[readingLines.length-1].x+', y='+readingLines[readingLines.length-1].y);
-    }
-  };
-
-  canvas.onmouseleave=function(){
-    if(sgLineStart){ sgLineStart=null; drawScatterPlot(); }
-  };
-}
-
-function toggleRegressionLine(){
-  regressionLineDrawn=!regressionLineDrawn;
-  readingLines=[];
-  const btn=document.getElementById('btnDrawLine');
-  btn.classList.toggle('active-line',regressionLineDrawn);
-  btn.textContent=regressionLineDrawn?'✅ Line Drawn — Click to Remove':'📏 Draw Best-Fit Line';
-  if(regressionLineDrawn) showToast('Line drawn! Click anywhere on the line to read values.');
-  drawScatterPlot();
-}
-function replotGraph(){regressionLineDrawn=false;readingLines=[];document.getElementById('btnDrawLine').classList.remove('active-line');document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';drawScatterPlot();showToast('Graph replotted');}
-window.addEventListener('resize',()=>{if(document.getElementById('graphPage').classList.contains('active'))drawScatterPlot();});
-
-/* ══════════════════════════════════════════════════════
-   NEW GRAPH — manual plot + draw line + read values
-   ══════════════════════════════════════════════════════ */
-let ngData = [];          // [{x, y}]
-let ngPlottedPts = [];    // actual plotted points
-let ngLine = null;        // {x1,y1,x2,y2} drawn line
-let ngReadingLines = [];  // [{x, y}] reading/corresponding lines
-let ngMode = 'point';     // 'point' | 'line' | 'readX' | 'readY'
-let ngLineStart = null;   // while dragging to draw line
-
-// Fixed axes same as scatter plot
-const NG_XMIN=0,NG_XMAX=20,NG_YMIN=0,NG_YMAX=100;
-
-function setNGMode(mode){
-  ngMode=mode;
-  ['ngModePoint','ngModeLine','ngModeReadX','ngModeReadY'].forEach(id=>document.getElementById(id).classList.remove('active'));
-  const map={point:'ngModePoint',line:'ngModeLine',readX:'ngModeReadX',readY:'ngModeReadY'};
-  document.getElementById(map[mode]).classList.add('active');
-  const canvas=document.getElementById('newGraphCanvas');
-  canvas.style.cursor=mode==='point'?'crosshair':mode==='line'?'copy':mode==='readX'||mode==='readY'?'crosshair':'default';
-  ngDraw();
-}
-
-function ngGetCoords(){
-  const canvas=document.getElementById('newGraphCanvas');
-  const wrap=canvas.parentElement;
-  const cw=wrap.clientWidth, ch=Math.round(cw*(3/4));
-  const pad={left:58,right:28,top:28,bottom:56};
-  const pW=cw-pad.left-pad.right, pH=ch-pad.top-pad.bottom;
-  const toSX=x=>pad.left+((x-NG_XMIN)/(NG_XMAX-NG_XMIN))*pW;
-  const toSY=y=>pad.top+((NG_YMAX-y)/(NG_YMAX-NG_YMIN))*pH;
-  const fromSX=sx=>(sx-pad.left)/pW*(NG_XMAX-NG_XMIN)+NG_XMIN;
-  const fromSY=sy=>NG_YMAX-(sy-pad.top)/pH*(NG_YMAX-NG_YMIN);
-  return {pad,pW,pH,cw,ch,toSX,toSY,fromSX,fromSY};
-}
-
-function ngDraw(){
-  const canvas=document.getElementById('newGraphCanvas');
-  const wrap=canvas.parentElement;
-  const dpr=window.devicePixelRatio||1;
-  const {pad,pW,pH,cw,ch,toSX,toSY} = ngGetCoords();
-  const W=cw,H=ch;
-  canvas.width=W*dpr;canvas.height=H*dpr;
-  canvas.style.width=W+'px';canvas.style.height=H+'px';
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
-
+  // graph paper bg
   ctx.fillStyle='#f5fcf5';ctx.fillRect(0,0,W,H);
-
-  // Grid: X 0-20 step 2, Y 0-100 step 10
-  for(let v=NG_XMIN;v<=NG_XMAX;v+=2){
-    ctx.strokeStyle=v%10===0?'#a5d6a7':'#c8e6c9';ctx.lineWidth=v%10===0?1:0.5;
+  // minor grid
+  const xSteps=10,ySteps=10;
+  for(let i=0;i<=xSteps;i++){const x=xMin+i*(xMax-xMin)/xSteps;ctx.strokeStyle='#c8e6c9';ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(toSX(x),pad.top);ctx.lineTo(toSX(x),H-pad.bottom);ctx.stroke();}
+  for(let i=0;i<=ySteps;i++){const y=yMin+i*(yMax-yMin)/ySteps;ctx.strokeStyle='#c8e6c9';ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(pad.left,toSY(y));ctx.lineTo(W-pad.right,toSY(y));ctx.stroke();}
+  // major grid + labels
+  const xMaj=5,yMaj=5;
+  ctx.strokeStyle='#a5d6a7';ctx.lineWidth=1;ctx.fillStyle='#444';ctx.font='11px DM Sans,sans-serif';
+  for(let v=xMin;v<=xMax+.01;v+=(xMax-xMin)/xMaj){
     ctx.beginPath();ctx.moveTo(toSX(v),pad.top);ctx.lineTo(toSX(v),H-pad.bottom);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(Math.round(v),toSX(v),H-pad.bottom+18);
   }
-  for(let v=NG_YMIN;v<=NG_YMAX;v+=10){
-    ctx.strokeStyle=v%50===0?'#a5d6a7':'#c8e6c9';ctx.lineWidth=v%50===0?1:0.5;
+  for(let v=yMin;v<=yMax+.01;v+=(yMax-yMin)/yMaj){
     ctx.beginPath();ctx.moveTo(pad.left,toSY(v));ctx.lineTo(W-pad.right,toSY(v));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(Math.round(v),pad.left-8,toSY(v)+4);
   }
-
-  // Labels
-  ctx.fillStyle='#444';ctx.font='11px DM Sans,sans-serif';
-  for(let v=NG_XMIN;v<=NG_XMAX;v+=2){ctx.textAlign='center';ctx.fillText(v,toSX(v),H-pad.bottom+16);}
-  for(let v=NG_YMIN;v<=NG_YMAX;v+=10){ctx.textAlign='right';ctx.fillText(v,pad.left-6,toSY(v)+4);}
-
-  // Axes
-  ctx.strokeStyle='#1a1a1a';ctx.lineWidth=2;ctx.setLineDash([]);
+  // axes
+  ctx.strokeStyle='#1a1a1a';ctx.lineWidth=2;
   ctx.beginPath();ctx.moveTo(pad.left,pad.top);ctx.lineTo(pad.left,H-pad.bottom);ctx.lineTo(W-pad.right,H-pad.bottom);ctx.stroke();
+  // arrows
   ctx.beginPath();ctx.moveTo(W-pad.right,H-pad.bottom);ctx.lineTo(W-pad.right-8,H-pad.bottom-5);ctx.moveTo(W-pad.right,H-pad.bottom);ctx.lineTo(W-pad.right-8,H-pad.bottom+5);ctx.stroke();
   ctx.beginPath();ctx.moveTo(pad.left,pad.top);ctx.lineTo(pad.left-5,pad.top+8);ctx.moveTo(pad.left,pad.top);ctx.lineTo(pad.left+5,pad.top+8);ctx.stroke();
-  ctx.fillStyle='#1a1a1a';ctx.font='bold 13px DM Sans,sans-serif';
-  ctx.textAlign='center';ctx.fillText('Distance (km)',pad.left+pW/2,H-6);
+  // axis labels
+  ctx.fillStyle='#1a1a1a';ctx.font='bold 13px DM Sans,sans-serif';ctx.textAlign='center';
+    ctx.fillText('Distance (km) — whole numbers',pad.left+pW/2,H-6);
   ctx.save();ctx.translate(14,pad.top+pH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Time (min)',0,0);ctx.restore();
-  ctx.font='bold 12px DM Sans,sans-serif';ctx.textAlign='left';ctx.fillText('→ x',W-pad.right+3,H-pad.bottom+20);
-  ctx.textAlign='center';ctx.fillText('↑ y',pad.left,pad.top-8);
+  // variable name on axis ends
+  ctx.font='bold 12px DM Sans,sans-serif';ctx.textAlign='left';ctx.fillText('\u2192 x',W-pad.right+3,H-pad.bottom+20);
+  ctx.textAlign='center';ctx.fillText('\u2191 y',pad.left,pad.top-8);
 
-  // Plotted points as × marks
-  ngPlottedPts.forEach(p=>{
-    const sx=toSX(p.x),sy=toSY(p.y),s=7;
+  // data points as x marks
+  placedOrders.forEach(o=>{
+    const sx=toSX(o.distance),sy=toSY(o.time),s=7;
     ctx.strokeStyle='#FF5200';ctx.lineWidth=2.5;
     ctx.beginPath();ctx.moveTo(sx-s,sy-s);ctx.lineTo(sx+s,sy+s);ctx.stroke();
     ctx.beginPath();ctx.moveTo(sx+s,sy-s);ctx.lineTo(sx-s,sy+s);ctx.stroke();
   });
 
-  // Drawn line (fully flexible — can start from axis edge or anywhere)
-  if(ngLine){
+  // regression line
+  if(regressionLineDrawn){
+    const pts=placedOrders.map(o=>({x:o.distance,y:o.time}));
+    const n=pts.length,sx=pts.reduce((a,p)=>a+p.x,0),sy=pts.reduce((a,p)=>a+p.y,0);
+    const sxy=pts.reduce((a,p)=>a+p.x*p.y,0),sxx=pts.reduce((a,p)=>a+p.x*p.x,0);
+    const slope=(n*sxy-sx*sy)/(n*sxx-sx*sx)||0,intercept=(sy-slope*sx)/n;
     ctx.strokeStyle='#1C1C1C';ctx.lineWidth=2.5;ctx.setLineDash([]);
-    ctx.beginPath();ctx.moveTo(ngLine.x1,ngLine.y1);ctx.lineTo(ngLine.x2,ngLine.y2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(toSX(xMin),toSY(slope*xMin+intercept));ctx.lineTo(toSX(xMax),toSY(slope*xMax+intercept));ctx.stroke();
   }
-
-  // Line being dragged (preview)
-  if(ngLineStart){
-    ctx.strokeStyle='rgba(28,28,28,0.4)';ctx.lineWidth=2;ctx.setLineDash([6,4]);
-    ctx.beginPath();ctx.moveTo(ngLineStart.sx,ngLineStart.sy);ctx.lineTo(ngLineStart.curSx||ngLineStart.sx,ngLineStart.curSy||ngLineStart.sy);ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
-  // Reading/corresponding lines
-  ngReadingLines.forEach(rl=>{
-    const sx=toSX(rl.x),sy=toSY(rl.y);
-    ctx.strokeStyle='#1565c0';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
-    ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx,H-pad.bottom);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(pad.left,sy);ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle='#1565c0';
-    ctx.beginPath();ctx.arc(sx,H-pad.bottom,5,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(pad.left,sy,5,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(sx,sy,5,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#1565c0';ctx.font='bold 11px DM Sans,sans-serif';
-    ctx.textAlign='center';ctx.fillText(rl.x.toFixed(1),sx,H-pad.bottom+14);
-    ctx.textAlign='right';ctx.fillText(rl.y.toFixed(1),pad.left-8,sy+4);
-  });
-  ctx.setLineDash([]);
-
-  // Mode hint overlay
-  const hints={point:'Click on graph to plot a point',line:'Click & drag to draw a line from any point (axes included)',readX:'Click on the line to read X & Y values',readY:'Click on the line to read X & Y values'};
-  ctx.fillStyle='rgba(255,82,0,0.12)';ctx.beginPath();ctx.roundRect?ctx.roundRect(pad.left+6,pad.top+6,220,24,6):ctx.rect(pad.left+6,pad.top+6,220,24);ctx.fill();
-  ctx.fillStyle='#d94600';ctx.font='bold 11px DM Sans,sans-serif';ctx.textAlign='left';ctx.fillText('Mode: '+hints[ngMode],pad.left+12,pad.top+22);
 }
 
-function ngGetCanvasPoint(e,canvas){
-  const rect=canvas.getBoundingClientRect();
-  const scaleX=(canvas.width/(window.devicePixelRatio||1))/rect.width;
-  const scaleY=(canvas.height/(window.devicePixelRatio||1))/rect.height;
-  return {cx:(e.clientX-rect.left)*scaleX, cy:(e.clientY-rect.top)*scaleY};
+function toggleRegressionLine(){
+  regressionLineDrawn=!regressionLineDrawn;
+  const btn=document.getElementById('btnDrawLine');
+  btn.classList.toggle('active-line',regressionLineDrawn);
+  btn.textContent=regressionLineDrawn?'\u2705 Line Drawn \u2014 Click to Remove':'\uD83D\uDCCF Draw Best-Fit Line';
+  drawScatterPlot();
 }
+function replotGraph(){regressionLineDrawn=false;document.getElementById('btnDrawLine').classList.remove('active-line');document.getElementById('btnDrawLine').textContent='\uD83D\uDCCF Draw Best-Fit Line';drawScatterPlot();showToast('Graph replotted');}
+window.addEventListener('resize',()=>{if(document.getElementById('graphPage').classList.contains('active'))drawScatterPlot();});
 
-function ngSnapToAxis(cx,cy,coords){
-  // If near y-axis, snap to y-axis; if near x-axis, snap to x-axis
-  const {pad,cw,ch} = coords;
-  const snapDist=14;
-  let snappedCx=cx, snappedCy=cy;
-  if(Math.abs(cx-pad.left)<snapDist) snappedCx=pad.left;
-  if(Math.abs(cy-(ch-pad.bottom))<snapDist) snappedCy=ch-pad.bottom;
-  return {cx:snappedCx, cy:snappedCy};
-}
-
-function ngInitCanvas(){
-  const canvas=document.getElementById('newGraphCanvas');
-
-  canvas.onmousedown=function(e){
-    const {cx,cy}=ngGetCanvasPoint(e,canvas);
-    const coords=ngGetCoords();
-    const {pad,toSX,toSY,fromSX,fromSY,cw,ch}=coords;
-    if(ngMode==='point'){
-      // Only plot if inside plot area
-      if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
-      const xV=Math.round(fromSX(cx)), yV=Math.round(fromSY(cy));
-      if(xV<NG_XMIN||xV>NG_XMAX||yV<NG_YMIN||yV>NG_YMAX) return;
-      ngPlottedPts.push({x:xV,y:yV});
-      ngDraw();
-      showToast('Point plotted: ('+xV+', '+yV+')');
-    } else if(ngMode==='line'){
-      // Allow starting from anywhere including axes
-      const snapped=ngSnapToAxis(cx,cy,coords);
-      ngLineStart={sx:snapped.cx, sy:snapped.cy, curSx:snapped.cx, curSy:snapped.cy};
-      ngDraw();
-    } else if(ngMode==='readX'||ngMode==='readY'){
-      if(!ngLine) return;
-      if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
-      // Find Y on line at given X (line goes from canvas pixel coords)
-      const {x1,y1,x2,y2}=ngLine;
-      if(x2===x1) return;
-      const t=(cx-x1)/(x2-x1);
-      const lineY=y1+t*(y2-y1);
-      const dataX=fromSX(cx), dataY=fromSY(lineY);
-      if(dataX<NG_XMIN||dataX>NG_XMAX||dataY<NG_YMIN||dataY>NG_YMAX) return;
-      ngReadingLines.push({x:Math.round(dataX*2)/2, y:Math.round(dataY*2)/2});
-      ngDraw();
-      showToast('Reading: x='+ngReadingLines[ngReadingLines.length-1].x+', y='+ngReadingLines[ngReadingLines.length-1].y);
-    }
-  };
-
-  canvas.onmousemove=function(e){
-    if(ngMode!=='line'||!ngLineStart) return;
-    const {cx,cy}=ngGetCanvasPoint(e,canvas);
-    const coords=ngGetCoords();
-    const snapped=ngSnapToAxis(cx,cy,coords);
-    ngLineStart.curSx=snapped.cx; ngLineStart.curSy=snapped.cy;
-    ngDraw();
-  };
-
-  canvas.onmouseup=function(e){
-    if(ngMode!=='line'||!ngLineStart) return;
-    const {cx,cy}=ngGetCanvasPoint(e,canvas);
-    const coords=ngGetCoords();
-    const snapped=ngSnapToAxis(cx,cy,coords);
-    const dist=Math.hypot(snapped.cx-ngLineStart.sx, snapped.cy-ngLineStart.sy);
-    if(dist>10){
-      ngLine={x1:ngLineStart.sx,y1:ngLineStart.sy,x2:snapped.cx,y2:snapped.cy};
-      showToast('Line drawn! Switch to Read X/Y to take readings.');
-    }
-    ngLineStart=null;
-    ngDraw();
-  };
-
-  canvas.onmouseleave=function(){
-    if(ngLineStart && ngMode==='line'){ngLineStart=null;ngDraw();}
-  };
-}
-
-function ngAddRow(){
-  const x=parseFloat(document.getElementById('ngInputX').value);
-  const y=parseFloat(document.getElementById('ngInputY').value);
-  if(isNaN(x)||isNaN(y)){showToast('Enter valid X and Y values');return;}
-  if(x<0||x>20){showToast('X must be between 0 and 20');return;}
-  if(y<0||y>100){showToast('Y must be between 0 and 100');return;}
-  ngData.push({x,y});
-  document.getElementById('ngInputX').value='';
-  document.getElementById('ngInputY').value='';
-  ngRefreshTable();
-  document.getElementById('ngInputX').focus();
-}
-
-function ngRefreshTable(){
-  const empty=document.getElementById('ngTableEmpty');
-  const table=document.getElementById('ngDataTable');
-  if(!ngData.length){empty.style.display='block';table.style.display='none';return;}
-  empty.style.display='none';table.style.display='table';
-  document.getElementById('ngTableBody').innerHTML=ngData.map((r,i)=>
-    `<tr><td>${i+1}</td><td class="dist-val">${r.x}</td><td class="time-val">${r.y}</td><td><button onclick="ngDeleteRow(${i})" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:14px;font-weight:700;">✕</button></td></tr>`
-  ).join('');
-}
-
-function ngDeleteRow(i){ngData.splice(i,1);ngRefreshTable();}
-
-function ngPlotPoints(){
-  if(!ngData.length){showToast('Add data rows first!');return;}
-  ngPlottedPts=[...ngData];
-  ngDraw();
-  showToast(ngData.length+' points plotted! Switch to Draw Line mode to draw your line.');
-}
-
-function ngClearPoints(){ngPlottedPts=[];ngDraw();showToast('Points cleared');}
-function ngClearLine(){ngLine=null;ngReadingLines=[];ngDraw();showToast('Line cleared');}
-function ngClearAll(){ngPlottedPts=[];ngLine=null;ngReadingLines=[];ngLineStart=null;ngDraw();showToast('All cleared');}
-function ngClearData(){ngData=[];ngRefreshTable();}
-
-window.addEventListener('resize',()=>{
-  if(document.getElementById('newGraphPage').classList.contains('active')) ngDraw();
-});
-
-
+/* PAGE NAV */
 function showPage(id){
-  const hp=document.getElementById('homePage');
-  if(hp) hp.style.display=(id==='homePage')?'block':'none';
-  ['restPage','checkoutPage','graphPage','newGraphPage'].forEach(p=>{
-    const el=document.getElementById(p);
-    if(el) el.classList.toggle('active',p===id);
-  });
+  document.getElementById('homePage').style.display=(id==='homePage')?'block':'none';
+  ['restPage','checkoutPage','graphPage'].forEach(p=>document.getElementById(p).classList.toggle('active',p===id));
 }
 function goHome(){showPage('homePage');currentRestId=null;window.scrollTo(0,0);}
 
@@ -1961,10 +1444,7 @@ function saveNewAddress(){
 }
 
 /* INIT */
-try{renderHome();}catch(e){console.error('renderHome failed',e);}
-try{initHeroSlideshow();}catch(e){console.error('heroSlideshow failed',e);}
-showPage('homePage');
-setTimeout(ngInitCanvas, 100);
+renderHome();initHeroSlideshow();showPage('homePage');
 </script>
 </body>
 </html>
