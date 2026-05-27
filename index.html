@@ -216,7 +216,6 @@ button:not(.qty-btn):not(.cls-btn):active{transform:scale(.97)}
 .rest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 60%)}
 .rest-hero-back{position:absolute;top:18px;left:18px;width:38px;height:38px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;cursor:pointer;transition:background .2s}
 .rest-hero-back:hover{background:rgba(255,255,255,.3)}
-.rest-hero-logo{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:56px;height:56px;border-radius:14px;overflow:hidden;background:white;box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;font-size:30px}
 .rest-info-card{background:white;border-radius:var(--r-lg);padding:20px 22px;margin:-36px 16px 0;box-shadow:var(--shadow-lg);position:relative;z-index:10}
 .rest-info-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
 .rest-info-badge{font-size:11px;color:var(--gray);display:flex;align-items:center;gap:5px;margin-bottom:4px}
@@ -563,7 +562,7 @@ td.time-val{font-weight:700;color:var(--green)}
     <div class="hero-inner">
       <!-- SINGLE DYNAMIC BIG HERO CARD -->
       <div class="hero-big-card" id="heroBigCard">
-        <div class="hero-big-left" id="heroBigLeft">
+        <div class="hero-big-left" id="heroBigLeft" style="position:relative;z-index:2">
           <div class="hero-big-eyebrow" id="heroBigEyebrow">Limited Time Offer</div>
           <div class="hero-big-title" id="heroBigTitle">CRAVE<span>-ATHON</span></div>
           <div class="hero-big-sub" id="heroBigSub">Min. &#x20B9;150 OFF &amp; More</div>
@@ -572,14 +571,15 @@ td.time-val{font-weight:700;color:var(--green)}
             <button class="hero-big-secondary" id="heroBigSecBtn">Explore Deals</button>
           </div>
         </div>
-        <div class="hero-big-img" id="heroBigImg">
-          <div class="hero-big-img-inner" id="heroBigImgInner">&#x1F35B;</div>
-        </div>
+        <!-- Full background image — managed by applyHeroSlide() -->
+        <img id="heroBgImg" alt="" aria-hidden="true"
+             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.38;border-radius:inherit;pointer-events:none;transition:opacity .6s ease">
+        <div style="position:absolute;inset:0;z-index:1;border-radius:inherit;background:linear-gradient(90deg,rgba(0,0,0,.6) 30%,rgba(0,0,0,.1) 100%);pointer-events:none"></div>
         <!-- Slide dots -->
-        <div class="hero-big-dots" id="heroBigDots"></div>
+        <div class="hero-big-dots" id="heroBigDots" style="position:relative;z-index:3"></div>
         <!-- Arrow controls -->
-        <button class="hero-big-arrow hero-big-prev" onclick="heroPrev()">&#x2039;</button>
-        <button class="hero-big-arrow hero-big-next" onclick="heroNext()">&#x203A;</button>
+        <button class="hero-big-arrow hero-big-prev" onclick="heroPrev()" style="z-index:3">&#x2039;</button>
+        <button class="hero-big-arrow hero-big-next" onclick="heroNext()" style="z-index:3">&#x203A;</button>
       </div>
     </div>
   </div>
@@ -610,10 +610,9 @@ td.time-val{font-weight:700;color:var(--green)}
 <!-- RESTAURANT INNER PAGE -->
 <div id="restPage" class="inner-page">
   <div class="rest-hero">
-    <div class="rest-hero-ph" id="restHeroPh"></div>
+    <img id="restHeroImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;opacity:0.75">
     <div class="rest-hero-overlay"></div>
     <button class="rest-hero-back" onclick="goHome()">&#x2190;</button>
-    <div class="rest-hero-logo"><span id="restLogoSym"></span></div>
   </div>
   <div class="page-body" style="padding-top:0">
     <div class="rest-info-card">
@@ -1079,7 +1078,7 @@ const RESTAURANTS = [
     menu:{ "Top Picks":[ {name:"Dahi Puri",desc:"Crispy puris with yogurt & chutneys",price:70,orig:90,img:"images/dahi-puri.jpg",veg:true}, {name:"Papdi Chaat",desc:"Crispy papdi with chickpeas & chutneys",price:80,orig:100,img:"images/papdi-chaat.jpg",veg:true} ],
       "Chaat":[ {name:"Raj Kachori",desc:"Giant kachori filled with sprouts & curd",price:100,orig:130,img:"images/raj-kachori.jpg",veg:true}, {name:"Aloo Tikki Chaat",desc:"Potato patties with chutney & yogurt",price:80,orig:100,img:"images/aloo-tikki.jpg",veg:true} ] }
   },
-  { id:23, name:"Steak & Ale", cuisine:"Continental \u00B7 Steaks \u00B7 Mocktails", rating:4.2, ratingCount:"5K+", time:"35-50", discount:"\u20B9180 OFF", discountAbove:"above \u20B9999", category:"Continental", img:"images/rest-steak.jpg", ph:"\uD83E\uDD69", area:"Jubilee Hills", baseDistKm:9,
+  { id:23, name:"Steak & Ale", cuisine:"Continental \u00B7 Steaks \u00B7 Beer", rating:4.2, ratingCount:"5K+", time:"35-50", discount:"\u20B9180 OFF", discountAbove:"above \u20B9999", category:"Continental", img:"images/rest-steak.jpg", ph:"\uD83E\uDD69", area:"Jubilee Hills", baseDistKm:9,
     deal:"Free Mocktail with Steak", dealSub:"ON SELECTED STEAKS", dealCnt:"2/5",
     menu:{ "Top Picks":[ {name:"Ribeye Steak",desc:"350g prime ribeye with peppercorn sauce",price:650,orig:799,img:"images/ribeye.jpg",veg:false}, {name:"Mushroom Stroganoff",desc:"Creamy mushroom sauce over pasta",price:280,orig:350,img:"images/stroganoff.jpg",veg:true} ],
       "Steaks":[ {name:"Sirloin",desc:"250g sirloin with garlic butter & fries",price:520,orig:650,img:"images/sirloin.jpg",veg:false}, {name:"Grilled Chicken Steak",desc:"Herb-marinated chicken breast",price:320,orig:400,img:"images/chicken-steak.jpg",veg:false} ] }
@@ -1217,11 +1216,11 @@ const _origToggleMode=toggleMode;
 
 /* ── BIG HERO SLIDESHOW ── */
 const HERO_SLIDES=[
-  {bg:'linear-gradient(135deg,#4a0f00 0%,#8a2500 55%,#4a0f00 100%)',eyebrow:'Limited Time Offer',title:'CRAVE<span>-ATHON</span>',sub:'Min. \u20B9150 OFF & More',cta:'Order Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'View Deals',img:'\uD83C\uDF5B',eyebrowColor:'rgba(255,200,150,.85)',titleColor:'var(--orange)',subColor:'rgba(255,255,255,.65)'},
-  {bg:'linear-gradient(135deg,#0a2744 0%,#1565c0 55%,#0a2744 100%)',eyebrow:'Summer Fest',title:'60%<span> OFF</span>',sub:'Up to 60% off on your favourites',cta:'Grab Deals \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Browse Menu',img:'\uD83C\uDF66',eyebrowColor:'rgba(180,220,255,.85)',titleColor:'#64b5f6',subColor:'rgba(255,255,255,.7)'},
-  {bg:'linear-gradient(135deg,#1a3300 0%,#2e7d32 55%,#1a3300 100%)',eyebrow:'Free Delivery',title:'FREE<span> DELIVERY</span>',sub:'On all orders above \u20B999',cta:'Order Free \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'How it works',img:'\uD83D\uDEB4',eyebrowColor:'rgba(200,255,180,.85)',titleColor:'#81c784',subColor:'rgba(255,255,255,.7)'},
-  {bg:'linear-gradient(135deg,#2d0040 0%,#7b1fa2 55%,#2d0040 100%)',eyebrow:'Binge Saver',title:'\u20B9150<span> OFF</span>',sub:'Min \u20B9150 off on orders above \u20B9499',cta:'Save Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Best Deals',img:'\uD83C\uDF54',eyebrowColor:'rgba(240,180,255,.85)',titleColor:'#ce93d8',subColor:'rgba(255,255,255,.7)'},
-  {bg:'linear-gradient(135deg,#1a1500 0%,#f57f17 55%,#1a1500 100%)',eyebrow:'Value Pick',title:'MEALS<span> AT \u20B999</span>',sub:'Budget meals starting at just \u20B999',cta:'Explore \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'See Menu',img:'\uD83C\uDF5C',eyebrowColor:'rgba(255,240,180,.85)',titleColor:'#ffcc02',subColor:'rgba(255,255,255,.7)'},
+  {bg:'linear-gradient(135deg,#4a0f00 0%,#8a2500 55%,#4a0f00 100%)',eyebrow:'Limited Time Offer',title:'CRAVE<span>-ATHON</span>',sub:'Min. \u20B9150 OFF & More',cta:'Order Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'View Deals',img:'\uD83C\uDF5B',imgSrc:'images/hero-craveathon.jpg',eyebrowColor:'rgba(255,200,150,.85)',titleColor:'var(--orange)',subColor:'rgba(255,255,255,.65)'},
+  {bg:'linear-gradient(135deg,#0a2744 0%,#1565c0 55%,#0a2744 100%)',eyebrow:'Summer Fest',title:'60%<span> OFF</span>',sub:'Up to 60% off on your favourites',cta:'Grab Deals \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Browse Menu',img:'\uD83C\uDF66',imgSrc:'images/hero-summer-fest.jpg',eyebrowColor:'rgba(180,220,255,.85)',titleColor:'#64b5f6',subColor:'rgba(255,255,255,.7)'},
+  {bg:'linear-gradient(135deg,#1a3300 0%,#2e7d32 55%,#1a3300 100%)',eyebrow:'Free Delivery',title:'FREE<span> DELIVERY</span>',sub:'On all orders above \u20B999',cta:'Order Free \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'How it works',img:'\uD83D\uDEB4',imgSrc:'images/hero-free-delivery.jpg',eyebrowColor:'rgba(200,255,180,.85)',titleColor:'#81c784',subColor:'rgba(255,255,255,.7)'},
+  {bg:'linear-gradient(135deg,#2d0040 0%,#7b1fa2 55%,#2d0040 100%)',eyebrow:'Binge Saver',title:'\u20B9150<span> OFF</span>',sub:'Min \u20B9150 off on orders above \u20B9499',cta:'Save Now \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'Best Deals',img:'\uD83C\uDF54',imgSrc:'images/hero-binge-saver.jpg',eyebrowColor:'rgba(240,180,255,.85)',titleColor:'#ce93d8',subColor:'rgba(255,255,255,.7)'},
+  {bg:'linear-gradient(135deg,#1a1500 0%,#f57f17 55%,#1a1500 100%)',eyebrow:'Value Pick',title:'MEALS<span> AT \u20B999</span>',sub:'Budget meals starting at just \u20B999',cta:'Explore \u2192',ctaFn:"document.getElementById('restaurants').scrollIntoView({behavior:'smooth'})",sec:'See Menu',img:'\uD83C\uDF5C',imgSrc:'images/hero-value-pick.jpg',eyebrowColor:'rgba(255,240,180,.85)',titleColor:'#ffcc02',subColor:'rgba(255,255,255,.7)'},
 ];
 let heroIdx=0, heroTimer=null;
 function initHeroSlideshow(){
@@ -1246,7 +1245,15 @@ function applyHeroSlide(i){
   document.getElementById('heroBigTitle').style.color=s.titleColor;
   document.getElementById('heroBigSub').textContent=s.sub;
   document.getElementById('heroBigSub').style.color=s.subColor;
-  document.getElementById('heroBigImgInner').textContent=s.img;
+  // Full-bleed background image
+  const bg=document.getElementById('heroBgImg');
+  if(bg && s.imgSrc){
+    bg.src=s.imgSrc;
+    bg.style.opacity='0.38';
+    bg.onerror=function(){ bg.style.opacity='0'; };
+  } else if(bg){
+    bg.src=''; bg.style.opacity='0';
+  }
   const cta=document.getElementById('heroBigCta');
   cta.innerHTML=s.cta;
   cta.onclick=new Function(s.ctaFn);
@@ -1279,8 +1286,11 @@ function openRestaurant(id){
   currentRestId=id;
   const r=RESTAURANTS.find(x=>x.id===id);
   showPage('restPage'); window.scrollTo(0,0);
-  document.getElementById('restHeroPh').textContent=r.ph;
-  document.getElementById('restLogoSym').textContent=r.ph;
+  // Hero background — same image as the restaurant card
+  const heroImg = document.getElementById('restHeroImg');
+  heroImg.src = r.img;
+  heroImg.onerror = function(){ heroImg.style.opacity='0'; };
+  heroImg.onload  = function(){ heroImg.style.opacity='0.75'; };
   document.getElementById('restCat').textContent='Best in '+r.category;
   document.getElementById('restCatItalic').textContent=r.category.toLowerCase();
   document.getElementById('restInfoName').textContent=r.name;
