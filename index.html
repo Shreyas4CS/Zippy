@@ -804,11 +804,9 @@ td.time-val{font-weight:700;color:var(--green)}
       </div>
 
       <div class="graph-controls">
-        <button class="btn-draw-line" id="btnDrawLine" onclick="toggleRegressionLine()">&#x1F4CF; Draw Best-Fit Line</button>
         <button class="btn-clear-pts" id="btnClearReadings" onclick="clearSGReadings()">&#x2715; Clear Readings</button>
         <button class="btn-clear-pts" id="btnClearManualLine" onclick="clearSGManualLine()">&#x21BA; Clear Line</button>
         <button class="btn-clear-pts" onclick="replotGraph()">&#x1F5D1; Clear All</button>
-        <button class="btn-new-graph" onclick="openNewGraphPage()">&#x2795; Plot New Graph</button>
       </div>
       <div id="sgEquation" style="display:none;margin-top:10px;background:var(--orange-bg);border:1.5px solid var(--orange);border-radius:10px;padding:10px 16px;font-size:15px;font-weight:800;color:var(--orange);font-family:'Nunito',sans-serif;letter-spacing:0.3px;">&#x1F4C8; Regression Equation: <span id="sgEquationText"></span></div>
       <div class="graph-hint" id="sgHint">&#x1F4A1; Use the mode buttons above to draw a line or read values. Click the canvas to interact.</div>
@@ -822,6 +820,37 @@ td.time-val{font-weight:700;color:var(--green)}
       <div class="graph-side-head"><h3>Data Table</h3><p>Distance &amp; Time values only</p></div>
       <div class="graph-side-scroll">
         <table><thead><tr><th>#</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="graphSideTableBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREDICTION TABLE — below scatter graph, always visible -->
+  <div style="max-width:1280px;margin:0 auto;padding:0 24px 60px">
+    <div class="data-input-table-wrap">
+      <div class="data-input-table-head">
+        <div>
+          <h3>&#x1F4CA; Prediction Table</h3>
+          <p>Enter distance &amp; time values; traffic and rain columns adjust automatically</p>
+        </div>
+      </div>
+      <div class="data-input-table-scroll">
+        <table class="data-input-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Distance (km)</th>
+              <th>Time (mins)</th>
+              <th>Traffic (+15 mins)</th>
+              <th>Rain (+20 mins)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="manualDataBody"></tbody>
+        </table>
+      </div>
+      <div class="data-input-table-footer">
+        <button class="btn-add-data-row" onclick="addManualDataRow()">+ Add Row</button>
+        <span style="font-size:12px;color:var(--gray-light)">Traffic adds 15 mins &bull; Rain adds 20 mins to the base time</span>
       </div>
     </div>
   </div>
@@ -900,36 +929,6 @@ td.time-val{font-weight:700;color:var(--green)}
     </div>
   </div>
 
-  <!-- PREDICTION TABLE — below graph -->
-  <div style="max-width:1280px;margin:0 auto;padding:0 24px 60px">
-    <div class="data-input-table-wrap">
-      <div class="data-input-table-head">
-        <div>
-          <h3>&#x1F4CA; Prediction Table</h3>
-          <p>Enter distance &amp; time values; traffic and rain columns adjust automatically</p>
-        </div>
-      </div>
-      <div class="data-input-table-scroll">
-        <table class="data-input-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Distance (km)</th>
-              <th>Time (mins)</th>
-              <th>Traffic (+15 mins)</th>
-              <th>Rain (+20 mins)</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="manualDataBody"></tbody>
-        </table>
-      </div>
-      <div class="data-input-table-footer">
-        <button class="btn-add-data-row" onclick="addManualDataRow()">+ Add Row</button>
-        <span style="font-size:12px;color:var(--gray-light)">Traffic adds 15 mins &bull; Rain adds 20 mins to the base time</span>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- LOGOUT CONFIRM MODAL -->
@@ -1595,11 +1594,10 @@ function openGraphPage(){
   if(!placedOrders.length){showToast('Place orders first!');return;}
   showPage('graphPage');window.scrollTo(0,0);
   regressionLineDrawn=false;readingLines=[];sgManualLine=null;sgLineStart=null;
-  document.getElementById('btnDrawLine').classList.remove('active-line');
-  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
-  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
   document.getElementById('graphSideTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
-  setSGMode('readX');
+  // Hide equation — children will draw their own line to get the equation
+  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
+  setSGMode('line');
   setTimeout(()=>{drawScatterPlot();initExistingGraphClick();},80);
 }
 function closeGraphPage(){showPage('homePage');window.scrollTo(0,0);}
@@ -1628,7 +1626,11 @@ function setSGMode(mode){
 }
 
 function clearSGReadings(){ readingLines=[]; drawScatterPlot(); showToast('Readings cleared'); }
-function clearSGManualLine(){ sgManualLine=null; sgLineStart=null; drawScatterPlot(); showToast('Manual line cleared'); }
+function clearSGManualLine(){
+  sgManualLine=null; sgLineStart=null;
+  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
+  drawScatterPlot(); showToast('Line cleared — draw a new one!');
+}
 
 /* ── nice integer step for axis ticks (e.g. 2,4,5,10,20) ── */
 function niceStep(range, targetTicks){
@@ -1798,6 +1800,19 @@ function initExistingGraphClick(){
       const dist=Math.hypot(s.cx-sgLineStart.sx, s.cy-sgLineStart.sy);
       if(dist>10){
         sgManualLine={x1:sgLineStart.sx,y1:sgLineStart.sy,x2:s.cx,y2:s.cy};
+        // Compute and show slope equation for the drawn line
+        const canvas2=document.getElementById('regressionCanvas');
+        if(canvas2._fromSX && canvas2._fromSY){
+          const dx1=canvas2._fromSX(sgManualLine.x1), dy1=canvas2._fromSY(sgManualLine.y1);
+          const dx2=canvas2._fromSX(sgManualLine.x2), dy2=canvas2._fromSY(sgManualLine.y2);
+          if(dx2!==dx1){
+            const slope=(dy2-dy1)/(dx2-dx1);
+            const intercept=dy1-slope*dx1;
+            const sign=intercept>=0?'+':'-';
+            const eq=document.getElementById('sgEquation');
+            if(eq){eq.style.display='block';eq.innerHTML='&#x2705; Your Line Equation: <strong>y = '+slope.toFixed(2)+'x '+sign+' '+Math.abs(intercept).toFixed(2)+'</strong>';}
+          }
+        }
         showToast('Line drawn! Switch to Read X/Y to take readings.');
       }
       sgLineStart=null;
@@ -1867,11 +1882,9 @@ function toggleRegressionLine(){
   drawScatterPlot();
 }
 function replotGraph(){
-  regressionLineDrawn=false; readingLines=[];
-  document.getElementById('btnDrawLine').classList.remove('active-line');
-  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
+  regressionLineDrawn=false; readingLines=[]; sgManualLine=null;
   const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
-  drawScatterPlot(); showToast('Graph replotted');
+  drawScatterPlot(); showToast('Graph replotted — draw your line!');
 }
 window.addEventListener('resize',()=>{if(document.getElementById('graphPage').classList.contains('active'))drawScatterPlot();});
 
