@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zippy by Cognospace</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Firebase SDK (compat) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 :root{
   --orange:#FF5200;--orange-light:#FF7340;--orange-dark:#D94600;
@@ -533,24 +530,6 @@ td.time-val{font-weight:700;color:var(--green)}
 @media(max-width:900px){.hero-banner{flex-direction:column;text-align:center;padding:28px 20px}.hero-img{width:100%;height:180px}.restaurant-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.form-row{grid-template-columns:1fr}}
 @media(max-width:640px){.header-inner{padding:0 14px;gap:10px}.header-location{max-width:160px}.hero-inner{padding:20px 14px}.deals-banner{padding:0 14px 20px}.page-body{padding:0 14px 50px}.restaurant-grid{grid-template-columns:1fr 1fr;gap:12px}.rest-img-wrap{height:130px}.cart-drawer{width:100%}.rest-info-card{margin:-28px 10px 0}.top-picks-grid{grid-template-columns:1fr 1fr}.pay-options{grid-template-columns:repeat(3,1fr)}.data-btns{flex-direction:column;width:100%}.graph-controls{flex-direction:column;align-items:flex-start}.graph-inner{padding:0 14px 40px}}
 @media(max-width:380px){.restaurant-grid{grid-template-columns:1fr}.top-picks-grid{grid-template-columns:1fr}.pay-options{grid-template-columns:repeat(2,1fr)}}
-
-/* ADMIN BUTTON */
-.btn-admin-nav{background:var(--black);color:white;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;transition:background .2s}
-.btn-admin-nav:hover{background:#333}
-
-/* PREDICTION TABLE */
-.prediction-section{margin-top:40px;padding-top:12px;border-top:2px dashed var(--border)}
-#predTable th,#predTable td{border:1px solid var(--border);padding:10px 14px;font-size:13px;text-align:left;min-width:90px}
-#predTable thead tr{background:var(--orange);color:white;font-weight:700}
-#predTable tbody tr:nth-child(even){background:#fafafa}
-#predTable tbody tr:hover{background:#fff5f0}
-#predTable td[contenteditable="true"]{background:#fffbf5;outline:2px solid var(--orange);outline-offset:-2px;cursor:text}
-#predTable th[contenteditable="true"]{background:var(--orange-dark);cursor:text;outline:2px solid white;outline-offset:-2px}
-#graphPredTable th,#graphPredTable td{border:1px solid var(--border);padding:6px 10px;font-size:12px;text-align:left}
-#graphPredTable thead tr{background:var(--orange);color:white;font-weight:700}
-#graphPredTable tbody tr:nth-child(even){background:#fafafa}
-.pred-delete-btn{background:none;border:none;color:#c0392b;cursor:pointer;font-size:13px;padding:2px 6px;border-radius:4px}
-.pred-delete-btn:hover{background:#ffeaea}
 </style>
 </head>
 <body>
@@ -573,8 +552,6 @@ td.time-val{font-weight:700;color:var(--green)}
         <img src="images/cognospace_logo.png" alt="Cognospace" onerror="this.style.display='none'">
       </a>
       <button class="cart-pill" onclick="openCart()">&#x1F6D2; Cart <span class="cart-num" id="cartNum">0</span></button>
-      <button class="btn-admin-nav" id="adminNavBtn" onclick="openAdminLogin()">&#x1F512; Admin</button>
-      <button class="btn-admin-nav btn-logout" id="adminLogoutBtn" onclick="adminLogout()" style="display:none;background:#c0392b;">&#x1F513; Logout</button>
     </div>
   </div>
 </header>
@@ -625,25 +602,6 @@ td.time-val{font-weight:700;color:var(--green)}
         <div class="data-table-head-bar"><h3>Distance vs Time &#x2014; Regression Dataset</h3><span id="dataTableInfo">0 records</span></div>
         <table><thead><tr><th>#</th><th>Restaurant</th><th>Item</th><th>Customer</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="dataTableBody"></tbody></table>
         <div class="table-foot-bar"><span id="ftAvgDist">Avg Distance: &#x2014;</span><span id="ftAvgTime">Avg Time: &#x2014;</span><span id="ftTotal">Total: 0 orders</span></div>
-      </div>
-    </div>
-
-    <!-- PREDICTION TABLE SECTION -->
-    <div class="prediction-section" id="predictionSection">
-      <div class="data-header" style="margin-bottom:16px">
-        <div class="sec-title">&#x1F52E; Prediction Table</div>
-        <span id="predAdminBadge" style="display:none;background:var(--orange);color:white;border-radius:50px;padding:4px 14px;font-size:12px;font-weight:700;">&#x1F6E0; Admin Editing</span>
-      </div>
-      <div id="predTableWrap" style="overflow-x:auto;border-radius:var(--r-md);box-shadow:var(--shadow-sm);">
-        <div id="predTableEmpty" style="text-align:center;padding:40px;color:var(--gray);font-size:14px;">&#x1F4CB; No prediction data yet. An admin will populate this table.</div>
-        <table id="predTable" style="display:none;width:100%;border-collapse:collapse;background:white;"></table>
-      </div>
-      <!-- Admin controls (hidden for users) -->
-      <div id="predAdminControls" style="display:none;margin-top:14px;display:none;gap:10px;flex-wrap:wrap;align-items:center">
-        <button class="btn-gen-table" onclick="predAddRow()">&#x2795; Add Row</button>
-        <button class="btn-gen-table" onclick="predAddCol()">&#x2795; Add Column</button>
-        <button class="btn-plot-graph" onclick="predSave()" style="background:var(--green);border-color:var(--green);">&#x1F4BE; Save Table</button>
-        <span id="predSaveStatus" style="font-size:12px;color:var(--green);font-weight:600;"></span>
       </div>
     </div>
   </div>
@@ -745,9 +703,10 @@ td.time-val{font-weight:700;color:var(--green)}
       <div class="graph-title">Scatter Plot &#x2014; Distance vs Delivery Time</div>
       <div class="graph-subtitle">X&#x2011;axis: Distance (km) &nbsp;|&nbsp; Y&#x2011;axis: Time (min)</div>
 
-      <!-- Mode bar -->
+      <!-- Mode bar (same as new graph) -->
       <div class="ng-mode-bar">
-        <button class="ng-mode-btn" id="sgModeLine" onclick="setSGMode('line')">&#x270F;&#xFE0F; Draw Line</button>
+        <button class="ng-mode-btn" id="sgModeNone" onclick="setSGMode('none')">&#x1F4CF; Best-Fit Line</button>
+        <button class="ng-mode-btn" id="sgModeLine" onclick="setSGMode('line')">&#x2014; Draw Line</button>
         <button class="ng-mode-btn active" id="sgModeReadX" onclick="setSGMode('readX')">&#x21E3; Read X value</button>
         <button class="ng-mode-btn" id="sgModeReadY" onclick="setSGMode('readY')">&#x21E2; Read Y value</button>
       </div>
@@ -757,17 +716,14 @@ td.time-val{font-weight:700;color:var(--green)}
       </div>
 
       <div class="graph-controls">
+        <button class="btn-draw-line" id="btnDrawLine" onclick="toggleRegressionLine()">&#x1F4CF; Draw Best-Fit Line</button>
         <button class="btn-clear-pts" id="btnClearReadings" onclick="clearSGReadings()">&#x2715; Clear Readings</button>
         <button class="btn-clear-pts" id="btnClearManualLine" onclick="clearSGManualLine()">&#x21BA; Clear Line</button>
         <button class="btn-clear-pts" onclick="replotGraph()">&#x1F5D1; Clear All</button>
+        <button class="btn-new-graph" onclick="openNewGraphPage()">&#x2795; Plot New Graph</button>
       </div>
-      <div class="graph-hint" id="sgHint">&#x1F4A1; Select <b>Draw Line</b> to draw by hand (mouse or touch), then use Read X/Y to take readings.</div>
-      <!-- Slope equation box — shown after a line is drawn -->
-      <div id="sgEquationBox" style="display:none;margin-top:12px;background:linear-gradient(135deg,#fff8f0,#fff3e8);border:2px solid var(--orange);border-radius:12px;padding:14px 20px;">
-        <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">&#x1F4C8; Line Equation</div>
-        <div id="sgEquationText" style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--orange);letter-spacing:0.3px"></div>
-        <div id="sgSlopeDetails" style="font-size:12px;color:var(--gray);margin-top:6px;line-height:1.6"></div>
-      </div>
+      <div id="sgEquation" style="display:none;margin-top:10px;background:var(--orange-bg);border:1.5px solid var(--orange);border-radius:10px;padding:10px 16px;font-size:15px;font-weight:800;color:var(--orange);font-family:'Nunito',sans-serif;letter-spacing:0.3px;">&#x1F4C8; Regression Equation: <span id="sgEquationText"></span></div>
+      <div class="graph-hint" id="sgHint">&#x1F4A1; Use the mode buttons above to draw a line or read values. Click the canvas to interact.</div>
       <div class="graph-legend">
         <div class="legend-item"><span class="legend-x">&#xD7;</span> Data Point</div>
         <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;background:var(--black);vertical-align:middle"></span> Best-fit / Drawn Line</div>
@@ -778,12 +734,6 @@ td.time-val{font-weight:700;color:var(--green)}
       <div class="graph-side-head"><h3>Data Table</h3><p>Distance &amp; Time values only</p></div>
       <div class="graph-side-scroll">
         <table><thead><tr><th>#</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="graphSideTableBody"></tbody></table>
-      </div>
-      <!-- Prediction table on graph page (read-only view) -->
-      <div id="graphPredSection" style="margin-top:20px;border-top:2px dashed var(--border);padding-top:16px">
-        <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;color:var(--black);margin-bottom:10px">&#x1F52E; Prediction Table</div>
-        <div id="graphPredEmpty" style="font-size:12px;color:var(--gray);padding:12px 0;text-align:center">No prediction data yet.</div>
-        <div style="overflow-x:auto"><table id="graphPredTable" style="display:none;width:100%;border-collapse:collapse;font-size:12px;"></table></div>
       </div>
     </div>
   </div>
@@ -822,12 +772,6 @@ td.time-val{font-weight:700;color:var(--green)}
         2. Click <b>Plot Points</b> to place the × marks on the graph<br>
         3. Switch to <b>Draw Line</b> mode — click any start point on the graph (including on axes) and drag to draw a straight line<br>
         4. Use <b>Read X</b> or <b>Read Y</b> mode — click the best-fit line to draw corresponding dashed lines to both axes and read the values
-      </div>
-      <!-- Slope equation box for new graph page -->
-      <div id="ngEquationBox" style="display:none;margin-top:12px;background:linear-gradient(135deg,#fff8f0,#fff3e8);border:2px solid var(--orange);border-radius:12px;padding:14px 20px;">
-        <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">&#x1F4C8; Line Equation</div>
-        <div id="ngEquationText" style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--orange);letter-spacing:0.3px"></div>
-        <div id="ngSlopeDetails" style="font-size:12px;color:var(--gray);margin-top:6px;line-height:1.6"></div>
       </div>
 
       <div class="ng-legend">
@@ -911,26 +855,6 @@ td.time-val{font-weight:700;color:var(--green)}
 </div>
 
 <div class="toast" id="toast"></div>
-
-<!-- ADMIN LOGIN MODAL -->
-<div class="modal-backdrop" id="adminLoginModal" style="display:none;z-index:9000;align-items:center;justify-content:center;">
-  <div class="modal-box" style="max-width:360px;padding:32px;text-align:left;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <h2 style="font-size:20px;font-weight:800">&#x1F512; Admin Login</h2>
-      <button onclick="closeAdminLogin()" style="background:none;font-size:20px;color:var(--gray);">&#x2715;</button>
-    </div>
-    <div class="form-group" style="margin-bottom:14px">
-      <label class="form-label">Username</label>
-      <input type="text" class="form-input" id="adminUser" placeholder="Admin" autocomplete="off">
-    </div>
-    <div class="form-group" style="margin-bottom:20px">
-      <label class="form-label">Password</label>
-      <input type="password" class="form-input" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()">
-    </div>
-    <div id="adminLoginError" style="display:none;color:#c0392b;font-size:12px;font-weight:600;margin-bottom:10px">&#x26A0; Incorrect credentials.</div>
-    <button class="btn-pay" onclick="doAdminLogin()" style="width:100%;margin-top:0">Login as Admin</button>
-  </div>
-</div>
 
 <!-- FOOTER -->
 <footer class="site-footer">
@@ -1486,8 +1410,7 @@ function processPayment(){
   const mult=getDeliveryMultiplier();const time=Math.max(8,Math.round((10+dist*2.5+(Math.random()*10-5))*mult));
   const sub=cartItems.reduce((s,c)=>s+c.price*c.qty,0);
   const loc=customLocation||(document.querySelector('.addr-option.selected .addr-text')?.textContent)||'User Location';
-  const currentMode=trafficOn?'traffic':rainOn?'rain':'normal';
-  cartItems.forEach(ci=>{placedOrders.push({restaurant:ci.restName,item:ci.itemName,customer:document.getElementById('coName').value.trim(),location:loc,distance:dist,time,trafficMode:currentMode});});
+  cartItems.forEach(ci=>{placedOrders.push({restaurant:ci.restName,item:ci.itemName,customer:document.getElementById('coName').value.trim(),location:loc,distance:dist,time});});
   document.getElementById('modalDist').textContent=dist+' km';
   document.getElementById('modalTime').textContent=time+' min';
   document.getElementById('modalAmt').textContent='\u20B9'+(sub+5);
@@ -1505,13 +1428,7 @@ function closeSuccessModal(){document.getElementById('successModal').classList.r
 /* DATA TABLE */
 function generateTable(){
   if(!placedOrders.length)return;
-  document.getElementById('dataTableBody').innerHTML=placedOrders.map((o,i)=>{
-    let timeDisplay=''+o.time;
-    if(o.trafficMode==='traffic') timeDisplay=o.time+' <span style="font-size:11px;color:#e65100;font-weight:700">(Traffic)</span>';
-    else if(o.trafficMode==='rain') timeDisplay=o.time+' <span style="font-size:11px;color:#1565c0;font-weight:700">(Rain)</span>';
-    // normal: no bracket, just the number
-    return`<tr><td>${i+1}</td><td>${o.restaurant}</td><td>${o.item}</td><td>${o.customer}</td><td class="dist-val">${o.distance}</td><td class="time-val">${timeDisplay}</td></tr>`;
-  }).join('');
+  document.getElementById('dataTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td>${o.restaurant}</td><td>${o.item}</td><td>${o.customer}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
   const avgD=Math.round(placedOrders.reduce((s,o)=>s+o.distance,0)/placedOrders.length);
   const avgT=Math.round(placedOrders.reduce((s,o)=>s+o.time,0)/placedOrders.length);
   document.getElementById('ftAvgDist').textContent='Avg Distance: '+avgD+' km';
@@ -1526,9 +1443,11 @@ function openGraphPage(){
   if(!placedOrders.length){showToast('Place orders first!');return;}
   showPage('graphPage');window.scrollTo(0,0);
   regressionLineDrawn=false;readingLines=[];sgManualLine=null;sgLineStart=null;
-  const eq=document.getElementById('sgEquationBox'); if(eq) eq.style.display='none';
+  document.getElementById('btnDrawLine').classList.remove('active-line');
+  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
+  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
   document.getElementById('graphSideTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
-  setSGMode('line');
+  setSGMode('readX');
   setTimeout(()=>{drawScatterPlot();initExistingGraphClick();},80);
 }
 function closeGraphPage(){showPage('homePage');window.scrollTo(0,0);}
@@ -1539,28 +1458,25 @@ function closeNewGraphPage(){showPage('graphPage');window.scrollTo(0,0);setTimeo
 
 function setSGMode(mode){
   sgMode = mode;
-  ['sgModeLine','sgModeReadX','sgModeReadY'].forEach(id=>{
+  ['sgModeNone','sgModeLine','sgModeReadX','sgModeReadY'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.classList.remove('active');
   });
-  const map={line:'sgModeLine',readX:'sgModeReadX',readY:'sgModeReadY'};
+  const map={none:'sgModeNone',line:'sgModeLine',readX:'sgModeReadX',readY:'sgModeReadY'};
   const btn=document.getElementById(map[mode]); if(btn) btn.classList.add('active');
   const hints={
-    line:'Click & drag on the canvas (or drag with finger on touchscreen) to draw your line.',
-    readX:'Click/tap anywhere on a line to drop dashed reading lines to both axes.',
-    readY:'Click/tap anywhere on a line to drop dashed reading lines to both axes.'
+    none:'Click "Draw Best-Fit Line" button to toggle the regression line.',
+    line:'Click & drag on the canvas (axes included) to draw your own straight line.',
+    readX:'Click anywhere on a line to drop dashed reading lines to both axes.',
+    readY:'Click anywhere on a line to drop dashed reading lines to both axes.'
   };
-  const h=document.getElementById('sgHint'); if(h) h.innerHTML='💡 '+(hints[mode]||'');
+  const h=document.getElementById('sgHint'); if(h) h.textContent='💡 '+hints[mode];
   const canvas=document.getElementById('regressionCanvas');
   if(canvas) canvas.style.cursor=mode==='line'?'copy':'crosshair';
   drawScatterPlot();
 }
 
 function clearSGReadings(){ readingLines=[]; drawScatterPlot(); showToast('Readings cleared'); }
-function clearSGManualLine(){
-  sgManualLine=null; sgLineStart=null;
-  document.getElementById('sgEquationBox').style.display='none';
-  drawScatterPlot(); showToast('Manual line cleared');
-}
+function clearSGManualLine(){ sgManualLine=null; sgLineStart=null; drawScatterPlot(); showToast('Manual line cleared'); }
 
 /* ── nice integer step for axis ticks (e.g. 2,4,5,10,20) ── */
 function niceStep(range, targetTicks){
@@ -1709,66 +1625,34 @@ function sgSnapToAxis(cx,cy){
   return {cx,cy};
 }
 
-/* ── Compute & display slope equation from two canvas pixel points ── */
-function calcAndShowEquation(px1, py1, px2, py2, fromSX, fromSY, equationBoxId, equationTextId, slopeDetailsId){
-  // Convert pixel coords to data coords
-  const dx1 = fromSX(px1), dy1 = fromSY(py1);
-  const dx2 = fromSX(px2), dy2 = fromSY(py2);
-  const dxDiff = dx2 - dx1;
-  if(Math.abs(dxDiff) < 0.0001){
-    // Vertical line
-    document.getElementById(equationBoxId).style.display='block';
-    document.getElementById(equationTextId).textContent = 'x = ' + dx1.toFixed(2);
-    document.getElementById(slopeDetailsId).innerHTML = 'Vertical line &mdash; undefined slope';
-    return;
-  }
-  const m = (dy2 - dy1) / dxDiff;          // slope
-  const c = dy1 - m * dx1;                   // y-intercept
-  const sign = c >= 0 ? '+' : '−';
-  const absC = Math.abs(c);
-  // Format nicely
-  const mStr = m.toFixed(3).replace(/\.?0+$/, '') || '0';
-  const cStr = absC.toFixed(3).replace(/\.?0+$/, '') || '0';
-  const eqStr = `y = ${mStr}x ${sign} ${cStr}`;
-  document.getElementById(equationBoxId).style.display='block';
-  document.getElementById(equationTextId).textContent = eqStr;
-  document.getElementById(slopeDetailsId).innerHTML =
-    `<b>Slope (m):</b> ${m.toFixed(4)} &nbsp;|&nbsp; <b>Y-intercept (c):</b> ${c.toFixed(4)}<br>` +
-    `<b>Interpretation:</b> For every 1 km increase in distance, delivery time ${m>=0?'increases':'decreases'} by <b>${Math.abs(m).toFixed(2)} min</b>`;
-}
-
 function initExistingGraphClick(){
   const canvas=document.getElementById('regressionCanvas');
 
-  function sgHandleStart(e){
+  canvas.onmousedown=function(e){
     const {cx,cy}=sgGetCanvasPoint(e,canvas);
     if(sgMode==='line'){
       const s=sgSnapToAxis(cx,cy);
       sgLineStart={sx:s.cx,sy:s.cy,curSx:s.cx,curSy:s.cy};
       drawScatterPlot();
     }
-  }
-  function sgHandleMove(e){
+  };
+
+  canvas.onmousemove=function(e){
     if(sgMode!=='line'||!sgLineStart) return;
     const {cx,cy}=sgGetCanvasPoint(e,canvas);
     const s=sgSnapToAxis(cx,cy);
     sgLineStart.curSx=s.cx; sgLineStart.curSy=s.cy;
     drawScatterPlot();
-  }
-  function sgHandleEnd(e){
+  };
+
+  canvas.onmouseup=function(e){
     if(sgMode==='line' && sgLineStart){
       const {cx,cy}=sgGetCanvasPoint(e,canvas);
       const s=sgSnapToAxis(cx,cy);
       const dist=Math.hypot(s.cx-sgLineStart.sx, s.cy-sgLineStart.sy);
       if(dist>10){
         sgManualLine={x1:sgLineStart.sx,y1:sgLineStart.sy,x2:s.cx,y2:s.cy};
-        // Show slope equation
-        calcAndShowEquation(
-          sgLineStart.sx, sgLineStart.sy, s.cx, s.cy,
-          canvas._fromSX, canvas._fromSY,
-          'sgEquationBox','sgEquationText','sgSlopeDetails'
-        );
-        showToast('Line drawn! Equation shown below.');
+        showToast('Line drawn! Switch to Read X/Y to take readings.');
       }
       sgLineStart=null;
       drawScatterPlot();
@@ -1778,6 +1662,8 @@ function initExistingGraphClick(){
       const {cx,cy}=sgGetCanvasPoint(e,canvas);
       const pad=canvas._pad;
       if(cx<pad.left||cx>canvas._W-pad.right||cy<pad.top||cy>canvas._H-pad.bottom) return;
+
+      // Try best-fit line first, then manual line
       let lineY=null;
       if(sgManualLine){
         const {x1,y1,x2,y2}=sgManualLine;
@@ -1789,6 +1675,7 @@ function initExistingGraphClick(){
         lineY=canvas._toSY(dataY);
       }
       if(lineY===null){ showToast('Draw a line first, then read values!'); return; }
+
       const dataX=canvas._fromSX(cx);
       const dataY=canvas._fromSY(lineY);
       if(dataX<canvas._xMin||dataX>canvas._xMax||dataY<canvas._yMin||dataY>canvas._yMax) return;
@@ -1796,39 +1683,49 @@ function initExistingGraphClick(){
       drawScatterPlot();
       showToast('Reading: x='+readingLines[readingLines.length-1].x+', y='+readingLines[readingLines.length-1].y);
     }
-  }
+  };
 
-  canvas.onmousedown=function(e){ sgHandleStart(e); };
-  canvas.onmousemove=function(e){ sgHandleMove(e); };
-  canvas.onmouseup=function(e){ sgHandleEnd(e); };
-  canvas.onmouseleave=function(){ if(sgLineStart){ sgLineStart=null; drawScatterPlot(); } };
-
-  // Touch support
-  canvas.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    const touch=e.touches[0];
-    sgHandleStart({clientX:touch.clientX,clientY:touch.clientY});
-  },{passive:false});
-  canvas.addEventListener('touchmove',function(e){
-    e.preventDefault();
-    const touch=e.touches[0];
-    sgHandleMove({clientX:touch.clientX,clientY:touch.clientY});
-  },{passive:false});
-  canvas.addEventListener('touchend',function(e){
-    e.preventDefault();
-    const touch=e.changedTouches[0];
-    sgHandleEnd({clientX:touch.clientX,clientY:touch.clientY});
-  },{passive:false});
+  canvas.onmouseleave=function(){
+    if(sgLineStart){ sgLineStart=null; drawScatterPlot(); }
+  };
 }
 
 function toggleRegressionLine(){
-  // Best-fit line removed — this function is retained for legacy compatibility
+  if(placedOrders.length < 2){ showToast('Need at least 2 orders to draw best-fit line!'); return; }
+  regressionLineDrawn = !regressionLineDrawn;
+  readingLines = [];
+  const btn = document.getElementById('btnDrawLine');
+  if(regressionLineDrawn){
+    btn.classList.add('active-line');
+    btn.textContent = '✅ Best-Fit Line Drawn — Click to Remove';
+    // Compute and show equation
+    const pts = placedOrders.map(o=>({x:o.distance, y:o.time}));
+    const n = pts.length;
+    const sumX = pts.reduce((a,p)=>a+p.x,0);
+    const sumY = pts.reduce((a,p)=>a+p.y,0);
+    const sumXY= pts.reduce((a,p)=>a+p.x*p.y,0);
+    const sumXX= pts.reduce((a,p)=>a+p.x*p.x,0);
+    const m = (n*sumXY - sumX*sumY)/(n*sumXX - sumX*sumX) || 0;
+    const c = (sumY - m*sumX)/n;
+    const sign = c>=0?'+':'-';
+    showToast('Line drawn! y = ' + m.toFixed(2) + 'x ' + sign + ' ' + Math.abs(c).toFixed(2));
+    // Show equation below the button
+    const eq = document.getElementById('sgEquation');
+    if(eq){ eq.style.display='block'; eq.innerHTML='&#x1F4C8; Regression Equation: <strong>y = '+m.toFixed(2)+'x '+sign+' '+Math.abs(c).toFixed(2)+'</strong>'; }
+  } else {
+    btn.classList.remove('active-line');
+    btn.textContent = '📏 Draw Best-Fit Line';
+    const eq = document.getElementById('sgEquation');
+    if(eq) eq.style.display='none';
+  }
   drawScatterPlot();
 }
 function replotGraph(){
-  regressionLineDrawn=false; readingLines=[]; sgManualLine=null; sgLineStart=null;
-  const eq=document.getElementById('sgEquationBox'); if(eq) eq.style.display='none';
-  drawScatterPlot(); showToast('Graph cleared');
+  regressionLineDrawn=false; readingLines=[];
+  document.getElementById('btnDrawLine').classList.remove('active-line');
+  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
+  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
+  drawScatterPlot(); showToast('Graph replotted');
 }
 window.addEventListener('resize',()=>{if(document.getElementById('graphPage').classList.contains('active'))drawScatterPlot();});
 
@@ -1970,11 +1867,12 @@ function ngSnapToAxis(cx,cy,coords){
 function ngInitCanvas(){
   const canvas=document.getElementById('newGraphCanvas');
 
-  function ngHandleStart(e){
+  canvas.onmousedown=function(e){
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
     const {pad,toSX,toSY,fromSX,fromSY,cw,ch}=coords;
     if(ngMode==='point'){
+      // Only plot if inside plot area
       if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
       const xV=Math.round(fromSX(cx)), yV=Math.round(fromSY(cy));
       if(xV<NG_XMIN||xV>NG_XMAX||yV<NG_YMIN||yV>NG_YMAX) return;
@@ -1982,12 +1880,14 @@ function ngInitCanvas(){
       ngDraw();
       showToast('Point plotted: ('+xV+', '+yV+')');
     } else if(ngMode==='line'){
+      // Allow starting from anywhere including axes
       const snapped=ngSnapToAxis(cx,cy,coords);
       ngLineStart={sx:snapped.cx, sy:snapped.cy, curSx:snapped.cx, curSy:snapped.cy};
       ngDraw();
     } else if(ngMode==='readX'||ngMode==='readY'){
       if(!ngLine) return;
       if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
+      // Find Y on line at given X (line goes from canvas pixel coords)
       const {x1,y1,x2,y2}=ngLine;
       if(x2===x1) return;
       const t=(cx-x1)/(x2-x1);
@@ -1998,16 +1898,18 @@ function ngInitCanvas(){
       ngDraw();
       showToast('Reading: x='+ngReadingLines[ngReadingLines.length-1].x+', y='+ngReadingLines[ngReadingLines.length-1].y);
     }
-  }
-  function ngHandleMove(e){
+  };
+
+  canvas.onmousemove=function(e){
     if(ngMode!=='line'||!ngLineStart) return;
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
     const snapped=ngSnapToAxis(cx,cy,coords);
     ngLineStart.curSx=snapped.cx; ngLineStart.curSy=snapped.cy;
     ngDraw();
-  }
-  function ngHandleEnd(e){
+  };
+
+  canvas.onmouseup=function(e){
     if(ngMode!=='line'||!ngLineStart) return;
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
@@ -2015,39 +1917,15 @@ function ngInitCanvas(){
     const dist=Math.hypot(snapped.cx-ngLineStart.sx, snapped.cy-ngLineStart.sy);
     if(dist>10){
       ngLine={x1:ngLineStart.sx,y1:ngLineStart.sy,x2:snapped.cx,y2:snapped.cy};
-      // Show slope equation
-      calcAndShowEquation(
-        ngLineStart.sx, ngLineStart.sy, snapped.cx, snapped.cy,
-        coords.fromSX, coords.fromSY,
-        'ngEquationBox','ngEquationText','ngSlopeDetails'
-      );
-      showToast('Line drawn! Equation shown below.');
+      showToast('Line drawn! Switch to Read X/Y to take readings.');
     }
     ngLineStart=null;
     ngDraw();
-  }
+  };
 
-  canvas.onmousedown=function(e){ ngHandleStart(e); };
-  canvas.onmousemove=function(e){ ngHandleMove(e); };
-  canvas.onmouseup=function(e){ ngHandleEnd(e); };
-  canvas.onmouseleave=function(){ if(ngLineStart && ngMode==='line'){ngLineStart=null;ngDraw();} };
-
-  // Touch support
-  canvas.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    const touch=e.touches[0];
-    ngHandleStart({clientX:touch.clientX,clientY:touch.clientY});
-  },{passive:false});
-  canvas.addEventListener('touchmove',function(e){
-    e.preventDefault();
-    const touch=e.touches[0];
-    ngHandleMove({clientX:touch.clientX,clientY:touch.clientY});
-  },{passive:false});
-  canvas.addEventListener('touchend',function(e){
-    e.preventDefault();
-    const touch=e.changedTouches[0];
-    ngHandleEnd({clientX:touch.clientX,clientY:touch.clientY});
-  },{passive:false});
+  canvas.onmouseleave=function(){
+    if(ngLineStart && ngMode==='line'){ngLineStart=null;ngDraw();}
+  };
 }
 
 function ngAddRow(){
@@ -2083,16 +1961,8 @@ function ngPlotPoints(){
 }
 
 function ngClearPoints(){ngPlottedPts=[];ngDraw();showToast('Points cleared');}
-function ngClearLine(){
-  ngLine=null;ngReadingLines=[];
-  const eq=document.getElementById('ngEquationBox'); if(eq) eq.style.display='none';
-  ngDraw();showToast('Line cleared');
-}
-function ngClearAll(){
-  ngPlottedPts=[];ngLine=null;ngReadingLines=[];ngLineStart=null;
-  const eq=document.getElementById('ngEquationBox'); if(eq) eq.style.display='none';
-  ngDraw();showToast('All cleared');
-}
+function ngClearLine(){ngLine=null;ngReadingLines=[];ngDraw();showToast('Line cleared');}
+function ngClearAll(){ngPlottedPts=[];ngLine=null;ngReadingLines=[];ngLineStart=null;ngDraw();showToast('All cleared');}
 function ngClearData(){ngData=[];ngRefreshTable();}
 
 window.addEventListener('resize',()=>{
@@ -2158,192 +2028,11 @@ function saveNewAddress(){
   showToast('\u2705 '+label+' address saved!');
 }
 
-/* ══════════════════════════════════════════
-   FIREBASE CONFIG + PREDICTION TABLE
-   ══════════════════════════════════════════ */
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyCxcOW84sDNUrWpecvseLsMxq4m6PBIx3E",
-  authDomain: "zippy-ccdb2.firebaseapp.com",
-  databaseURL: "https://zippy-ccdb2-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "zippy-ccdb2",
-  storageBucket: "zippy-ccdb2.firebasestorage.app",
-  messagingSenderId: "733074351739",
-  appId: "1:733074351739:web:69b809033b9887e3dfe4de",
-  measurementId: "G-PMH7K54BZN"
-};
-
-let firebaseApp=null, firebaseDB=null, firebaseReady=false;
-function initFirebase(){
-  try{
-    if(typeof firebase==='undefined'){console.warn('Firebase SDK not loaded');return;}
-    if(!firebaseApp) firebaseApp=firebase.initializeApp(FIREBASE_CONFIG);
-    firebaseDB=firebase.database(firebaseApp);
-    firebaseReady=true;
-  }catch(err){console.warn('Firebase init error:',err);}
-}
-
-/* ── Admin Auth ── */
-let isAdmin=false;
-function openAdminLogin(){
-  document.getElementById('adminLoginModal').style.display='flex';
-  document.getElementById('adminUser').value='';
-  document.getElementById('adminPass').value='';
-  document.getElementById('adminLoginError').style.display='none';
-  setTimeout(()=>document.getElementById('adminUser').focus(),100);
-}
-function closeAdminLogin(){
-  document.getElementById('adminLoginModal').style.display='none';
-}
-function doAdminLogin(){
-  const u=document.getElementById('adminUser').value.trim();
-  const p=document.getElementById('adminPass').value;
-  if(u==='Admin'&&p==='Admin123'){
-    isAdmin=true;
-    closeAdminLogin();
-    document.getElementById('adminNavBtn').style.display='none';
-    document.getElementById('adminLogoutBtn').style.display='';
-    document.getElementById('predAdminBadge').style.display='';
-    document.getElementById('predAdminControls').style.display='flex';
-    predEnableEditing(true);
-    showToast('✅ Logged in as Admin!');
-    loadPredTableFromFirebase();
-  } else {
-    document.getElementById('adminLoginError').style.display='block';
-  }
-}
-function adminLogout(){
-  isAdmin=false;
-  document.getElementById('adminNavBtn').style.display='';
-  document.getElementById('adminLogoutBtn').style.display='none';
-  document.getElementById('predAdminBadge').style.display='none';
-  document.getElementById('predAdminControls').style.display='none';
-  predEnableEditing(false);
-  showToast('Logged out of Admin mode');
-}
-
-/* ── Prediction Table State ── */
-let predData={headers:[],rows:[]};
-
-function predRender(){
-  const table=document.getElementById('predTable');
-  const empty=document.getElementById('predTableEmpty');
-  const hasData = predData.headers.length > 0;
-
-  if(!hasData){
-    empty.style.display='block'; table.style.display='none';
-  } else {
-    empty.style.display='none'; table.style.display='table';
-    const editable=isAdmin;
-    let html='<thead><tr>';
-    predData.headers.forEach((h,ci)=>{
-      html+=`<th ${editable?`contenteditable="true" oninput="predData.headers[${ci}]=this.textContent"`:''} >${h}</th>`;
-    });
-    if(editable) html+='<th style="width:40px;background:var(--orange-dark)"></th>';
-    html+='</tr></thead><tbody>';
-    predData.rows.forEach((row,ri)=>{
-      html+='<tr>';
-      row.forEach((cell,ci)=>{
-        html+=`<td ${editable?`contenteditable="true" oninput="predData.rows[${ri}][${ci}]=this.textContent"`:''} >${cell}</td>`;
-      });
-      if(editable) html+=`<td><button class="pred-delete-btn" onclick="predDeleteRow(${ri})" title="Delete row">&#x1F5D1;</button></td>`;
-      html+='</tr>';
-    });
-    html+='</tbody>';
-    table.innerHTML=html;
-  }
-
-  // Sync mini prediction table on graph page
-  const gTable=document.getElementById('graphPredTable');
-  const gEmpty=document.getElementById('graphPredEmpty');
-  if(gTable && gEmpty){
-    if(!hasData){
-      gEmpty.style.display='block'; gTable.style.display='none';
-    } else {
-      gEmpty.style.display='none'; gTable.style.display='table';
-      let gHtml='<thead><tr>'+predData.headers.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>';
-      predData.rows.forEach(row=>{
-        gHtml+='<tr>'+row.map(c=>`<td>${c}</td>`).join('')+'</tr>';
-      });
-      gHtml+='</tbody>';
-      gTable.innerHTML=gHtml;
-    }
-  }
-}
-
-function predEnableEditing(on){
-  predRender();
-}
-
-function predAddRow(){
-  if(!predData.headers.length){showToast('Add at least one column first.');return;}
-  predData.rows.push(predData.headers.map(()=>''));
-  predRender();
-}
-function predAddCol(){
-  const name=prompt('Column name:','New Column');
-  if(!name) return;
-  predData.headers.push(name);
-  predData.rows.forEach(r=>r.push(''));
-  predRender();
-}
-function predDeleteRow(ri){
-  predData.rows.splice(ri,1);
-  predRender();
-}
-
-function predSave(){
-  // Sync content-editable values before save
-  const table=document.getElementById('predTable');
-  const ths=table.querySelectorAll('thead th');
-  ths.forEach((th,i)=>{if(i<predData.headers.length)predData.headers[i]=th.textContent.trim();});
-  const rows=table.querySelectorAll('tbody tr');
-  rows.forEach((tr,ri)=>{
-    const tds=tr.querySelectorAll('td');
-    tds.forEach((td,ci)=>{if(ci<predData.rows[ri].length)predData.rows[ri][ci]=td.textContent.trim();});
-  });
-
-  document.getElementById('predSaveStatus').textContent='Saving…';
-  if(firebaseReady && firebaseDB){
-    firebaseDB.ref('predictionTable').set(predData)
-      .then(()=>{ document.getElementById('predSaveStatus').textContent='✅ Saved!'; showToast('Prediction table saved to Firebase!'); })
-      .catch(err=>{ console.error(err); document.getElementById('predSaveStatus').textContent='⚠ Save failed'; showToast('Firebase save failed — saved locally.'); });
-  } else {
-    // Fallback: localStorage
-    try{ localStorage.setItem('zippy_predTable',JSON.stringify(predData)); }catch(e){}
-    document.getElementById('predSaveStatus').textContent='✅ Saved locally!';
-    showToast('Prediction table saved!');
-  }
-  predRender();
-}
-
-function loadPredTableFromFirebase(){
-  // Try Firebase first
-  if(firebaseReady && firebaseDB){
-    firebaseDB.ref('predictionTable').once('value').then(snap=>{
-      const data=snap.val();
-      if(data&&data.headers&&data.rows){ predData=data; predRender(); }
-    }).catch(()=>{});
-  }
-  // Always also try localStorage as fallback
-  try{
-    const stored=localStorage.getItem('zippy_predTable');
-    if(stored){ const d=JSON.parse(stored); if(d&&d.headers&&d.rows&&!firebaseReady){predData=d;predRender();} }
-  }catch(e){}
-}
-
-/* ══════════════════════════════════════════
-   INIT
-   ══════════════════════════════════════════ */
+/* INIT */
 try{renderHome();}catch(e){console.error('renderHome failed',e);}
 try{initHeroSlideshow();}catch(e){console.error('heroSlideshow failed',e);}
 showPage('homePage');
 setTimeout(ngInitCanvas, 100);
-// Load prediction table for all users (Firebase may not be ready yet, localStorage fallback)
-try{ predRender(); loadPredTableFromFirebase(); }catch(e){}
-// Init Firebase then reload prediction table
-setTimeout(function(){
-  try{ initFirebase(); loadPredTableFromFirebase(); }catch(e){}
-}, 800);
 </script>
 </body>
 </html>
