@@ -86,6 +86,7 @@ img{display:block;max-width:100%}
 /* Data table row hover */
 #dataTableBody tr{transition:background .15s ease}
 #dataTableBody tr:hover{background:#fff5f0}
+#regressionCanvas,#newGraphCanvas{touch-action:none;}
 
 /* Checkout sections staggered entry */
 .checkout-section{animation:fadeInUp .35s ease both}
@@ -1761,7 +1762,8 @@ function sgGetCanvasPoint(e,canvas){
   const rect=canvas.getBoundingClientRect();
   const scaleX=(canvas.width/(window.devicePixelRatio||1))/rect.width;
   const scaleY=(canvas.height/(window.devicePixelRatio||1))/rect.height;
-  return {cx:(e.clientX-rect.left)*scaleX, cy:(e.clientY-rect.top)*scaleY};
+  const src=e.touches?e.touches[0]:(e.changedTouches?e.changedTouches[0]:e);
+  return {cx:(src.clientX-rect.left)*scaleX,cy:(src.clientY-rect.top)*scaleY};
 }
 
 function sgSnapToAxis(cx,cy){
@@ -1776,31 +1778,31 @@ function sgSnapToAxis(cx,cy){
 function initExistingGraphClick(){
   const canvas=document.getElementById('regressionCanvas');
 
-  canvas.onmousedown=function(e){
+  function sgHandleStart(e){
+    if(e.cancelable) e.preventDefault();
     const {cx,cy}=sgGetCanvasPoint(e,canvas);
     if(sgMode==='line'){
       const s=sgSnapToAxis(cx,cy);
       sgLineStart={sx:s.cx,sy:s.cy,curSx:s.cx,curSy:s.cy};
       drawScatterPlot();
     }
-  };
-
-  canvas.onmousemove=function(e){
+  }
+  function sgHandleMove(e){
+    if(e.cancelable) e.preventDefault();
     if(sgMode!=='line'||!sgLineStart) return;
     const {cx,cy}=sgGetCanvasPoint(e,canvas);
     const s=sgSnapToAxis(cx,cy);
     sgLineStart.curSx=s.cx; sgLineStart.curSy=s.cy;
     drawScatterPlot();
-  };
-
-  canvas.onmouseup=function(e){
+  }
+  function sgHandleEnd(e){
+    if(e.cancelable) e.preventDefault();
     if(sgMode==='line' && sgLineStart){
       const {cx,cy}=sgGetCanvasPoint(e,canvas);
       const s=sgSnapToAxis(cx,cy);
       const dist=Math.hypot(s.cx-sgLineStart.sx, s.cy-sgLineStart.sy);
       if(dist>10){
         sgManualLine={x1:sgLineStart.sx,y1:sgLineStart.sy,x2:s.cx,y2:s.cy};
-        // Compute and show slope equation for the drawn line
         const canvas2=document.getElementById('regressionCanvas');
         if(canvas2._fromSX && canvas2._fromSY){
           const dx1=canvas2._fromSX(sgManualLine.x1), dy1=canvas2._fromSY(sgManualLine.y1);
@@ -1823,8 +1825,6 @@ function initExistingGraphClick(){
       const {cx,cy}=sgGetCanvasPoint(e,canvas);
       const pad=canvas._pad;
       if(cx<pad.left||cx>canvas._W-pad.right||cy<pad.top||cy>canvas._H-pad.bottom) return;
-
-      // Try best-fit line first, then manual line
       let lineY=null;
       if(sgManualLine){
         const {x1,y1,x2,y2}=sgManualLine;
@@ -1836,7 +1836,6 @@ function initExistingGraphClick(){
         lineY=canvas._toSY(dataY);
       }
       if(lineY===null){ showToast('Draw a line first, then read values!'); return; }
-
       const dataX=canvas._fromSX(cx);
       const dataY=canvas._fromSY(lineY);
       if(dataX<canvas._xMin||dataX>canvas._xMax||dataY<canvas._yMin||dataY>canvas._yMax) return;
@@ -1844,11 +1843,24 @@ function initExistingGraphClick(){
       drawScatterPlot();
       showToast('Reading: x='+readingLines[readingLines.length-1].x+', y='+readingLines[readingLines.length-1].y);
     }
-  };
+  }
 
-  canvas.onmouseleave=function(){
-    if(sgLineStart){ sgLineStart=null; drawScatterPlot(); }
-  };
+  // Mouse events
+  canvas.onmousedown=sgHandleStart;
+  canvas.onmousemove=sgHandleMove;
+  canvas.onmouseup=sgHandleEnd;
+  canvas.onmouseleave=function(){if(sgLineStart){sgLineStart=null;drawScatterPlot();}};
+
+  // Touch events
+  canvas.removeEventListener('touchstart',canvas._sgTouchStart||null);
+  canvas.removeEventListener('touchmove',canvas._sgTouchMove||null);
+  canvas.removeEventListener('touchend',canvas._sgTouchEnd||null);
+  canvas._sgTouchStart=sgHandleStart;
+  canvas._sgTouchMove=sgHandleMove;
+  canvas._sgTouchEnd=sgHandleEnd;
+  canvas.addEventListener('touchstart',canvas._sgTouchStart,{passive:false});
+  canvas.addEventListener('touchmove',canvas._sgTouchMove,{passive:false});
+  canvas.addEventListener('touchend',canvas._sgTouchEnd,{passive:false});
 }
 
 function toggleRegressionLine(){
@@ -2024,7 +2036,8 @@ function ngGetCanvasPoint(e,canvas){
   const rect=canvas.getBoundingClientRect();
   const scaleX=(canvas.width/(window.devicePixelRatio||1))/rect.width;
   const scaleY=(canvas.height/(window.devicePixelRatio||1))/rect.height;
-  return {cx:(e.clientX-rect.left)*scaleX, cy:(e.clientY-rect.top)*scaleY};
+  const src=e.touches?e.touches[0]:(e.changedTouches?e.changedTouches[0]:e);
+  return {cx:(src.clientX-rect.left)*scaleX,cy:(src.clientY-rect.top)*scaleY};
 }
 
 function ngSnapToAxis(cx,cy,coords){
@@ -2040,12 +2053,12 @@ function ngSnapToAxis(cx,cy,coords){
 function ngInitCanvas(){
   const canvas=document.getElementById('newGraphCanvas');
 
-  canvas.onmousedown=function(e){
+  function ngHandleStart(e){
+    if(e.cancelable) e.preventDefault();
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
     const {pad,toSX,toSY,fromSX,fromSY,cw,ch}=coords;
     if(ngMode==='point'){
-      // Only plot if inside plot area
       if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
       const xV=Math.round(fromSX(cx)), yV=Math.round(fromSY(cy));
       if(xV<NG_XMIN||xV>NG_XMAX||yV<NG_YMIN||yV>NG_YMAX) return;
@@ -2053,52 +2066,74 @@ function ngInitCanvas(){
       ngDraw();
       showToast('Point plotted: ('+xV+', '+yV+')');
     } else if(ngMode==='line'){
-      // Allow starting from anywhere including axes
       const snapped=ngSnapToAxis(cx,cy,coords);
-      ngLineStart={sx:snapped.cx, sy:snapped.cy, curSx:snapped.cx, curSy:snapped.cy};
+      ngLineStart={sx:snapped.cx,sy:snapped.cy,curSx:snapped.cx,curSy:snapped.cy};
       ngDraw();
     } else if(ngMode==='readX'||ngMode==='readY'){
       if(!ngLine) return;
       if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
-      // Find Y on line at given X (line goes from canvas pixel coords)
       const {x1,y1,x2,y2}=ngLine;
       if(x2===x1) return;
       const t=(cx-x1)/(x2-x1);
       const lineY=y1+t*(y2-y1);
       const dataX=fromSX(cx), dataY=fromSY(lineY);
       if(dataX<NG_XMIN||dataX>NG_XMAX||dataY<NG_YMIN||dataY>NG_YMAX) return;
-      ngReadingLines.push({x:Math.round(dataX*2)/2, y:Math.round(dataY*2)/2});
+      ngReadingLines.push({x:Math.round(dataX*2)/2,y:Math.round(dataY*2)/2});
       ngDraw();
       showToast('Reading: x='+ngReadingLines[ngReadingLines.length-1].x+', y='+ngReadingLines[ngReadingLines.length-1].y);
     }
-  };
-
-  canvas.onmousemove=function(e){
+  }
+  function ngHandleMove(e){
+    if(e.cancelable) e.preventDefault();
     if(ngMode!=='line'||!ngLineStart) return;
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
     const snapped=ngSnapToAxis(cx,cy,coords);
     ngLineStart.curSx=snapped.cx; ngLineStart.curSy=snapped.cy;
     ngDraw();
-  };
-
-  canvas.onmouseup=function(e){
+  }
+  function ngHandleEnd(e){
+    if(e.cancelable) e.preventDefault();
     if(ngMode!=='line'||!ngLineStart) return;
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
     const snapped=ngSnapToAxis(cx,cy,coords);
-    const dist=Math.hypot(snapped.cx-ngLineStart.sx, snapped.cy-ngLineStart.sy);
+    const dist=Math.hypot(snapped.cx-ngLineStart.sx,snapped.cy-ngLineStart.sy);
     if(dist>10){
       ngLine={x1:ngLineStart.sx,y1:ngLineStart.sy,x2:snapped.cx,y2:snapped.cy};
+      // Show slope equation for the drawn line
+      const {fromSX,fromSY}=ngGetCoords();
+      const dx1=fromSX(ngLine.x1),dy1=fromSY(ngLine.y1);
+      const dx2=fromSX(ngLine.x2),dy2=fromSY(ngLine.y2);
+      if(dx2!==dx1){
+        const slope=(dy2-dy1)/(dx2-dx1);
+        const intercept=dy1-slope*dx1;
+        const sign=intercept>=0?'+':'-';
+        const eq=document.getElementById('ngEquation');
+        if(eq){eq.style.display='block';eq.innerHTML='&#x2705; Your Line Equation: <strong>y = '+slope.toFixed(2)+'x '+sign+' '+Math.abs(intercept).toFixed(2)+'</strong>';}
+      }
       showToast('Line drawn! Switch to Read X/Y to take readings.');
     }
     ngLineStart=null;
     ngDraw();
-  };
+  }
 
-  canvas.onmouseleave=function(){
-    if(ngLineStart && ngMode==='line'){ngLineStart=null;ngDraw();}
-  };
+  // Mouse events
+  canvas.onmousedown=ngHandleStart;
+  canvas.onmousemove=ngHandleMove;
+  canvas.onmouseup=ngHandleEnd;
+  canvas.onmouseleave=function(){if(ngLineStart&&ngMode==='line'){ngLineStart=null;ngDraw();}};
+
+  // Touch events
+  canvas.removeEventListener('touchstart',canvas._ngTouchStart||null);
+  canvas.removeEventListener('touchmove',canvas._ngTouchMove||null);
+  canvas.removeEventListener('touchend',canvas._ngTouchEnd||null);
+  canvas._ngTouchStart=ngHandleStart;
+  canvas._ngTouchMove=ngHandleMove;
+  canvas._ngTouchEnd=ngHandleEnd;
+  canvas.addEventListener('touchstart',canvas._ngTouchStart,{passive:false});
+  canvas.addEventListener('touchmove',canvas._ngTouchMove,{passive:false});
+  canvas.addEventListener('touchend',canvas._ngTouchEnd,{passive:false});
 }
 
 function ngAddRow(){
