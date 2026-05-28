@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zippy by Cognospace</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Firebase SDK (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 :root{
   --orange:#FF5200;--orange-light:#FF7340;--orange-dark:#D94600;
@@ -163,9 +166,16 @@ button:not(.qty-btn):not(.cls-btn):active{transform:scale(.97)}
 .hero-big-prev{left:14px}
 .hero-big-next{right:14px}
 
-/* LOGOUT BUTTON */
-.btn-logout{display:flex;align-items:center;gap:6px;border-radius:50px;padding:6px 16px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:white;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
-.btn-logout:hover{border-color:#c0392b;color:#c0392b;background:#fff5f5}
+/* WEATHER MODE BUTTONS */
+.weather-modes{display:flex;align-items:center;gap:8px;margin-right:4px}
+.mode-btn{display:flex;align-items:center;gap:6px;border-radius:50px;padding:6px 14px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:white;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
+.mode-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mode-btn.active.traffic{background:#fff3e0;border-color:#e65100;color:#e65100}
+.mode-btn.active.rain{background:#e3f2fd;border-color:#1565c0;color:#1565c0}
+.mode-indicator{display:none;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--orange);background:var(--orange-bg);border-radius:50px;padding:4px 12px;border:1px solid rgba(255,82,0,.2)}
+.mode-indicator.show{display:flex}
+@media(max-width:640px){.weather-modes{gap:5px}.mode-btn{padding:5px 10px;font-size:11px}}
+@media(max-width:480px){.weather-modes{display:none}}
 
 /* DEAL SLIDESHOW (kept for dots CSS reuse) */
 .deals-dots{display:flex;justify-content:center;gap:7px;margin-top:12px}
@@ -497,79 +507,24 @@ td.time-val{font-weight:700;color:var(--green)}
 .btn-addr-cancel{background:var(--bg);color:var(--gray);border:1.5px solid var(--border);border-radius:12px;padding:13px;font-weight:700;font-size:14px;transition:all .2s}
 .btn-addr-cancel:hover{border-color:var(--orange);color:var(--orange)}
 
-/* LANDING PAGE */
-.landing-page{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a0800 0%,#3d0c00 40%,#1a0800 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;overflow:hidden}
-.landing-page.hidden{display:none}
-.landing-bg-circles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.landing-bg-circles span{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,82,0,.18) 0%,transparent 70%)}
-.landing-bg-circles span:nth-child(1){width:600px;height:600px;top:-150px;left:-150px}
-.landing-bg-circles span:nth-child(2){width:400px;height:400px;bottom:-100px;right:-80px}
-.landing-bg-circles span:nth-child(3){width:300px;height:300px;top:50%;left:60%}
-.landing-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:32px;text-align:center;padding:24px}
-.landing-logo-block{display:flex;flex-direction:column;align-items:center;gap:16px}
-.landing-zippy{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(72px,14vw,120px);color:var(--orange);line-height:1;letter-spacing:-3px;text-shadow:0 8px 32px rgba(255,82,0,.35)}
-.landing-by{font-size:14px;color:rgba(255,255,255,.5);font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-top:-10px}
-.landing-cognospace{display:flex;align-items:center;justify-content:center;margin-top:4px}
-.landing-cognospace img{height:60px;width:auto;max-width:220px;object-fit:contain;filter:brightness(1.2)}
-.landing-cognospace-text{font-family:'Nunito',sans-serif;font-weight:900;font-size:28px;color:white;letter-spacing:-0.5px}
-.landing-tagline{font-size:16px;color:rgba(255,255,255,.65);font-weight:500;max-width:360px;line-height:1.5}
-.landing-start-btn{background:var(--orange);color:white;border:none;border-radius:50px;padding:18px 52px;font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(255,82,0,.4);letter-spacing:.3px}
-.landing-start-btn:hover{background:var(--orange-dark);transform:translateY(-3px);box-shadow:0 12px 40px rgba(255,82,0,.5)}
-/* SESSION MODAL */
-.session-modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:10000;align-items:center;justify-content:center;padding:20px}
-.session-modal-backdrop.open{display:flex}
-.session-modal{background:white;border-radius:24px;width:100%;max-width:460px;box-shadow:0 24px 80px rgba(0,0,0,.3);overflow:hidden;animation:bounce-in .4s cubic-bezier(.34,1.56,.64,1)}
-.session-modal-head{background:var(--orange);padding:24px 28px 20px;text-align:center}
-.session-modal-head h2{font-family:'Nunito',sans-serif;font-weight:900;font-size:24px;color:white;margin-bottom:4px}
-.session-modal-head p{font-size:13px;color:rgba(255,255,255,.8)}
-.session-modal-body{padding:24px 28px}
-.session-field{margin-bottom:18px}
-.session-label{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;display:block}
-.session-input{width:100%;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-size:15px;font-weight:600;color:var(--black);transition:border-color .2s;background:var(--bg)}
-.session-input:focus{border-color:var(--orange);background:white;outline:none}
-.session-launch-btn{width:100%;background:var(--orange);color:white;border:none;border-radius:12px;padding:15px;font-family:'Nunito',sans-serif;font-weight:900;font-size:17px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow-orange);margin-top:8px}
-.session-launch-btn:hover{background:var(--orange-dark);transform:translateY(-1px)}
-/* NEW DATA INPUT TABLE */
-.data-input-table-wrap{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);margin-top:24px}
-.data-input-table-head{background:var(--orange);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-.data-input-table-head h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;color:white}
-.data-input-table-head p{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
-.data-input-table-scroll{overflow-x:auto}
-.data-input-table{width:100%;border-collapse:collapse;min-width:500px}
-.data-input-table th{background:var(--orange-bg);color:var(--orange);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:11px 14px;text-align:center;border-bottom:2px solid rgba(255,82,0,.15);white-space:nowrap}
-.data-input-table td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;font-size:14px}
-.data-input-table tbody tr:hover{background:#fff5f0}
-.data-input-table .sno-cell{font-weight:700;color:var(--gray);font-size:13px}
-.data-input-table input[type=number]{width:80px;border:1.5px solid var(--border);border-radius:7px;padding:6px 8px;font-size:14px;font-weight:600;text-align:center;transition:border-color .2s}
-.data-input-table input[type=number]:focus{border-color:var(--orange);outline:none}
-.data-input-table select{border:1.5px solid var(--border);border-radius:7px;padding:6px 8px;font-size:14px;font-weight:600;transition:border-color .2s;cursor:pointer;background:white}
-.data-input-table select:focus{border-color:var(--orange);outline:none}
-
-.del-row-btn{background:none;border:none;color:#c0392b;cursor:pointer;font-size:15px;font-weight:700;padding:4px 8px;border-radius:6px;transition:background .15s}
-.del-row-btn:hover{background:#fff0f0}
-.data-input-table-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.btn-add-data-row:hover{background:var(--orange-dark)}
-/* LOGOUT CONFIRM MODAL */
-.logout-modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10500;align-items:center;justify-content:center}
-.logout-modal-backdrop.open{display:flex}
-.logout-modal{background:white;border-radius:18px;width:100%;max-width:340px;box-shadow:0 16px 60px rgba(0,0,0,.2);overflow:hidden;animation:bounce-in .3s cubic-bezier(.34,1.56,.64,1);margin:20px}
-.logout-modal-body{padding:28px 28px 20px;text-align:center}
-.logout-modal-icon{font-size:40px;margin-bottom:12px}
-.logout-modal-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--black);margin-bottom:8px}
-.logout-modal-sub{font-size:13px;color:var(--gray);line-height:1.5}
-.logout-modal-btns{display:flex;gap:10px;padding:0 28px 24px}
-.btn-logout-cancel{flex:1;background:var(--bg);color:var(--gray);border:1.5px solid var(--border);border-radius:10px;padding:12px;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s}
-.btn-logout-cancel:hover{border-color:var(--orange);color:var(--orange)}
-.btn-logout-confirm{flex:1;background:#c0392b;color:white;border:none;border-radius:10px;padding:12px;font-weight:800;font-size:14px;cursor:pointer;transition:all .2s}
-.btn-logout-confirm:hover{background:#a93226}
 /* TOAST */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--black);color:white;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;z-index:9999;white-space:nowrap;transition:transform .3s ease;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
-
-/* FOOTER — minimal */
-.site-footer{background:#1a0800;color:rgba(255,255,255,.6);margin-top:60px}
-.footer-minimal{max-width:1280px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.07);font-size:12px}
+/* FOOTER */
+.site-footer{background:#1a0800;color:rgba(255,255,255,.7);margin-top:60px}
+.footer-inner{max-width:1280px;margin:0 auto;padding:44px 24px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.footer-brand{display:flex;align-items:center;gap:14px}
+.footer-logo-mark{width:44px;height:44px;background:var(--orange);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:white;flex-shrink:0}
+.footer-brand-name{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:white}
+.footer-brand-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:2px}
+.footer-links{display:flex;gap:48px;flex-wrap:wrap}
+.footer-col{display:flex;flex-direction:column;gap:10px}
+.footer-col-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:rgba(255,255,255,.4);margin-bottom:4px}
+.footer-col a{font-size:13px;color:rgba(255,255,255,.65);transition:color .2s;text-decoration:none}
+.footer-col a:hover{color:var(--orange)}
+.footer-bottom{max-width:1280px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap}
+.footer-credit{color:rgba(255,255,255,.5)}
 .footer-credit a{color:var(--orange);font-weight:700;text-decoration:none}
 .footer-credit a:hover{text-decoration:underline}
 
@@ -578,57 +533,29 @@ td.time-val{font-weight:700;color:var(--green)}
 @media(max-width:900px){.hero-banner{flex-direction:column;text-align:center;padding:28px 20px}.hero-img{width:100%;height:180px}.restaurant-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.form-row{grid-template-columns:1fr}}
 @media(max-width:640px){.header-inner{padding:0 14px;gap:10px}.header-location{max-width:160px}.hero-inner{padding:20px 14px}.deals-banner{padding:0 14px 20px}.page-body{padding:0 14px 50px}.restaurant-grid{grid-template-columns:1fr 1fr;gap:12px}.rest-img-wrap{height:130px}.cart-drawer{width:100%}.rest-info-card{margin:-28px 10px 0}.top-picks-grid{grid-template-columns:1fr 1fr}.pay-options{grid-template-columns:repeat(3,1fr)}.data-btns{flex-direction:column;width:100%}.graph-controls{flex-direction:column;align-items:flex-start}.graph-inner{padding:0 14px 40px}}
 @media(max-width:380px){.restaurant-grid{grid-template-columns:1fr}.top-picks-grid{grid-template-columns:1fr}.pay-options{grid-template-columns:repeat(2,1fr)}}
+
+/* ADMIN BUTTON */
+.btn-admin-nav{background:var(--black);color:white;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;transition:background .2s}
+.btn-admin-nav:hover{background:#333}
+
+/* PREDICTION TABLE */
+.prediction-section{margin-top:40px;padding-top:12px;border-top:2px dashed var(--border)}
+#predTable th,#predTable td{border:1px solid var(--border);padding:10px 14px;font-size:13px;text-align:left;min-width:90px}
+#predTable thead tr{background:var(--orange);color:white;font-weight:700}
+#predTable tbody tr:nth-child(even){background:#fafafa}
+#predTable tbody tr:hover{background:#fff5f0}
+#predTable td[contenteditable="true"]{background:#fffbf5;outline:2px solid var(--orange);outline-offset:-2px;cursor:text}
+#predTable th[contenteditable="true"]{background:var(--orange-dark);cursor:text;outline:2px solid white;outline-offset:-2px}
+#graphPredTable th,#graphPredTable td{border:1px solid var(--border);padding:6px 10px;font-size:12px;text-align:left}
+#graphPredTable thead tr{background:var(--orange);color:white;font-weight:700}
+#graphPredTable tbody tr:nth-child(even){background:#fafafa}
+.pred-delete-btn{background:none;border:none;color:#c0392b;cursor:pointer;font-size:13px;padding:2px 6px;border-radius:4px}
+.pred-delete-btn:hover{background:#ffeaea}
 </style>
 </head>
 <body>
 
-<!-- LANDING PAGE -->
-<div class="landing-page" id="landingPage">
-  <div class="landing-bg-circles"><span></span><span></span><span></span></div>
-  <div class="landing-content">
-    <div class="landing-logo-block">
-      <div class="landing-zippy">Zippy</div>
-      <div class="landing-by">by</div>
-      <div class="landing-cognospace">
-        <img src="images/cognospace_logo.png" alt="Cognospace" id="landingCognoImg" onerror="this.style.display='none';document.getElementById('landingCognoText').style.display='block'">
-        <span class="landing-cognospace-text" id="landingCognoText" style="display:none">CognoSpace</span>
-      </div>
-    </div>
-    <div class="landing-tagline">A real-world learning simulation to explore distance, time &amp; delivery data.</div>
-    <button class="landing-start-btn" onclick="openSessionModal()">&#x1F680; Start a Session</button>
-  </div>
-</div>
-
-<!-- SESSION MODAL -->
-<div class="session-modal-backdrop" id="sessionModalBackdrop">
-  <div class="session-modal">
-    <div class="session-modal-head">
-      <h2>&#x1F4CB; Session Details</h2>
-      <p>Enter your class details to begin</p>
-    </div>
-    <div class="session-modal-body">
-      <div class="session-field">
-        <label class="session-label">School Name</label>
-        <input class="session-input" type="text" id="sessSchool" oninput="validateSession()">
-      </div>
-      <div class="session-field">
-        <label class="session-label">Grade</label>
-        <input class="session-input" type="text" id="sessGrade" oninput="validateSession()">
-      </div>
-      <div class="session-field">
-        <label class="session-label">Section</label>
-        <input class="session-input" type="text" id="sessSection" oninput="validateSession()">
-      </div>
-      <div class="session-field">
-        <label class="session-label">Table Name / Number</label>
-        <input class="session-input" type="text" id="sessTable" oninput="validateSession()">
-      </div>
-      <button class="session-launch-btn" id="sessionLaunchBtn" onclick="launchSession()" disabled>&#x1F680; Launch</button>
-    </div>
-  </div>
-</div>
-
-<header class="header" id="mainHeader" style="display:none">
+<header class="header">
   <div class="header-inner">
     <div class="logo" onclick="goHome()">
       <div class="logo-wordmark">
@@ -637,14 +564,22 @@ td.time-val{font-weight:700;color:var(--green)}
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn-logout" id="btnLogout" onclick="doLogout()" style="display:none">&#x1F6AA; Logout</button>
+      <div class="weather-modes">
+        <button class="mode-btn traffic" id="btnTraffic" onclick="toggleMode('traffic')" title="Enable traffic mode — increases delivery time">&#x1F6A6; Traffic</button>
+        <button class="mode-btn rain" id="btnRain" onclick="toggleMode('rain')" title="Enable rain mode — increases delivery time">&#x1F327;&#xFE0F; Rain</button>
+        <div class="mode-indicator" id="modeIndicator">&#x23F1; Extended ETA</div>
+      </div>
       <a href="https://www.cognospace.in" target="_blank" rel="noopener" class="cognospace-logo-link" title="Visit Cognospace">
         <img src="images/cognospace_logo.png" alt="Cognospace" onerror="this.style.display='none'">
       </a>
       <button class="cart-pill" onclick="openCart()">&#x1F6D2; Cart <span class="cart-num" id="cartNum">0</span></button>
+      <button class="btn-admin-nav" id="adminNavBtn" onclick="openAdminLogin()">&#x1F512; Admin</button>
+      <button class="btn-admin-nav btn-logout" id="adminLogoutBtn" onclick="adminLogout()" style="display:none;background:#c0392b;">&#x1F513; Logout</button>
     </div>
   </div>
 </header>
+
+<!-- HOME PAGE -->
 <div id="homePage" style="display:block">
   <div class="hero">
     <div class="hero-inner">
@@ -690,6 +625,25 @@ td.time-val{font-weight:700;color:var(--green)}
         <div class="data-table-head-bar"><h3>Distance vs Time &#x2014; Regression Dataset</h3><span id="dataTableInfo">0 records</span></div>
         <table><thead><tr><th>#</th><th>Restaurant</th><th>Item</th><th>Customer</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="dataTableBody"></tbody></table>
         <div class="table-foot-bar"><span id="ftAvgDist">Avg Distance: &#x2014;</span><span id="ftAvgTime">Avg Time: &#x2014;</span><span id="ftTotal">Total: 0 orders</span></div>
+      </div>
+    </div>
+
+    <!-- PREDICTION TABLE SECTION -->
+    <div class="prediction-section" id="predictionSection">
+      <div class="data-header" style="margin-bottom:16px">
+        <div class="sec-title">&#x1F52E; Prediction Table</div>
+        <span id="predAdminBadge" style="display:none;background:var(--orange);color:white;border-radius:50px;padding:4px 14px;font-size:12px;font-weight:700;">&#x1F6E0; Admin Editing</span>
+      </div>
+      <div id="predTableWrap" style="overflow-x:auto;border-radius:var(--r-md);box-shadow:var(--shadow-sm);">
+        <div id="predTableEmpty" style="text-align:center;padding:40px;color:var(--gray);font-size:14px;">&#x1F4CB; No prediction data yet. An admin will populate this table.</div>
+        <table id="predTable" style="display:none;width:100%;border-collapse:collapse;background:white;"></table>
+      </div>
+      <!-- Admin controls (hidden for users) -->
+      <div id="predAdminControls" style="display:none;margin-top:14px;display:none;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn-gen-table" onclick="predAddRow()">&#x2795; Add Row</button>
+        <button class="btn-gen-table" onclick="predAddCol()">&#x2795; Add Column</button>
+        <button class="btn-plot-graph" onclick="predSave()" style="background:var(--green);border-color:var(--green);">&#x1F4BE; Save Table</button>
+        <span id="predSaveStatus" style="font-size:12px;color:var(--green);font-weight:600;"></span>
       </div>
     </div>
   </div>
@@ -791,10 +745,9 @@ td.time-val{font-weight:700;color:var(--green)}
       <div class="graph-title">Scatter Plot &#x2014; Distance vs Delivery Time</div>
       <div class="graph-subtitle">X&#x2011;axis: Distance (km) &nbsp;|&nbsp; Y&#x2011;axis: Time (min)</div>
 
-      <!-- Mode bar (same as new graph) -->
+      <!-- Mode bar -->
       <div class="ng-mode-bar">
-        <button class="ng-mode-btn" id="sgModeNone" onclick="setSGMode('none')">&#x1F4CF; Best-Fit Line</button>
-        <button class="ng-mode-btn" id="sgModeLine" onclick="setSGMode('line')">&#x2014; Draw Line</button>
+        <button class="ng-mode-btn" id="sgModeLine" onclick="setSGMode('line')">&#x270F;&#xFE0F; Draw Line</button>
         <button class="ng-mode-btn active" id="sgModeReadX" onclick="setSGMode('readX')">&#x21E3; Read X value</button>
         <button class="ng-mode-btn" id="sgModeReadY" onclick="setSGMode('readY')">&#x21E2; Read Y value</button>
       </div>
@@ -804,14 +757,17 @@ td.time-val{font-weight:700;color:var(--green)}
       </div>
 
       <div class="graph-controls">
-        <button class="btn-draw-line" id="btnDrawLine" onclick="toggleRegressionLine()">&#x1F4CF; Draw Best-Fit Line</button>
         <button class="btn-clear-pts" id="btnClearReadings" onclick="clearSGReadings()">&#x2715; Clear Readings</button>
         <button class="btn-clear-pts" id="btnClearManualLine" onclick="clearSGManualLine()">&#x21BA; Clear Line</button>
         <button class="btn-clear-pts" onclick="replotGraph()">&#x1F5D1; Clear All</button>
-        <button class="btn-new-graph" onclick="openNewGraphPage()">&#x2795; Plot New Graph</button>
       </div>
-      <div id="sgEquation" style="display:none;margin-top:10px;background:var(--orange-bg);border:1.5px solid var(--orange);border-radius:10px;padding:10px 16px;font-size:15px;font-weight:800;color:var(--orange);font-family:'Nunito',sans-serif;letter-spacing:0.3px;">&#x1F4C8; Regression Equation: <span id="sgEquationText"></span></div>
-      <div class="graph-hint" id="sgHint">&#x1F4A1; Use the mode buttons above to draw a line or read values. Click the canvas to interact.</div>
+      <div class="graph-hint" id="sgHint">&#x1F4A1; Select <b>Draw Line</b> to draw by hand (mouse or touch), then use Read X/Y to take readings.</div>
+      <!-- Slope equation box — shown after a line is drawn -->
+      <div id="sgEquationBox" style="display:none;margin-top:12px;background:linear-gradient(135deg,#fff8f0,#fff3e8);border:2px solid var(--orange);border-radius:12px;padding:14px 20px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">&#x1F4C8; Line Equation</div>
+        <div id="sgEquationText" style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--orange);letter-spacing:0.3px"></div>
+        <div id="sgSlopeDetails" style="font-size:12px;color:var(--gray);margin-top:6px;line-height:1.6"></div>
+      </div>
       <div class="graph-legend">
         <div class="legend-item"><span class="legend-x">&#xD7;</span> Data Point</div>
         <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;background:var(--black);vertical-align:middle"></span> Best-fit / Drawn Line</div>
@@ -822,6 +778,12 @@ td.time-val{font-weight:700;color:var(--green)}
       <div class="graph-side-head"><h3>Data Table</h3><p>Distance &amp; Time values only</p></div>
       <div class="graph-side-scroll">
         <table><thead><tr><th>#</th><th>Distance (km)</th><th>Time (min)</th></tr></thead><tbody id="graphSideTableBody"></tbody></table>
+      </div>
+      <!-- Prediction table on graph page (read-only view) -->
+      <div id="graphPredSection" style="margin-top:20px;border-top:2px dashed var(--border);padding-top:16px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;color:var(--black);margin-bottom:10px">&#x1F52E; Prediction Table</div>
+        <div id="graphPredEmpty" style="font-size:12px;color:var(--gray);padding:12px 0;text-align:center">No prediction data yet.</div>
+        <div style="overflow-x:auto"><table id="graphPredTable" style="display:none;width:100%;border-collapse:collapse;font-size:12px;"></table></div>
       </div>
     </div>
   </div>
@@ -861,6 +823,12 @@ td.time-val{font-weight:700;color:var(--green)}
         3. Switch to <b>Draw Line</b> mode — click any start point on the graph (including on axes) and drag to draw a straight line<br>
         4. Use <b>Read X</b> or <b>Read Y</b> mode — click the best-fit line to draw corresponding dashed lines to both axes and read the values
       </div>
+      <!-- Slope equation box for new graph page -->
+      <div id="ngEquationBox" style="display:none;margin-top:12px;background:linear-gradient(135deg,#fff8f0,#fff3e8);border:2px solid var(--orange);border-radius:12px;padding:14px 20px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">&#x1F4C8; Line Equation</div>
+        <div id="ngEquationText" style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--orange);letter-spacing:0.3px"></div>
+        <div id="ngSlopeDetails" style="font-size:12px;color:var(--gray);margin-top:6px;line-height:1.6"></div>
+      </div>
 
       <div class="ng-legend">
         <div class="ng-legend-item"><span style="color:var(--orange);font-weight:900;font-size:15px">&#x2715;</span> Plotted Point</div>
@@ -878,11 +846,11 @@ td.time-val{font-weight:700;color:var(--green)}
       <div class="ng-input-row">
         <div class="ng-input-group">
           <div class="ng-input-label">X (Distance km)</div>
-          <input class="ng-input" type="number" id="ngInputX" placeholder="e.g. 20" min="0" max="50" step="1">
+          <input class="ng-input" type="number" id="ngInputX" placeholder="e.g. 4" min="0" max="20" step="1">
         </div>
         <div class="ng-input-group">
           <div class="ng-input-label">Y (Time min)</div>
-          <input class="ng-input" type="number" id="ngInputY" placeholder="e.g. 30" min="0" max="50" step="1">
+          <input class="ng-input" type="number" id="ngInputY" placeholder="e.g. 30" min="0" max="100" step="1">
         </div>
         <button class="ng-add-row-btn" onclick="ngAddRow()">+ Add</button>
       </div>
@@ -897,52 +865,6 @@ td.time-val{font-weight:700;color:var(--green)}
         <button class="ng-plot-btn" onclick="ngPlotPoints()">&#x1F4C9; Plot Points</button>
         <button class="ng-clear-btn" onclick="ngClearData()">&#x1F5D1; Clear Data</button>
       </div>
-    </div>
-  </div>
-
-  <!-- PREDICTION TABLE — below graph -->
-  <div style="max-width:1280px;margin:0 auto;padding:0 24px 60px">
-    <div class="data-input-table-wrap">
-      <div class="data-input-table-head">
-        <div>
-          <h3>&#x1F4CA; Prediction Table</h3>
-          <p>Enter distance &amp; time values; traffic and rain columns adjust automatically</p>
-        </div>
-      </div>
-      <div class="data-input-table-scroll">
-        <table class="data-input-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Distance (km)</th>
-              <th>Time (mins)</th>
-              <th>Traffic (+15 mins)</th>
-              <th>Rain (+20 mins)</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="manualDataBody"></tbody>
-        </table>
-      </div>
-      <div class="data-input-table-footer">
-        <button class="btn-add-data-row" onclick="addManualDataRow()">+ Add Row</button>
-        <span style="font-size:12px;color:var(--gray-light)">Traffic adds 15 mins &bull; Rain adds 20 mins to the base time</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- LOGOUT CONFIRM MODAL -->
-<div class="logout-modal-backdrop" id="logoutModalBackdrop">
-  <div class="logout-modal">
-    <div class="logout-modal-body">
-      <div class="logout-modal-icon">&#x1F6AA;</div>
-      <div class="logout-modal-title">Log out?</div>
-      <div class="logout-modal-sub">Your session data will be cleared and you'll return to the start screen.</div>
-    </div>
-    <div class="logout-modal-btns">
-      <button class="btn-logout-cancel" onclick="closeLogoutModal()">Cancel</button>
-      <button class="btn-logout-confirm" onclick="confirmLogout()">Log Out</button>
     </div>
   </div>
 </div>
@@ -990,10 +912,59 @@ td.time-val{font-weight:700;color:var(--green)}
 
 <div class="toast" id="toast"></div>
 
-<!-- FOOTER — minimal -->
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-backdrop" id="adminLoginModal" style="display:none;z-index:9000;align-items:center;justify-content:center;">
+  <div class="modal-box" style="max-width:360px;padding:32px;text-align:left;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h2 style="font-size:20px;font-weight:800">&#x1F512; Admin Login</h2>
+      <button onclick="closeAdminLogin()" style="background:none;font-size:20px;color:var(--gray);">&#x2715;</button>
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">Username</label>
+      <input type="text" class="form-input" id="adminUser" placeholder="Admin" autocomplete="off">
+    </div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <div id="adminLoginError" style="display:none;color:#c0392b;font-size:12px;font-weight:600;margin-bottom:10px">&#x26A0; Incorrect credentials.</div>
+    <button class="btn-pay" onclick="doAdminLogin()" style="width:100%;margin-top:0">Login as Admin</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer class="site-footer">
-  <div class="footer-minimal">
-    <span style="color:rgba(255,255,255,.5)">&#xa9; 2026 Zippy. All rights reserved.</span>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo-mark">Z</div>
+      <div>
+        <div class="footer-brand-name">Zippy</div>
+        <div class="footer-brand-sub">Fast food. Faster delivery.</div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Help</div>
+        <a href="#">Support</a>
+        <a href="#">Track Order</a>
+        <a href="#">Partner with Us</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&#xa9; 2026 Zippy. All rights reserved.</span>
     <span class="footer-credit">Designed &amp; Developed by <a href="https://www.cognospace.in" target="_blank" rel="noopener">CognoSpace</a> &#x2728;</span>
   </div>
 </footer>
@@ -1284,87 +1255,40 @@ const RESTAURANTS = [
 /* STATE */
 let cartItems=[], placedOrders=[], currentRestId=null, customLocation='', regressionLineDrawn=false;
 
-/* ── SESSION / LANDING PAGE ── */
-function openSessionModal(){
-  document.getElementById('sessionModalBackdrop').classList.add('open');
+/* ── WEATHER MODE STATE ── */
+let trafficOn=false, rainOn=false;
+function toggleMode(mode){
+  if(mode==='traffic'){
+    trafficOn=!trafficOn;
+    document.getElementById('btnTraffic').classList.toggle('active',trafficOn);
+  } else {
+    rainOn=!rainOn;
+    document.getElementById('btnRain').classList.toggle('active',rainOn);
+  }
+  const both=trafficOn&&rainOn, any=trafficOn||rainOn;
+  const ind=document.getElementById('modeIndicator');
+  if(both) ind.textContent='\u23F1 3× Longer Delivery';
+  else if(trafficOn) ind.textContent='\uD83D\uDE97 Traffic: +15-25 min';
+  else if(rainOn) ind.textContent='\uD83C\uDF27\uFE0F Rain: +10-20 min';
+  ind.classList.toggle('show',any);
+  showToast(both?'\uD83C\uDF27\uFE0F + \uD83D\uDE97 Both modes ON — 3× delivery time!':trafficOn?'\uD83D\uDE97 Traffic mode ON — longer delivery':rainOn?'\uD83C\uDF27\uFE0F Rain mode ON — longer delivery':'Mode disabled');
 }
-function validateSession(){
-  const school=document.getElementById('sessSchool').value.trim();
-  const grade=document.getElementById('sessGrade').value.trim();
-  const section=document.getElementById('sessSection').value.trim();
-  const table=document.getElementById('sessTable').value.trim();
-  document.getElementById('sessionLaunchBtn').disabled=!(school&&grade&&section&&table);
+function getDeliveryMultiplier(){
+  if(trafficOn&&rainOn) return 3;
+  if(trafficOn) return 1.8;
+  if(rainOn) return 1.5;
+  return 1;
 }
-function launchSession(){
-  const school=document.getElementById('sessSchool').value.trim();
-  const grade=document.getElementById('sessGrade').value.trim();
-  const section=document.getElementById('sessSection').value.trim();
-  const table=document.getElementById('sessTable').value.trim();
-  if(!school||!grade||!section||!table) return;
-  const sessionData={school,grade,section,table,ts:Date.now()};
-  localStorage.setItem('zippy_session',JSON.stringify(sessionData));
-  document.getElementById('sessionModalBackdrop').classList.remove('open');
-  showMainApp(sessionData);
+function getAdjustedTime(timeStr){
+  // timeStr like "30-40"
+  const m=getDeliveryMultiplier();
+  if(m===1)return timeStr;
+  const parts=timeStr.split('-').map(Number);
+  return parts.map(t=>Math.round(t*m)).join('-');
 }
-function showMainApp(sessionData){
-  document.getElementById('landingPage').classList.add('hidden');
-  document.getElementById('mainHeader').style.display='';
-  document.getElementById('btnLogout').style.display='flex';
-  document.body.style.overflow='';
-  try{renderHome();}catch(e){console.error('renderHome failed',e);}
-  try{initHeroSlideshow();}catch(e){console.error('heroSlideshow failed',e);}
-  showPage('homePage');
-  setTimeout(ngInitCanvas, 100);
-}
-function doLogout(){
-  document.getElementById('logoutModalBackdrop').classList.add('open');
-}
-function closeLogoutModal(){
-  document.getElementById('logoutModalBackdrop').classList.remove('open');
-}
-function confirmLogout(){
-  localStorage.removeItem('zippy_session');
-  location.reload();
-}
-
-
-/* ── MANUAL DATA INPUT TABLE ── */
-let manualRows=[];
-function addManualDataRow(){
-  manualRows.push({dist:'',time:'',traffic:'no',rain:'no'});
-  renderManualTable();
-}
-function renderManualTable(){
-  const tbody=document.getElementById('manualDataBody');
-  if(!tbody) return;
-  tbody.innerHTML=manualRows.map((r,i)=>{
-    const time=parseFloat(r.time)||0;
-    const trafficTime=(r.traffic==='yes'&&time)?time+15:'—';
-    const rainTime=(r.rain==='yes'&&time)?time+20:'—';
-    return `<tr>
-      <td class="sno-cell">${i+1}</td>
-      <td><input type="number" min="0" max="50" step="1" value="${r.dist}" oninput="manualRows[${i}].dist=this.value;renderManualTable()"></td>
-      <td><input type="number" min="0" max="50" step="1" value="${r.time}" oninput="manualRows[${i}].time=this.value;renderManualTable()"></td>
-      <td>
-        <select onchange="manualRows[${i}].traffic=this.value;renderManualTable()">
-          <option value="no"${r.traffic==='no'?' selected':''}>No</option>
-          <option value="yes"${r.traffic==='yes'?' selected':''}>Yes (+15)</option>
-        </select>
-        ${r.traffic==='yes'&&time?`<br><small style="color:#e65100;font-weight:700">${trafficTime} min</small>`:''}
-      </td>
-      <td>
-        <select onchange="manualRows[${i}].rain=this.value;renderManualTable()">
-          <option value="no"${r.rain==='no'?' selected':''}>No</option>
-          <option value="yes"${r.rain==='yes'?' selected':''}>Yes (+20)</option>
-        </select>
-        ${r.rain==='yes'&&time?`<br><small style="color:#1565c0;font-weight:700">${rainTime} min</small>`:''}
-      </td>
-      <td><button class="del-row-btn" onclick="manualRows.splice(${i},1);renderManualTable()">&#x2715;</button></td>
-    </tr>`;
-  }).join('');
-}
-function getDeliveryMultiplier(){ return 1; }
-function getAdjustedTime(timeStr){ return timeStr; }
+// Re-render home when mode changes so times update
+const _origToggleMode=toggleMode;
+// patch renderHome to use dynamic times (already done in template)
 
 /* ── BIG HERO SLIDESHOW ── */
 const HERO_SLIDES=[
@@ -1426,7 +1350,7 @@ function renderHome(){
       </div>
       <div class="rest-info">
         <div class="rest-name">${r.name}</div>
-        <div class="rest-meta"><span class="rest-rating">\u2605 ${r.rating}</span><span class="rest-dot"></span><span>${getAdjustedTime(r.time)} mins</span></div>
+        <div class="rest-meta"><span class="rest-rating">\u2605 ${r.rating}</span><span class="rest-dot"></span><span>${getAdjustedTime(r.time)} mins${(trafficOn||rainOn)?'<span style="font-size:10px;color:var(--orange);margin-left:3px">&uarr;</span>':''}</span></div>
         <div class="rest-cuisine">${r.cuisine}</div>
         <div class="rest-dist-row"><span>\uD83D\uDCCD ${r.baseDistKm} km away</span><span class="rest-dot" style="display:inline-block;background:#ccc"></span><span>${r.area}</span></div>
       </div>
@@ -1562,7 +1486,8 @@ function processPayment(){
   const mult=getDeliveryMultiplier();const time=Math.max(8,Math.round((10+dist*2.5+(Math.random()*10-5))*mult));
   const sub=cartItems.reduce((s,c)=>s+c.price*c.qty,0);
   const loc=customLocation||(document.querySelector('.addr-option.selected .addr-text')?.textContent)||'User Location';
-  cartItems.forEach(ci=>{placedOrders.push({restaurant:ci.restName,item:ci.itemName,customer:document.getElementById('coName').value.trim(),location:loc,distance:dist,time});});
+  const currentMode=trafficOn?'traffic':rainOn?'rain':'normal';
+  cartItems.forEach(ci=>{placedOrders.push({restaurant:ci.restName,item:ci.itemName,customer:document.getElementById('coName').value.trim(),location:loc,distance:dist,time,trafficMode:currentMode});});
   document.getElementById('modalDist').textContent=dist+' km';
   document.getElementById('modalTime').textContent=time+' min';
   document.getElementById('modalAmt').textContent='\u20B9'+(sub+5);
@@ -1580,7 +1505,13 @@ function closeSuccessModal(){document.getElementById('successModal').classList.r
 /* DATA TABLE */
 function generateTable(){
   if(!placedOrders.length)return;
-  document.getElementById('dataTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td>${o.restaurant}</td><td>${o.item}</td><td>${o.customer}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
+  document.getElementById('dataTableBody').innerHTML=placedOrders.map((o,i)=>{
+    let timeDisplay=''+o.time;
+    if(o.trafficMode==='traffic') timeDisplay=o.time+' <span style="font-size:11px;color:#e65100;font-weight:700">(Traffic)</span>';
+    else if(o.trafficMode==='rain') timeDisplay=o.time+' <span style="font-size:11px;color:#1565c0;font-weight:700">(Rain)</span>';
+    // normal: no bracket, just the number
+    return`<tr><td>${i+1}</td><td>${o.restaurant}</td><td>${o.item}</td><td>${o.customer}</td><td class="dist-val">${o.distance}</td><td class="time-val">${timeDisplay}</td></tr>`;
+  }).join('');
   const avgD=Math.round(placedOrders.reduce((s,o)=>s+o.distance,0)/placedOrders.length);
   const avgT=Math.round(placedOrders.reduce((s,o)=>s+o.time,0)/placedOrders.length);
   document.getElementById('ftAvgDist').textContent='Avg Distance: '+avgD+' km';
@@ -1595,11 +1526,9 @@ function openGraphPage(){
   if(!placedOrders.length){showToast('Place orders first!');return;}
   showPage('graphPage');window.scrollTo(0,0);
   regressionLineDrawn=false;readingLines=[];sgManualLine=null;sgLineStart=null;
-  document.getElementById('btnDrawLine').classList.remove('active-line');
-  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
-  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
+  const eq=document.getElementById('sgEquationBox'); if(eq) eq.style.display='none';
   document.getElementById('graphSideTableBody').innerHTML=placedOrders.map((o,i)=>`<tr><td>${i+1}</td><td class="dist-val">${o.distance}</td><td class="time-val">${o.time}</td></tr>`).join('');
-  setSGMode('readX');
+  setSGMode('line');
   setTimeout(()=>{drawScatterPlot();initExistingGraphClick();},80);
 }
 function closeGraphPage(){showPage('homePage');window.scrollTo(0,0);}
@@ -1610,25 +1539,28 @@ function closeNewGraphPage(){showPage('graphPage');window.scrollTo(0,0);setTimeo
 
 function setSGMode(mode){
   sgMode = mode;
-  ['sgModeNone','sgModeLine','sgModeReadX','sgModeReadY'].forEach(id=>{
+  ['sgModeLine','sgModeReadX','sgModeReadY'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.classList.remove('active');
   });
-  const map={none:'sgModeNone',line:'sgModeLine',readX:'sgModeReadX',readY:'sgModeReadY'};
+  const map={line:'sgModeLine',readX:'sgModeReadX',readY:'sgModeReadY'};
   const btn=document.getElementById(map[mode]); if(btn) btn.classList.add('active');
   const hints={
-    none:'Click "Draw Best-Fit Line" button to toggle the regression line.',
-    line:'Click & drag on the canvas (axes included) to draw your own straight line.',
-    readX:'Click anywhere on a line to drop dashed reading lines to both axes.',
-    readY:'Click anywhere on a line to drop dashed reading lines to both axes.'
+    line:'Click & drag on the canvas (or drag with finger on touchscreen) to draw your line.',
+    readX:'Click/tap anywhere on a line to drop dashed reading lines to both axes.',
+    readY:'Click/tap anywhere on a line to drop dashed reading lines to both axes.'
   };
-  const h=document.getElementById('sgHint'); if(h) h.textContent='💡 '+hints[mode];
+  const h=document.getElementById('sgHint'); if(h) h.innerHTML='💡 '+(hints[mode]||'');
   const canvas=document.getElementById('regressionCanvas');
   if(canvas) canvas.style.cursor=mode==='line'?'copy':'crosshair';
   drawScatterPlot();
 }
 
 function clearSGReadings(){ readingLines=[]; drawScatterPlot(); showToast('Readings cleared'); }
-function clearSGManualLine(){ sgManualLine=null; sgLineStart=null; drawScatterPlot(); showToast('Manual line cleared'); }
+function clearSGManualLine(){
+  sgManualLine=null; sgLineStart=null;
+  document.getElementById('sgEquationBox').style.display='none';
+  drawScatterPlot(); showToast('Manual line cleared');
+}
 
 /* ── nice integer step for axis ticks (e.g. 2,4,5,10,20) ── */
 function niceStep(range, targetTicks){
@@ -1649,9 +1581,15 @@ function drawScatterPlot(){
   const pad={left:60,right:30,top:30,bottom:58};
   const pW=W-pad.left-pad.right, pH=H-pad.top-pad.bottom;
 
-  /* ── Fixed axes: 0–50 for both, step 10 ── */
-  const xStep=10, yStep=10;
-  const xMin=0, xMax=50, yMin=0, yMax=50;
+  /* ── Dynamic axes: scale to actual data, clean integer ticks ── */
+  const xVals=placedOrders.map(o=>o.distance), yVals=placedOrders.map(o=>o.time);
+  const xDataMax=xVals.length?Math.max(...xVals):18;
+  const yDataMax=yVals.length?Math.max(...yVals):80;
+  const xStep=niceStep(xDataMax*1.3||20, 6);
+  const yStep=niceStep(yDataMax*1.3||60, 6);
+  const xMin=0, xMax=Math.ceil((xDataMax*1.2||20)/xStep)*xStep;
+  const yMin=0, yMax=Math.ceil((yDataMax*1.2||60)/yStep)*yStep;
+  /* ─────────────────────────────────────────────────────────── */
 
   const toSX=x=>pad.left+((x-xMin)/(xMax-xMin))*pW;
   const toSY=y=>pad.top+((yMax-y)/(yMax-yMin))*pH;
@@ -1661,8 +1599,8 @@ function drawScatterPlot(){
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle='#f5fcf5'; ctx.fillRect(0,0,W,H);
 
-  /* ── Minor grid lines at step 2 ── */
-  const xMinor=2, yMinor=2;
+  /* ── Minor grid lines at ¼ of each major step ── */
+  const xMinor=xStep/4, yMinor=yStep/4;
   ctx.strokeStyle='#d6eed6'; ctx.lineWidth=0.5;
   for(let v=xMin;v<=xMax+0.001;v+=xMinor){
     ctx.beginPath(); ctx.moveTo(toSX(v),pad.top); ctx.lineTo(toSX(v),H-pad.bottom); ctx.stroke();
@@ -1771,34 +1709,66 @@ function sgSnapToAxis(cx,cy){
   return {cx,cy};
 }
 
+/* ── Compute & display slope equation from two canvas pixel points ── */
+function calcAndShowEquation(px1, py1, px2, py2, fromSX, fromSY, equationBoxId, equationTextId, slopeDetailsId){
+  // Convert pixel coords to data coords
+  const dx1 = fromSX(px1), dy1 = fromSY(py1);
+  const dx2 = fromSX(px2), dy2 = fromSY(py2);
+  const dxDiff = dx2 - dx1;
+  if(Math.abs(dxDiff) < 0.0001){
+    // Vertical line
+    document.getElementById(equationBoxId).style.display='block';
+    document.getElementById(equationTextId).textContent = 'x = ' + dx1.toFixed(2);
+    document.getElementById(slopeDetailsId).innerHTML = 'Vertical line &mdash; undefined slope';
+    return;
+  }
+  const m = (dy2 - dy1) / dxDiff;          // slope
+  const c = dy1 - m * dx1;                   // y-intercept
+  const sign = c >= 0 ? '+' : '−';
+  const absC = Math.abs(c);
+  // Format nicely
+  const mStr = m.toFixed(3).replace(/\.?0+$/, '') || '0';
+  const cStr = absC.toFixed(3).replace(/\.?0+$/, '') || '0';
+  const eqStr = `y = ${mStr}x ${sign} ${cStr}`;
+  document.getElementById(equationBoxId).style.display='block';
+  document.getElementById(equationTextId).textContent = eqStr;
+  document.getElementById(slopeDetailsId).innerHTML =
+    `<b>Slope (m):</b> ${m.toFixed(4)} &nbsp;|&nbsp; <b>Y-intercept (c):</b> ${c.toFixed(4)}<br>` +
+    `<b>Interpretation:</b> For every 1 km increase in distance, delivery time ${m>=0?'increases':'decreases'} by <b>${Math.abs(m).toFixed(2)} min</b>`;
+}
+
 function initExistingGraphClick(){
   const canvas=document.getElementById('regressionCanvas');
 
-  canvas.onmousedown=function(e){
+  function sgHandleStart(e){
     const {cx,cy}=sgGetCanvasPoint(e,canvas);
     if(sgMode==='line'){
       const s=sgSnapToAxis(cx,cy);
       sgLineStart={sx:s.cx,sy:s.cy,curSx:s.cx,curSy:s.cy};
       drawScatterPlot();
     }
-  };
-
-  canvas.onmousemove=function(e){
+  }
+  function sgHandleMove(e){
     if(sgMode!=='line'||!sgLineStart) return;
     const {cx,cy}=sgGetCanvasPoint(e,canvas);
     const s=sgSnapToAxis(cx,cy);
     sgLineStart.curSx=s.cx; sgLineStart.curSy=s.cy;
     drawScatterPlot();
-  };
-
-  canvas.onmouseup=function(e){
+  }
+  function sgHandleEnd(e){
     if(sgMode==='line' && sgLineStart){
       const {cx,cy}=sgGetCanvasPoint(e,canvas);
       const s=sgSnapToAxis(cx,cy);
       const dist=Math.hypot(s.cx-sgLineStart.sx, s.cy-sgLineStart.sy);
       if(dist>10){
         sgManualLine={x1:sgLineStart.sx,y1:sgLineStart.sy,x2:s.cx,y2:s.cy};
-        showToast('Line drawn! Switch to Read X/Y to take readings.');
+        // Show slope equation
+        calcAndShowEquation(
+          sgLineStart.sx, sgLineStart.sy, s.cx, s.cy,
+          canvas._fromSX, canvas._fromSY,
+          'sgEquationBox','sgEquationText','sgSlopeDetails'
+        );
+        showToast('Line drawn! Equation shown below.');
       }
       sgLineStart=null;
       drawScatterPlot();
@@ -1808,8 +1778,6 @@ function initExistingGraphClick(){
       const {cx,cy}=sgGetCanvasPoint(e,canvas);
       const pad=canvas._pad;
       if(cx<pad.left||cx>canvas._W-pad.right||cy<pad.top||cy>canvas._H-pad.bottom) return;
-
-      // Try best-fit line first, then manual line
       let lineY=null;
       if(sgManualLine){
         const {x1,y1,x2,y2}=sgManualLine;
@@ -1821,7 +1789,6 @@ function initExistingGraphClick(){
         lineY=canvas._toSY(dataY);
       }
       if(lineY===null){ showToast('Draw a line first, then read values!'); return; }
-
       const dataX=canvas._fromSX(cx);
       const dataY=canvas._fromSY(lineY);
       if(dataX<canvas._xMin||dataX>canvas._xMax||dataY<canvas._yMin||dataY>canvas._yMax) return;
@@ -1829,49 +1796,39 @@ function initExistingGraphClick(){
       drawScatterPlot();
       showToast('Reading: x='+readingLines[readingLines.length-1].x+', y='+readingLines[readingLines.length-1].y);
     }
-  };
+  }
 
-  canvas.onmouseleave=function(){
-    if(sgLineStart){ sgLineStart=null; drawScatterPlot(); }
-  };
+  canvas.onmousedown=function(e){ sgHandleStart(e); };
+  canvas.onmousemove=function(e){ sgHandleMove(e); };
+  canvas.onmouseup=function(e){ sgHandleEnd(e); };
+  canvas.onmouseleave=function(){ if(sgLineStart){ sgLineStart=null; drawScatterPlot(); } };
+
+  // Touch support
+  canvas.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    const touch=e.touches[0];
+    sgHandleStart({clientX:touch.clientX,clientY:touch.clientY});
+  },{passive:false});
+  canvas.addEventListener('touchmove',function(e){
+    e.preventDefault();
+    const touch=e.touches[0];
+    sgHandleMove({clientX:touch.clientX,clientY:touch.clientY});
+  },{passive:false});
+  canvas.addEventListener('touchend',function(e){
+    e.preventDefault();
+    const touch=e.changedTouches[0];
+    sgHandleEnd({clientX:touch.clientX,clientY:touch.clientY});
+  },{passive:false});
 }
 
 function toggleRegressionLine(){
-  if(placedOrders.length < 2){ showToast('Need at least 2 orders to draw best-fit line!'); return; }
-  regressionLineDrawn = !regressionLineDrawn;
-  readingLines = [];
-  const btn = document.getElementById('btnDrawLine');
-  if(regressionLineDrawn){
-    btn.classList.add('active-line');
-    btn.textContent = '✅ Best-Fit Line Drawn — Click to Remove';
-    // Compute and show equation
-    const pts = placedOrders.map(o=>({x:o.distance, y:o.time}));
-    const n = pts.length;
-    const sumX = pts.reduce((a,p)=>a+p.x,0);
-    const sumY = pts.reduce((a,p)=>a+p.y,0);
-    const sumXY= pts.reduce((a,p)=>a+p.x*p.y,0);
-    const sumXX= pts.reduce((a,p)=>a+p.x*p.x,0);
-    const m = (n*sumXY - sumX*sumY)/(n*sumXX - sumX*sumX) || 0;
-    const c = (sumY - m*sumX)/n;
-    const sign = c>=0?'+':'-';
-    showToast('Line drawn! y = ' + m.toFixed(2) + 'x ' + sign + ' ' + Math.abs(c).toFixed(2));
-    // Show equation below the button
-    const eq = document.getElementById('sgEquation');
-    if(eq){ eq.style.display='block'; eq.innerHTML='&#x1F4C8; Regression Equation: <strong>y = '+m.toFixed(2)+'x '+sign+' '+Math.abs(c).toFixed(2)+'</strong>'; }
-  } else {
-    btn.classList.remove('active-line');
-    btn.textContent = '📏 Draw Best-Fit Line';
-    const eq = document.getElementById('sgEquation');
-    if(eq) eq.style.display='none';
-  }
+  // Best-fit line removed — this function is retained for legacy compatibility
   drawScatterPlot();
 }
 function replotGraph(){
-  regressionLineDrawn=false; readingLines=[];
-  document.getElementById('btnDrawLine').classList.remove('active-line');
-  document.getElementById('btnDrawLine').textContent='📏 Draw Best-Fit Line';
-  const eq=document.getElementById('sgEquation'); if(eq) eq.style.display='none';
-  drawScatterPlot(); showToast('Graph replotted');
+  regressionLineDrawn=false; readingLines=[]; sgManualLine=null; sgLineStart=null;
+  const eq=document.getElementById('sgEquationBox'); if(eq) eq.style.display='none';
+  drawScatterPlot(); showToast('Graph cleared');
 }
 window.addEventListener('resize',()=>{if(document.getElementById('graphPage').classList.contains('active'))drawScatterPlot();});
 
@@ -1885,8 +1842,8 @@ let ngReadingLines = [];  // [{x, y}] reading/corresponding lines
 let ngMode = 'point';     // 'point' | 'line' | 'readX' | 'readY'
 let ngLineStart = null;   // while dragging to draw line
 
-// Fixed axes: X 0-50 step 10, Y 0-50 step 10
-const NG_XMIN=0,NG_XMAX=50,NG_YMIN=0,NG_YMAX=50;
+// Fixed axes same as scatter plot
+const NG_XMIN=0,NG_XMAX=20,NG_YMIN=0,NG_YMAX=100;
 
 function setNGMode(mode){
   ngMode=mode;
@@ -1923,33 +1880,19 @@ function ngDraw(){
 
   ctx.fillStyle='#f5fcf5';ctx.fillRect(0,0,W,H);
 
-  // Grid: X 0-50 step 10, Y 0-50 step 10
-  for(let v=NG_XMIN;v<=NG_XMAX;v+=10){
-    ctx.strokeStyle='#a5d6a7';ctx.lineWidth=1;
+  // Grid: X 0-20 step 2, Y 0-100 step 10
+  for(let v=NG_XMIN;v<=NG_XMAX;v+=2){
+    ctx.strokeStyle=v%10===0?'#a5d6a7':'#c8e6c9';ctx.lineWidth=v%10===0?1:0.5;
     ctx.beginPath();ctx.moveTo(toSX(v),pad.top);ctx.lineTo(toSX(v),H-pad.bottom);ctx.stroke();
-    // minor grid at step 2
-    if(v+10<=NG_XMAX){
-      for(let m2=v+2;m2<v+10;m2+=2){
-        ctx.strokeStyle='#c8e6c9';ctx.lineWidth=0.5;
-        ctx.beginPath();ctx.moveTo(toSX(m2),pad.top);ctx.lineTo(toSX(m2),H-pad.bottom);ctx.stroke();
-      }
-    }
   }
   for(let v=NG_YMIN;v<=NG_YMAX;v+=10){
-    ctx.strokeStyle='#a5d6a7';ctx.lineWidth=1;
+    ctx.strokeStyle=v%50===0?'#a5d6a7':'#c8e6c9';ctx.lineWidth=v%50===0?1:0.5;
     ctx.beginPath();ctx.moveTo(pad.left,toSY(v));ctx.lineTo(W-pad.right,toSY(v));ctx.stroke();
-    // minor grid at step 2
-    if(v+10<=NG_YMAX){
-      for(let m2=v+2;m2<v+10;m2+=2){
-        ctx.strokeStyle='#c8e6c9';ctx.lineWidth=0.5;
-        ctx.beginPath();ctx.moveTo(pad.left,toSY(m2));ctx.lineTo(W-pad.right,toSY(m2));ctx.stroke();
-      }
-    }
   }
 
-  // Labels: step 10 for both axes
+  // Labels
   ctx.fillStyle='#444';ctx.font='11px DM Sans,sans-serif';
-  for(let v=NG_XMIN;v<=NG_XMAX;v+=10){ctx.textAlign='center';ctx.fillText(v,toSX(v),H-pad.bottom+16);}
+  for(let v=NG_XMIN;v<=NG_XMAX;v+=2){ctx.textAlign='center';ctx.fillText(v,toSX(v),H-pad.bottom+16);}
   for(let v=NG_YMIN;v<=NG_YMAX;v+=10){ctx.textAlign='right';ctx.fillText(v,pad.left-6,toSY(v)+4);}
 
   // Axes
@@ -2027,12 +1970,11 @@ function ngSnapToAxis(cx,cy,coords){
 function ngInitCanvas(){
   const canvas=document.getElementById('newGraphCanvas');
 
-  canvas.onmousedown=function(e){
+  function ngHandleStart(e){
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
     const {pad,toSX,toSY,fromSX,fromSY,cw,ch}=coords;
     if(ngMode==='point'){
-      // Only plot if inside plot area
       if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
       const xV=Math.round(fromSX(cx)), yV=Math.round(fromSY(cy));
       if(xV<NG_XMIN||xV>NG_XMAX||yV<NG_YMIN||yV>NG_YMAX) return;
@@ -2040,14 +1982,12 @@ function ngInitCanvas(){
       ngDraw();
       showToast('Point plotted: ('+xV+', '+yV+')');
     } else if(ngMode==='line'){
-      // Allow starting from anywhere including axes
       const snapped=ngSnapToAxis(cx,cy,coords);
       ngLineStart={sx:snapped.cx, sy:snapped.cy, curSx:snapped.cx, curSy:snapped.cy};
       ngDraw();
     } else if(ngMode==='readX'||ngMode==='readY'){
       if(!ngLine) return;
       if(cx<pad.left||cx>cw-pad.right||cy<pad.top||cy>ch-pad.bottom) return;
-      // Find Y on line at given X (line goes from canvas pixel coords)
       const {x1,y1,x2,y2}=ngLine;
       if(x2===x1) return;
       const t=(cx-x1)/(x2-x1);
@@ -2058,18 +1998,16 @@ function ngInitCanvas(){
       ngDraw();
       showToast('Reading: x='+ngReadingLines[ngReadingLines.length-1].x+', y='+ngReadingLines[ngReadingLines.length-1].y);
     }
-  };
-
-  canvas.onmousemove=function(e){
+  }
+  function ngHandleMove(e){
     if(ngMode!=='line'||!ngLineStart) return;
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
     const snapped=ngSnapToAxis(cx,cy,coords);
     ngLineStart.curSx=snapped.cx; ngLineStart.curSy=snapped.cy;
     ngDraw();
-  };
-
-  canvas.onmouseup=function(e){
+  }
+  function ngHandleEnd(e){
     if(ngMode!=='line'||!ngLineStart) return;
     const {cx,cy}=ngGetCanvasPoint(e,canvas);
     const coords=ngGetCoords();
@@ -2077,23 +2015,47 @@ function ngInitCanvas(){
     const dist=Math.hypot(snapped.cx-ngLineStart.sx, snapped.cy-ngLineStart.sy);
     if(dist>10){
       ngLine={x1:ngLineStart.sx,y1:ngLineStart.sy,x2:snapped.cx,y2:snapped.cy};
-      showToast('Line drawn! Switch to Read X/Y to take readings.');
+      // Show slope equation
+      calcAndShowEquation(
+        ngLineStart.sx, ngLineStart.sy, snapped.cx, snapped.cy,
+        coords.fromSX, coords.fromSY,
+        'ngEquationBox','ngEquationText','ngSlopeDetails'
+      );
+      showToast('Line drawn! Equation shown below.');
     }
     ngLineStart=null;
     ngDraw();
-  };
+  }
 
-  canvas.onmouseleave=function(){
-    if(ngLineStart && ngMode==='line'){ngLineStart=null;ngDraw();}
-  };
+  canvas.onmousedown=function(e){ ngHandleStart(e); };
+  canvas.onmousemove=function(e){ ngHandleMove(e); };
+  canvas.onmouseup=function(e){ ngHandleEnd(e); };
+  canvas.onmouseleave=function(){ if(ngLineStart && ngMode==='line'){ngLineStart=null;ngDraw();} };
+
+  // Touch support
+  canvas.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    const touch=e.touches[0];
+    ngHandleStart({clientX:touch.clientX,clientY:touch.clientY});
+  },{passive:false});
+  canvas.addEventListener('touchmove',function(e){
+    e.preventDefault();
+    const touch=e.touches[0];
+    ngHandleMove({clientX:touch.clientX,clientY:touch.clientY});
+  },{passive:false});
+  canvas.addEventListener('touchend',function(e){
+    e.preventDefault();
+    const touch=e.changedTouches[0];
+    ngHandleEnd({clientX:touch.clientX,clientY:touch.clientY});
+  },{passive:false});
 }
 
 function ngAddRow(){
   const x=parseFloat(document.getElementById('ngInputX').value);
   const y=parseFloat(document.getElementById('ngInputY').value);
   if(isNaN(x)||isNaN(y)){showToast('Enter valid X and Y values');return;}
-  if(x<0||x>50){showToast('X must be between 0 and 50');return;}
-  if(y<0||y>50){showToast('Y must be between 0 and 50');return;}
+  if(x<0||x>20){showToast('X must be between 0 and 20');return;}
+  if(y<0||y>100){showToast('Y must be between 0 and 100');return;}
   ngData.push({x,y});
   document.getElementById('ngInputX').value='';
   document.getElementById('ngInputY').value='';
@@ -2121,8 +2083,16 @@ function ngPlotPoints(){
 }
 
 function ngClearPoints(){ngPlottedPts=[];ngDraw();showToast('Points cleared');}
-function ngClearLine(){ngLine=null;ngReadingLines=[];ngDraw();showToast('Line cleared');}
-function ngClearAll(){ngPlottedPts=[];ngLine=null;ngReadingLines=[];ngLineStart=null;ngDraw();showToast('All cleared');}
+function ngClearLine(){
+  ngLine=null;ngReadingLines=[];
+  const eq=document.getElementById('ngEquationBox'); if(eq) eq.style.display='none';
+  ngDraw();showToast('Line cleared');
+}
+function ngClearAll(){
+  ngPlottedPts=[];ngLine=null;ngReadingLines=[];ngLineStart=null;
+  const eq=document.getElementById('ngEquationBox'); if(eq) eq.style.display='none';
+  ngDraw();showToast('All cleared');
+}
 function ngClearData(){ngData=[];ngRefreshTable();}
 
 window.addEventListener('resize',()=>{
@@ -2188,30 +2158,192 @@ function saveNewAddress(){
   showToast('\u2705 '+label+' address saved!');
 }
 
-/* window resize for graphs */
-window.addEventListener('resize',()=>{
-  if(document.getElementById('graphPage').classList.contains('active'))drawScatterPlot();
-});
+/* ══════════════════════════════════════════
+   FIREBASE CONFIG + PREDICTION TABLE
+   ══════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCxcOW84sDNUrWpecvseLsMxq4m6PBIx3E",
+  authDomain: "zippy-ccdb2.firebaseapp.com",
+  databaseURL: "https://zippy-ccdb2-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "zippy-ccdb2",
+  storageBucket: "zippy-ccdb2.firebasestorage.app",
+  messagingSenderId: "733074351739",
+  appId: "1:733074351739:web:69b809033b9887e3dfe4de",
+  measurementId: "G-PMH7K54BZN"
+};
 
-/* ── INIT — runs after all functions/consts are declared ── */
-// Seed prediction table rows
-addManualDataRow();addManualDataRow();addManualDataRow();
+let firebaseApp=null, firebaseDB=null, firebaseReady=false;
+function initFirebase(){
+  try{
+    if(typeof firebase==='undefined'){console.warn('Firebase SDK not loaded');return;}
+    if(!firebaseApp) firebaseApp=firebase.initializeApp(FIREBASE_CONFIG);
+    firebaseDB=firebase.database(firebaseApp);
+    firebaseReady=true;
+  }catch(err){console.warn('Firebase init error:',err);}
+}
 
-// Check for existing session, then show landing or app
-(function checkSession(){
-  const raw=localStorage.getItem('zippy_session');
-  if(raw){
-    try{
-      const sessionData=JSON.parse(raw);
-      showMainApp(sessionData);
-      return;
-    }catch(e){}
+/* ── Admin Auth ── */
+let isAdmin=false;
+function openAdminLogin(){
+  document.getElementById('adminLoginModal').style.display='flex';
+  document.getElementById('adminUser').value='';
+  document.getElementById('adminPass').value='';
+  document.getElementById('adminLoginError').style.display='none';
+  setTimeout(()=>document.getElementById('adminUser').focus(),100);
+}
+function closeAdminLogin(){
+  document.getElementById('adminLoginModal').style.display='none';
+}
+function doAdminLogin(){
+  const u=document.getElementById('adminUser').value.trim();
+  const p=document.getElementById('adminPass').value;
+  if(u==='Admin'&&p==='Admin123'){
+    isAdmin=true;
+    closeAdminLogin();
+    document.getElementById('adminNavBtn').style.display='none';
+    document.getElementById('adminLogoutBtn').style.display='';
+    document.getElementById('predAdminBadge').style.display='';
+    document.getElementById('predAdminControls').style.display='flex';
+    predEnableEditing(true);
+    showToast('✅ Logged in as Admin!');
+    loadPredTableFromFirebase();
+  } else {
+    document.getElementById('adminLoginError').style.display='block';
   }
-  // No session — show landing page
-  document.getElementById('landingPage').classList.remove('hidden');
-  document.getElementById('mainHeader').style.display='none';
-  document.body.style.overflow='hidden';
-})();
+}
+function adminLogout(){
+  isAdmin=false;
+  document.getElementById('adminNavBtn').style.display='';
+  document.getElementById('adminLogoutBtn').style.display='none';
+  document.getElementById('predAdminBadge').style.display='none';
+  document.getElementById('predAdminControls').style.display='none';
+  predEnableEditing(false);
+  showToast('Logged out of Admin mode');
+}
+
+/* ── Prediction Table State ── */
+let predData={headers:[],rows:[]};
+
+function predRender(){
+  const table=document.getElementById('predTable');
+  const empty=document.getElementById('predTableEmpty');
+  const hasData = predData.headers.length > 0;
+
+  if(!hasData){
+    empty.style.display='block'; table.style.display='none';
+  } else {
+    empty.style.display='none'; table.style.display='table';
+    const editable=isAdmin;
+    let html='<thead><tr>';
+    predData.headers.forEach((h,ci)=>{
+      html+=`<th ${editable?`contenteditable="true" oninput="predData.headers[${ci}]=this.textContent"`:''} >${h}</th>`;
+    });
+    if(editable) html+='<th style="width:40px;background:var(--orange-dark)"></th>';
+    html+='</tr></thead><tbody>';
+    predData.rows.forEach((row,ri)=>{
+      html+='<tr>';
+      row.forEach((cell,ci)=>{
+        html+=`<td ${editable?`contenteditable="true" oninput="predData.rows[${ri}][${ci}]=this.textContent"`:''} >${cell}</td>`;
+      });
+      if(editable) html+=`<td><button class="pred-delete-btn" onclick="predDeleteRow(${ri})" title="Delete row">&#x1F5D1;</button></td>`;
+      html+='</tr>';
+    });
+    html+='</tbody>';
+    table.innerHTML=html;
+  }
+
+  // Sync mini prediction table on graph page
+  const gTable=document.getElementById('graphPredTable');
+  const gEmpty=document.getElementById('graphPredEmpty');
+  if(gTable && gEmpty){
+    if(!hasData){
+      gEmpty.style.display='block'; gTable.style.display='none';
+    } else {
+      gEmpty.style.display='none'; gTable.style.display='table';
+      let gHtml='<thead><tr>'+predData.headers.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>';
+      predData.rows.forEach(row=>{
+        gHtml+='<tr>'+row.map(c=>`<td>${c}</td>`).join('')+'</tr>';
+      });
+      gHtml+='</tbody>';
+      gTable.innerHTML=gHtml;
+    }
+  }
+}
+
+function predEnableEditing(on){
+  predRender();
+}
+
+function predAddRow(){
+  if(!predData.headers.length){showToast('Add at least one column first.');return;}
+  predData.rows.push(predData.headers.map(()=>''));
+  predRender();
+}
+function predAddCol(){
+  const name=prompt('Column name:','New Column');
+  if(!name) return;
+  predData.headers.push(name);
+  predData.rows.forEach(r=>r.push(''));
+  predRender();
+}
+function predDeleteRow(ri){
+  predData.rows.splice(ri,1);
+  predRender();
+}
+
+function predSave(){
+  // Sync content-editable values before save
+  const table=document.getElementById('predTable');
+  const ths=table.querySelectorAll('thead th');
+  ths.forEach((th,i)=>{if(i<predData.headers.length)predData.headers[i]=th.textContent.trim();});
+  const rows=table.querySelectorAll('tbody tr');
+  rows.forEach((tr,ri)=>{
+    const tds=tr.querySelectorAll('td');
+    tds.forEach((td,ci)=>{if(ci<predData.rows[ri].length)predData.rows[ri][ci]=td.textContent.trim();});
+  });
+
+  document.getElementById('predSaveStatus').textContent='Saving…';
+  if(firebaseReady && firebaseDB){
+    firebaseDB.ref('predictionTable').set(predData)
+      .then(()=>{ document.getElementById('predSaveStatus').textContent='✅ Saved!'; showToast('Prediction table saved to Firebase!'); })
+      .catch(err=>{ console.error(err); document.getElementById('predSaveStatus').textContent='⚠ Save failed'; showToast('Firebase save failed — saved locally.'); });
+  } else {
+    // Fallback: localStorage
+    try{ localStorage.setItem('zippy_predTable',JSON.stringify(predData)); }catch(e){}
+    document.getElementById('predSaveStatus').textContent='✅ Saved locally!';
+    showToast('Prediction table saved!');
+  }
+  predRender();
+}
+
+function loadPredTableFromFirebase(){
+  // Try Firebase first
+  if(firebaseReady && firebaseDB){
+    firebaseDB.ref('predictionTable').once('value').then(snap=>{
+      const data=snap.val();
+      if(data&&data.headers&&data.rows){ predData=data; predRender(); }
+    }).catch(()=>{});
+  }
+  // Always also try localStorage as fallback
+  try{
+    const stored=localStorage.getItem('zippy_predTable');
+    if(stored){ const d=JSON.parse(stored); if(d&&d.headers&&d.rows&&!firebaseReady){predData=d;predRender();} }
+  }catch(e){}
+}
+
+/* ══════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════ */
+try{renderHome();}catch(e){console.error('renderHome failed',e);}
+try{initHeroSlideshow();}catch(e){console.error('heroSlideshow failed',e);}
+showPage('homePage');
+setTimeout(ngInitCanvas, 100);
+// Load prediction table for all users (Firebase may not be ready yet, localStorage fallback)
+try{ predRender(); loadPredTableFromFirebase(); }catch(e){}
+// Init Firebase then reload prediction table
+setTimeout(function(){
+  try{ initFirebase(); loadPredTableFromFirebase(); }catch(e){}
+}, 800);
 </script>
 </body>
 </html>
